@@ -91,21 +91,17 @@
       }
     }
 
-    /* MÀN HÌNH CHÀO HOÀNG GIA DÀNH RIÊNG CHO APP ĐÃ CÀI VỀ MÁY (PWA STANDALONE) */
+    /* MÀN HÌNH CHÀO HOÀNG GIA (ROYAL SPLASH SCREEN) */
     .royal-loading-screen {
       position: fixed;
       inset: 0;
       z-index: 999999;
       background: linear-gradient(160deg, #f0fdf9 0%, #e0f2fe 100%);
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      transition: opacity 0.35s ease, visibility 0.35s ease;
-    }
-
-    .royal-loading-screen.active {
-      display: flex;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
     .royal-loading-screen.fade-out {
@@ -210,6 +206,60 @@
     @keyframes splashCardPop {
       0% { transform: scale(0.92); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* VUỐT XUỐNG ĐỂ LÀM MỚI (PULL TO REFRESH) */
+    .ptr-box {
+      overflow: hidden;
+      height: 0;
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: height 0.25s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.25s ease;
+      flex-shrink: 0;
+      z-index: 10;
+      pointer-events: none;
+      width: 100%;
+    }
+    .ptr-box.pulling {
+      transition: none;
+    }
+    .ptr-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.5px solid #ccfbf1;
+      padding: 5px 14px;
+      border-radius: 50px;
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.16);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #0f766e;
+    }
+    .ptr-icon {
+      font-size: 0.95rem;
+      transition: transform 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      line-height: 1;
+    }
+    .ptr-icon.spin {
+      border: 2px solid #ccfbf1;
+      border-top-color: #0d9488;
+      border-radius: 50%;
+      animation: ptrRotate 0.7s linear infinite;
+      font-size: 0;
+    }
+    @keyframes ptrRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     /* Top Bar Canh Giữa - Floating Royal Island Bar */
@@ -1029,6 +1079,8 @@
       margin-bottom: 6px;
       scrollbar-width: thin;
       scrollbar-color: #99f6e4 transparent;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
     }
     #schedule-wrapper::-webkit-scrollbar { width: 4px; }
     #schedule-wrapper::-webkit-scrollbar-thumb { background: #99f6e4; border-radius: 4px; }
@@ -2272,7 +2324,7 @@
 </head>
 <body>
 
-  <!-- MÀN HÌNH CHÀO HOÀNG GIA (CHỈ HIỂN THỊ KHI MỞ BẰNG APP CÀI VỀ MÁY HOẶC ?app=1) -->
+  <!-- MÀN HÌNH CHÀO HOÀNG GIA (ROYAL SPLASH SCREEN HIỂN THỊ NGAY KHI MỞ APP) -->
   <div id="app-royal-splash" class="royal-loading-screen">
     <div class="royal-loading-box">
       <div class="royal-loading-icon-ring">
@@ -2285,20 +2337,6 @@
       </div>
     </div>
   </div>
-  <script>
-    (function initAppSplash() {
-      try {
-        var isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                           window.navigator.standalone === true ||
-                           document.referrer.includes('android-app://') ||
-                           window.location.search.includes('app=1');
-        if (isStandalone) {
-          var el = document.getElementById('app-royal-splash');
-          if (el) el.classList.add('active');
-        }
-      } catch(e) {}
-    })();
-  </script>
 
   <!-- Top Bar Canh Giữa - Floating Royal Island Bar -->
   <div class="app-header">
@@ -2397,7 +2435,15 @@
     </aside>
 
     <main class="schedule-main-content">
-      <div id="loading" style="text-align:center; padding: 20px 10px; color: var(--text-muted); font-size: 0.85rem;">
+      <!-- VUỐT XUỐNG ĐỂ LÀM MỚI (PULL TO REFRESH) -->
+      <div id="ptr-box" class="ptr-box">
+        <div class="ptr-pill">
+          <div class="ptr-icon" id="ptr-icon">↓</div>
+          <span class="ptr-text" id="ptr-text">Kéo xuống để làm mới...</span>
+        </div>
+      </div>
+
+      <div id="loading" style="text-align:center; padding: 20px 10px; color: var(--text-muted); font-size: 0.85rem; display:none;">
         Đang tải dữ liệu lịch học...
       </div>
       
@@ -2888,6 +2934,102 @@
       return selected;
     }
 
+    function initPullToRefresh() {
+      const scrollContainer = document.getElementById('schedule-wrapper');
+      const touchArea = document.querySelector('.schedule-main-content') || scrollContainer;
+      const ptrBox = document.getElementById('ptr-box');
+      const ptrIcon = document.getElementById('ptr-icon');
+      const ptrText = document.getElementById('ptr-text');
+      if (!scrollContainer || !ptrBox || !touchArea) return;
+
+      let startY = 0;
+      let startX = 0;
+      let isDragging = false;
+      let isRefreshing = false;
+      const threshold = 55;
+      const maxPull = 75;
+
+      touchArea.addEventListener('touchstart', (e) => {
+        if (isRefreshing) return;
+        if (scrollContainer.scrollTop <= 0) {
+          startY = e.touches[0].clientY;
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        }
+      }, { passive: true });
+
+      touchArea.addEventListener('touchmove', (e) => {
+        if (!isDragging || isRefreshing) return;
+        const currentY = e.touches[0].clientY;
+        const currentX = e.touches[0].clientX;
+        const dy = currentY - startY;
+        const dx = currentX - startX;
+
+        // Bỏ qua nếu vuốt ngang
+        if (Math.abs(dx) > Math.abs(dy)) {
+          return;
+        }
+
+        if (dy > 0 && scrollContainer.scrollTop <= 0) {
+          ptrBox.classList.add('pulling');
+          const pullDist = Math.min(dy * 0.42, maxPull);
+          ptrBox.style.height = pullDist + 'px';
+          ptrBox.style.opacity = Math.min(pullDist / 30, 1);
+
+          if (pullDist >= threshold) {
+            ptrIcon.style.transform = 'rotate(180deg)';
+            ptrText.innerText = 'Thả tay để cập nhật!';
+          } else {
+            ptrIcon.style.transform = 'rotate(0deg)';
+            ptrText.innerText = 'Kéo xuống để làm mới...';
+          }
+        } else {
+          ptrBox.style.height = '0px';
+          ptrBox.style.opacity = '0';
+        }
+      }, { passive: true });
+
+      const onTouchEnd = () => {
+        if (!isDragging || isRefreshing) return;
+        isDragging = false;
+        ptrBox.classList.remove('pulling');
+
+        const currentHeight = parseFloat(ptrBox.style.height) || 0;
+        if (currentHeight >= threshold) {
+          isRefreshing = true;
+          if (navigator.vibrate) try { navigator.vibrate(15); } catch(e) {}
+          ptrBox.style.height = '46px';
+          ptrBox.style.opacity = '1';
+          ptrIcon.className = 'ptr-icon spin';
+          ptrIcon.style.transform = 'none';
+          ptrText.innerText = 'Đang tải lịch học mới nhất...';
+
+          loadData(true, (err) => {
+            ptrIcon.className = 'ptr-icon';
+            ptrIcon.innerText = err ? '⚠️' : '✓';
+            ptrText.innerText = err ? 'Không thể làm mới' : 'Đã cập nhật mới nhất!';
+            setTimeout(() => {
+              ptrBox.style.height = '0px';
+              ptrBox.style.opacity = '0';
+              setTimeout(() => {
+                ptrIcon.innerText = '↓';
+                ptrIcon.className = 'ptr-icon';
+                ptrText.innerText = 'Kéo xuống để làm mới...';
+                isRefreshing = false;
+              }, 300);
+            }, 600);
+          });
+        } else {
+          ptrBox.style.height = '0px';
+          ptrBox.style.opacity = '0';
+          ptrIcon.style.transform = 'rotate(0deg)';
+        }
+      };
+
+      touchArea.addEventListener('touchend', onTouchEnd);
+      touchArea.addEventListener('touchcancel', onTouchEnd);
+    }
+
     function initApp() {
       try {
         const now = new Date();
@@ -2913,6 +3055,7 @@
         calculateWeekDates();
         initTimePickers();
         updateNotifIcon();
+        initPullToRefresh();
       } catch (err) {
         console.error("Lỗi chuẩn bị giao diện:", err);
       }
@@ -3058,15 +3201,21 @@
       showRoyalAlert(title, body, iconChar || "🔔");
     }
 
-    function loadData() {
+    let splashStartTime = Date.now();
+
+    function loadData(isRefresh = false, callback = null) {
       const loadingEl = document.getElementById('loading');
-      if (loadingEl) {
-        loadingEl.style.display = 'block';
-        loadingEl.innerHTML = 'Đang tải dữ liệu lịch học...';
+      if (loadingEl && !isRefresh) {
+        const appSplash = document.getElementById('app-royal-splash');
+        if (!appSplash || appSplash.style.display === 'none') {
+          loadingEl.style.display = 'block';
+          loadingEl.innerHTML = 'Đang tải dữ liệu lịch học...';
+        }
       }
 
       const loadTimer = setTimeout(() => {
-        if (loadingEl && loadingEl.style.display !== 'none' && (!appData || !appData.lichHoc || !appData.lichHoc.length)) {
+        if (!isRefresh && loadingEl && loadingEl.style.display !== 'none' && (!appData || !appData.lichHoc || !appData.lichHoc.length)) {
+          loadingEl.style.display = 'block';
           loadingEl.innerHTML = `
             <div style="color:#b45309; background:#fef3c7; padding:10px; border-radius:10px; font-size:0.8rem; text-align:center;">
               ⏳ Kết nối mạng hơi chậm... <button onclick="loadData()" style="margin-left:6px; padding:3px 10px; border-radius:6px; background:#0f766e; color:#fff; border:none; font-weight:700; cursor:pointer;">Thử lại</button>
@@ -3078,7 +3227,8 @@
       const onSuccess = (res) => {
         clearTimeout(loadTimer);
         if (res && res.error) {
-          if (loadingEl) {
+          if (typeof callback === 'function') callback(new Error(res.error));
+          if (!isRefresh && loadingEl) {
             loadingEl.style.display = 'block';
             loadingEl.innerHTML = `
               <div style="color:#b91c1c; background:#fee2e2; padding:10px; border-radius:10px; font-size:0.8rem; text-align:left;">
@@ -3092,32 +3242,42 @@
 
         if (loadingEl) loadingEl.style.display = 'none';
 
-        // Tự động ẩn màn hình chào App (nếu đang chạy dạng App PWA)
+        // Ẩn màn hình chào hoàng gia với hiệu ứng mờ dần (giữ tối thiểu 850ms)
         const appSplash = document.getElementById('app-royal-splash');
-        if (appSplash && appSplash.classList.contains('active')) {
+        if (appSplash && !appSplash.classList.contains('fade-out')) {
+          const elapsed = Date.now() - splashStartTime;
+          const waitRemain = Math.max(0, 850 - elapsed);
           setTimeout(() => {
             appSplash.classList.add('fade-out');
             setTimeout(() => {
               appSplash.style.display = 'none';
-            }, 350);
-          }, 350);
+            }, 400);
+          }, waitRemain);
         }
+
         appData = res || { danhSachBe: ["KFC", "PEPSI"], lichHoc: [] };
         if (appData && appData.infoBaby) {
           CACHED_INFO_BABY = appData.infoBaby;
         }
         renderTimeline();
         startRealtimeClock();
+
+        if (typeof callback === 'function') {
+          callback(null, res);
+        }
       };
 
       const onFailure = (err) => {
         clearTimeout(loadTimer);
         const appSplash = document.getElementById('app-royal-splash');
-        if (appSplash && appSplash.classList.contains('active')) {
+        if (appSplash && !appSplash.classList.contains('fade-out')) {
           appSplash.classList.add('fade-out');
-          setTimeout(() => { appSplash.style.display = 'none'; }, 350);
+          setTimeout(() => { appSplash.style.display = 'none'; }, 400);
         }
-        if (loadingEl) {
+        if (typeof callback === 'function') {
+          callback(err);
+        }
+        if (!isRefresh && loadingEl) {
           loadingEl.style.display = 'block';
           loadingEl.innerHTML = `
             <div style="color:#b91c1c; background:#fee2e2; padding:10px; border-radius:10px; font-size:0.8rem; text-align:left;">
