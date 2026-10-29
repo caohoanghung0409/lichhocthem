@@ -1409,14 +1409,14 @@
 
     @keyframes pulseCompletedStamp {
       0%, 100% {
-        opacity: 0.95;
+        opacity: 1;
         transform: translateY(-50%) rotate(-15deg) scale(1);
-        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
       }
       50% {
-        opacity: 0.35;
-        transform: translateY(-50%) rotate(-15deg) scale(0.96);
-        box-shadow: 0 0 14px 4px rgba(16, 185, 129, 0.25);
+        opacity: 0.82;
+        transform: translateY(-50%) rotate(-15deg) scale(0.97);
+        box-shadow: 0 0 4px rgba(16, 185, 129, 0.2);
       }
     }
 
@@ -1427,7 +1427,7 @@
       transform: translateY(-50%) rotate(-15deg);
       width: 96px;
       height: 96px;
-      border: 2px dashed rgba(16, 185, 129, 0.9);
+      border: 2.5px dashed #059669;
       border-radius: 50%;
       display: flex;
       flex-direction: column;
@@ -1435,27 +1435,30 @@
       justify-content: center;
       pointer-events: none;
       z-index: 10;
-      background: rgba(236, 253, 245, 0.72);
+      background: rgba(240, 253, 244, 0.95);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
       animation: stampIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulseCompletedStamp 1.6s ease-in-out 0.45s infinite;
     }
     .stamp-completed-seal-red::before {
       content: '';
       position: absolute;
       inset: 3px;
-      border: 1px solid rgba(16, 185, 129, 0.55);
+      border: 1.5px solid rgba(16, 185, 129, 0.85);
       border-radius: 50%;
     }
     .stamp-red-text {
-      font-size: 0.72rem;
-      font-weight: 900;
+      font-size: 0.76rem;
+      font-weight: 950;
       color: #047857;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       font-family: 'Plus Jakarta Sans', sans-serif;
+      text-shadow: 0 1px 2px rgba(4, 120, 87, 0.22);
     }
     .stamp-red-star {
-      font-size: 0.68rem;
-      color: #10b981;
+      font-size: 0.72rem;
+      color: #059669;
+      letter-spacing: 2.5px;
       line-height: 1;
     }
 
@@ -3025,11 +3028,11 @@
 
         // Ngưỡng vuốt ngang hợp lệ: khoảng cách ngang >= 42px và thời gian vuốt < 800ms
         if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy) * 1.2 && elapsed < 800) {
-          if (dx > 0) {
-            // Vuốt qua PHẢI (ngón tay kéo sang phải): Tiến tới ngày tiếp theo (vd: T5 -> T6)
+          if (dx < 0) {
+            // Vuốt qua TRÁI (ngón tay gạt sang trái): Tiến tới ngày kế tiếp (vd: T5 -> T6)
             switchDayBySwipe('next');
           } else {
-            // Vuốt qua TRÁI (ngón tay kéo sang trái): Lùi về ngày trước đó (vd: T5 -> T4)
+            // Vuốt qua PHẢI (ngón tay gạt sang phải): Lùi về ngày trước đó (vd: T5 -> T4)
             switchDayBySwipe('prev');
           }
         }
