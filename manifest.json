@@ -1,11 +1,11 @@
 {
-  "name": "LỊCH HỌC THÊM",
+  "name": "Lịch Học 2 Công Chúa",
   "short_name": "Lịch Học",
-  "description": "Lịch học thêm gia đình An Nhiên & Thiên Ý",
+  "description": "Lịch học thêm của An Nhiên và Thiên Ý",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#f8fafc",
   "theme_color": "#0f766e",
   "orientation": "portrait-primary",
   "icons": [
