@@ -145,11 +145,11 @@
       to { transform: rotate(360deg); }
     }
 
-    /* HIỆU ỨNG CHUYỂN NGÀY KHI VUỐT TRÁI / PHẢI */
+    /* HIỆU ỨNG CHUYỂN NGÀY KHI VUỐT TRÁI / PHẢI (MƯỢT MÀ, KHÔNG RUNG LẮC TOÀN TRANG) */
     @keyframes slideDayFromRight {
       0% {
         opacity: 0.35;
-        transform: translateX(30px);
+        transform: translateX(18px);
       }
       100% {
         opacity: 1;
@@ -160,7 +160,7 @@
     @keyframes slideDayFromLeft {
       0% {
         opacity: 0.35;
-        transform: translateX(-30px);
+        transform: translateX(-18px);
       }
       100% {
         opacity: 1;
@@ -174,6 +174,24 @@
 
     .day-slide-prev {
       animation: slideDayFromLeft 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) forwards !important;
+    }
+
+    /* HIỆU ỨNG NHẤP NHÁY (BLINK) CHO TAB NGÀY ĐANG ĐƯỢC CHỌN (YÊU CẦU 3) */
+    @keyframes tabBlinkPulse {
+      0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 12px rgba(15, 118, 110, 0.65), 0 3px 8px rgba(0, 0, 0, 0.2);
+        filter: brightness(1.05);
+      }
+      50% {
+        opacity: 0.36;
+        box-shadow: 0 0 2px rgba(15, 118, 110, 0.1);
+        filter: brightness(0.85);
+      }
+    }
+
+    .day-chip.tab-blinking {
+      animation: tabBlinkPulse 1.05s ease-in-out infinite !important;
     }
 
     /* Top Bar Canh Giữa - Floating Royal Island Bar */
@@ -437,11 +455,13 @@
     /* KHUNG BỐ CỤC CHÍNH (CÂU 4: DỌC TRÊN DESKTOP, NGANG TRÊN MOBILE) */
     .main-layout-container {
       width: 100%;
+      max-width: 100%;
       display: flex;
       flex-direction: column;
       flex: 1 1 auto;
       min-width: 0;
       min-height: 0;
+      overflow-x: hidden !important;
     }
     .calendar-sidebar-section {
       width: 100%;
@@ -449,11 +469,13 @@
     }
     .schedule-main-content {
       width: 100%;
+      max-width: 100%;
       flex: 1 1 auto;
       min-width: 0;
       min-height: 0;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden !important;
     }
 
     /* BỘ CHUYỂN TUẦN (WEEK NAVIGATOR - CÂU 5) */
@@ -1389,12 +1411,12 @@
       0%, 100% {
         opacity: 0.95;
         transform: translateY(-50%) rotate(-15deg) scale(1);
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
       }
       50% {
         opacity: 0.35;
         transform: translateY(-50%) rotate(-15deg) scale(0.96);
-        box-shadow: 0 0 14px 4px rgba(239, 68, 68, 0.2);
+        box-shadow: 0 0 14px 4px rgba(16, 185, 129, 0.25);
       }
     }
 
@@ -1405,7 +1427,7 @@
       transform: translateY(-50%) rotate(-15deg);
       width: 96px;
       height: 96px;
-      border: 2px dashed rgba(239, 68, 68, 0.8);
+      border: 2px dashed rgba(16, 185, 129, 0.9);
       border-radius: 50%;
       display: flex;
       flex-direction: column;
@@ -1413,27 +1435,27 @@
       justify-content: center;
       pointer-events: none;
       z-index: 10;
-      background: rgba(254, 242, 242, 0.5);
+      background: rgba(236, 253, 245, 0.72);
       animation: stampIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulseCompletedStamp 1.6s ease-in-out 0.45s infinite;
     }
     .stamp-completed-seal-red::before {
       content: '';
       position: absolute;
       inset: 3px;
-      border: 1px solid rgba(239, 68, 68, 0.55);
+      border: 1px solid rgba(16, 185, 129, 0.55);
       border-radius: 50%;
     }
     .stamp-red-text {
       font-size: 0.72rem;
       font-weight: 900;
-      color: rgba(220, 38, 38, 0.95);
+      color: #047857;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .stamp-red-star {
       font-size: 0.68rem;
-      color: rgba(220, 38, 38, 0.9);
+      color: #10b981;
       line-height: 1;
     }
 
@@ -2296,7 +2318,7 @@
 
       <!-- DẢI LỊCH MINI CALENDAR STRIP -->
       <div class="calendar-bar-wrapper">
-        <div class="day-chip mode-pill today-fixed-chip active" data-day="Hôm nay" onclick="selectDay('Hôm nay')">
+        <div class="day-chip mode-pill today-fixed-chip" data-day="Hôm nay" onclick="selectDay('Hôm nay')">
           <span style="font-size:0.75rem; font-weight:800;">⚡ HÔM NAY</span>
         </div>
         <div class="days-track" id="days-track">
@@ -2569,7 +2591,7 @@
 
     let appData = { danhSachBe: ["KFC", "PEPSI"], lichHoc: [] };
     let activeChild = 'Tất cả';
-    let activeDay = 'Hôm nay';
+    let activeDay = '';
     let todayName = '';
     let fullDateString = '';
     let countdownTimer = null;
@@ -3003,11 +3025,11 @@
 
         // Ngưỡng vuốt ngang hợp lệ: khoảng cách ngang >= 42px và thời gian vuốt < 800ms
         if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy) * 1.2 && elapsed < 800) {
-          if (dx < 0) {
-            // Vuốt sang TRÁI (ngón tay kéo sang trái): Xem ngày TIẾP THEO (vd: T5 -> T6)
+          if (dx > 0) {
+            // Vuốt qua PHẢI (ngón tay kéo sang phải): Tiến tới ngày tiếp theo (vd: T5 -> T6)
             switchDayBySwipe('next');
           } else {
-            // Vuốt sang PHẢI (ngón tay kéo sang phải): Xem ngày TRƯỚC ĐÓ (vd: T5 -> T4)
+            // Vuốt qua TRÁI (ngón tay kéo sang trái): Lùi về ngày trước đó (vd: T5 -> T4)
             switchDayBySwipe('prev');
           }
         }
@@ -3121,6 +3143,9 @@
         updateNotifIcon();
         initPullToRefresh();
         initDaySwipeGesture();
+        if (todayName) {
+          selectDay(todayName);
+        }
       } catch (err) {
         console.error("Lỗi chuẩn bị giao diện:", err);
       }
@@ -3371,13 +3396,32 @@
       }
       activeDay = dayKey;
 
+      // Kiểm tra nếu tab đang chọn trùng với ngày hôm nay (trong tuần hiện tại)
+      const isMatchingToday = (currentWeekOffset === 0 && (dayKey === 'Hôm nay' || (todayName && dayKey.toLowerCase() === todayName.toLowerCase())));
+
       document.querySelectorAll('.day-chip').forEach(chip => {
         const chipDay = chip.getAttribute('data-day');
-        if (chipDay === dayKey) {
-          chip.classList.add('active');
+        const isThisChipToday = (chipDay === 'Hôm nay' || (todayName && chipDay.toLowerCase() === todayName.toLowerCase()));
+
+        let shouldActive = false;
+        let shouldBlink = false;
+
+        if (isMatchingToday) {
+          // Trùng ngày hôm nay -> Cả HÔM NAY và thứ hiện tại đều active & nhấp nháy
+          if (isThisChipToday) {
+            shouldActive = true;
+            shouldBlink = true;
+          }
         } else {
-          chip.classList.remove('active');
+          // Ở thứ khác / Cả tuần -> Chỉ đúng tab được chọn active & nhấp nháy
+          if (chipDay === dayKey) {
+            shouldActive = true;
+            shouldBlink = true;
+          }
         }
+
+        chip.classList.toggle('active', shouldActive);
+        chip.classList.toggle('tab-blinking', shouldBlink);
       });
 
       const dateInputEl = document.getElementById('header-date-input');
