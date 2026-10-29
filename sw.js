@@ -1,5 +1,5 @@
-// Service Worker cho PWA Lịch Học 2 Công Chúa
-const CACHE_NAME = 'lichhoc-pwa-v1';
+// Service Worker cho PWA Lịch Học Thêm
+const CACHE_NAME = 'lichhoc-pwa-v2';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
@@ -15,4 +15,3 @@ self.addEventListener('fetch', (e) => {
     fetch(e.request).catch(() => caches.match(e.request))
   );
 });
-
