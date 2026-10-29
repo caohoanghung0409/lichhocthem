@@ -1,0 +1,3999 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Lịch Học 2 Công Chúa</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Lịch Học">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1zuVfqhX8uSq-X2gyC3uL8FK-WFaHPc9U">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #f8fafc;
+      --card-bg: #ffffff;
+      --border-subtle: #edf2f7;
+
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      
+      --kfc-accent: #87CEFF;
+      --kfc-badge-bg: #e0f2fe;
+      --kfc-badge-text: #0284c7;
+      --kfc-border: #87CEFF;
+      
+      --pepsi-accent: #FFD1DC;
+      --pepsi-badge-bg: #fff5f8;
+      --pepsi-badge-text: #db2777;
+      --pepsi-border: #FFD1DC;
+
+      --live-green: #059669;
+      --live-bg: #ecfdf5;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(160deg, #f0fdf9 0%, #e0f2fe 100%);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      padding: 6px 12px 6px 12px;
+    }
+
+    /* Top Bar Canh Giữa - Floating Royal Island Bar */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      padding: 5px 8px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(204, 251, 241, 0.85);
+      border-radius: 18px;
+      box-shadow: 0 3px 12px rgba(15, 118, 110, 0.06);
+    }
+    .header-left-slot {
+      flex: 1 1 0;
+      min-width: 32px;
+      height: 36px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .header-right-slot {
+      flex: 1 1 0;
+      min-width: 32px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .shuttle-track {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .shuttle-hlny-logo {
+      position: absolute;
+      left: 0;
+      width: 28px;
+      height: 28px;
+      object-fit: cover;
+      border-radius: 7px;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.12);
+      animation: hlnyShuttleMotion 3.6s ease-in-out infinite;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    @keyframes hlnyShuttleMotion {
+      0% {
+        left: 0;
+      }
+      50% {
+        left: calc(100% - 28px);
+      }
+      100% {
+        left: 0;
+      }
+    }
+    .header-center-box {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0 2px;
+      white-space: nowrap !important;
+    }
+    .header-title-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      white-space: nowrap !important;
+      flex-shrink: 0;
+    }
+    .header-avatar-left,
+    .header-avatar-right {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    .header-avatar-left {
+      border: 2px solid #87CEFF;
+      box-shadow: 0 2px 8px rgba(135, 206, 255, 0.5);
+      animation: avatarFloatLeft 2.8s ease-in-out infinite;
+    }
+    .header-avatar-right {
+      border: 2px solid #FFD1DC;
+      box-shadow: 0 2px 8px rgba(255, 209, 220, 0.5);
+      animation: avatarFloatRight 2.8s ease-in-out infinite 0.4s;
+    }
+    .header-avatar-left:hover {
+      transform: scale(1.18);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+    }
+    .header-avatar-right:hover {
+      transform: scale(1.18);
+      box-shadow: 0 4px 12px rgba(219, 39, 119, 0.4);
+    }
+    @keyframes avatarFloatLeft {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-2.5px) rotate(-7deg); }
+    }
+    @keyframes avatarFloatRight {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-2.5px) rotate(7deg); }
+    }
+    .header-gradient-title {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      background: linear-gradient(120deg, #0284c7 0%, #0d9488 48%, #db2777 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      line-height: 1.15;
+      white-space: nowrap !important;
+      display: inline-block;
+    }
+    .header-date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+      background: #ffffff;
+      border: 1px solid #ccfbf1;
+      padding: 1px 8px;
+      border-radius: 50px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #0f766e;
+      box-shadow: 0 1px 3px rgba(15, 118, 110, 0.05);
+      line-height: 1.2;
+      white-space: nowrap !important;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .header-date-pill:hover {
+      background: #f0fdfa;
+      border-color: #0f766e;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.15);
+      transform: translateY(-1px);
+    }
+    .header-date-dropdown-arrow {
+      font-size: 0.52rem;
+      color: #0f766e;
+      opacity: 0.75;
+      margin-left: 1px;
+    }
+    .header-hidden-date-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .header-hidden-date-input::-webkit-calendar-picker-indicator {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .btn-notif {
+      background: #ffffff;
+      border: 1px solid #ccfbf1;
+      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.05rem;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.08);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .btn-notif:active { transform: scale(0.9); }
+
+    /* BỘ LỌC CÔNG CHÚA INTERACTIVE PROFILE TABS */
+    .princess-profile-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+    .profile-nav-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(204, 251, 241, 0.9);
+      padding: 5px 6px;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.02);
+      white-space: nowrap;
+    }
+    .profile-nav-btn:active { transform: scale(0.96); }
+    
+    .profile-nav-btn.active {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12) !important;
+      transform: translateY(-1px);
+    }
+    .profile-nav-btn.active.kfc {
+      border-color: var(--kfc-accent) !important;
+      color: var(--kfc-badge-text) !important;
+    }
+    .profile-nav-btn.active.pepsi {
+      border-color: var(--pepsi-accent) !important;
+      color: var(--pepsi-badge-text) !important;
+    }
+    .profile-nav-btn.active.both {
+      border-color: #0d9488 !important;
+      color: #0f766e !important;
+    }
+
+    .profile-nav-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    /* KHUNG BỐ CỤC CHÍNH (CÂU 4: DỌC TRÊN DESKTOP, NGANG TRÊN MOBILE) */
+    .main-layout-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+    }
+    .calendar-sidebar-section {
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .schedule-main-content {
+      width: 100%;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BỘ CHUYỂN TUẦN (WEEK NAVIGATOR - CÂU 5) */
+    .week-navigator-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #ccfbf1;
+      padding: 4px 6px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.06);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .week-nav-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #99f6e4;
+      background: #f0fdfa;
+      color: #0f766e;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .week-nav-btn:hover {
+      background: #0f766e;
+      color: #ffffff;
+      border-color: #0f766e;
+      transform: scale(1.08);
+    }
+    .week-nav-btn:active {
+      transform: scale(0.95);
+    }
+    .week-nav-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 3px 6px;
+      border-radius: 8px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .week-nav-info:hover {
+      background: #f0fdfa;
+    }
+    .week-nav-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #0f766e;
+      letter-spacing: 0.2px;
+    }
+    .week-nav-range {
+      font-size: 0.70rem;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    /* Dải Lịch Mini Calendar Strip */
+    .calendar-bar-wrapper {
+      display: flex;
+      align-items: stretch;
+      gap: 5px;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .today-fixed-chip {
+      flex: 0 0 auto;
+      white-space: nowrap;
+      min-height: 38px;
+    }
+
+    .days-track {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .days-track::-webkit-scrollbar { display: none; }
+
+    /* CỘT DỌC BÊN TRÁI TRÊN MÁY TÍNH / IPAD / MÀN HÌNH RỘNG (CÁCH 1 CÂU 4) */
+    @media (min-width: 768px) {
+      .app-header,
+      .princess-profile-nav,
+      .main-layout-container,
+      .app-footer {
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+      }
+      .main-layout-container {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 16px;
+        flex: 1 1 auto;
+        min-height: 0;
+      }
+      .calendar-sidebar-section {
+        width: 200px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid #ccfbf1;
+        padding: 10px 8px;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(15, 118, 110, 0.08);
+        box-sizing: border-box;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+      .calendar-sidebar-section::-webkit-scrollbar { display: none; }
+      
+      .week-nav-info {
+        flex-direction: column;
+        gap: 2px;
+        text-align: center;
+        padding: 2px 2px;
+      }
+      .week-nav-title {
+        font-size: 0.74rem;
+      }
+      .week-nav-range {
+        font-size: 0.65rem;
+      }
+
+      .calendar-bar-wrapper {
+        flex-direction: column;
+        gap: 6px;
+      }
+      .days-track {
+        flex-direction: column;
+        gap: 6px;
+        overflow: visible;
+      }
+      .today-fixed-chip {
+        width: 100%;
+        min-height: 36px;
+        border-radius: 9px !important;
+        justify-content: center !important;
+      }
+      .day-chip.mode-pill {
+        width: 100%;
+        min-height: 36px;
+        border-radius: 9px !important;
+        justify-content: center !important;
+      }
+      .day-chip:not(.mode-pill) {
+        width: 100%;
+        min-height: 36px;
+        padding: 6px 12px;
+        border-radius: 9px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(204, 251, 241, 0.9);
+        border-left: 4.5px solid var(--day-c, #0f766e);
+      }
+      .day-chip:not(.mode-pill) .day-chip-name {
+        font-size: 0.78rem;
+      }
+      .day-chip:not(.mode-pill) .day-chip-date {
+        font-size: 0.74rem;
+        margin-top: 0;
+      }
+      .day-chip.is-current-day:not(.active) {
+        border-top: 1px solid var(--day-c, #0f766e) !important;
+        border-left: 5px solid var(--day-c, #0f766e) !important;
+      }
+    }
+    
+    .day-chip {
+      flex: 0 0 auto;
+      min-width: 46px;
+      min-height: 38px;
+      padding: 3px 6px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(204, 251, 241, 0.9);
+      color: #115e59;
+      border-radius: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .day-chip-name {
+      font-size: 0.66rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .day-chip-date {
+      font-size: 0.74rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-top: 1px;
+    }
+
+    /* MÀU SẮC RIÊNG CHO TỪNG NGÀY TRONG TUẦN (MỖI NGÀY 1 MÀU) */
+    .day-chip[data-day="Thứ 2"] { --day-c: #0284c7; --day-bg: #f0f9ff; }
+    .day-chip[data-day="Thứ 3"] { --day-c: #8b5cf6; --day-bg: #f5f3ff; }
+    .day-chip[data-day="Thứ 4"] { --day-c: #059669; --day-bg: #ecfdf5; }
+    .day-chip[data-day="Thứ 5"] { --day-c: #d97706; --day-bg: #fffbeb; }
+    .day-chip[data-day="Thứ 6"] { --day-c: #e11d48; --day-bg: #fff1f2; }
+    .day-chip[data-day="Thứ 7"] { --day-c: #4f46e5; --day-bg: #eef2ff; }
+    .day-chip[data-day="Chủ Nhật"] { --day-c: #dc2626; --day-bg: #fef2f2; }
+
+    /* Khi chưa chọn: có viền trên và chữ màu riêng của ngày */
+    .day-chip:not(.mode-pill) {
+      border-top: 3px solid var(--day-c, #0f766e);
+    }
+    .day-chip:not(.mode-pill):not(.active) .day-chip-name {
+      color: var(--day-c, #115e59);
+    }
+
+    /* Khi ĐƯỢC CHỌN (Active) */
+    .day-chip.mode-pill.active {
+      background: #0f766e !important;
+      color: #ffffff !important;
+      border-color: #0f766e !important;
+      box-shadow: 0 3px 8px rgba(15, 118, 110, 0.25);
+      transform: translateY(-1px);
+    }
+    .day-chip:not(.mode-pill).active {
+      background: var(--day-c, #0f766e) !important;
+      border-color: var(--day-c, #0f766e) !important;
+      color: #ffffff !important;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+      transform: translateY(-1px);
+    }
+    .day-chip:not(.mode-pill).active .day-chip-name,
+    .day-chip:not(.mode-pill).active .day-chip-date {
+      color: #ffffff !important;
+    }
+
+    .day-chip.mode-pill {
+      min-width: auto;
+      padding: 0 11px;
+      border-radius: 50px;
+      flex-direction: row;
+      gap: 4px;
+    }
+
+    .day-chip.is-current-day:not(.active) {
+      border: 1.5px solid var(--day-c, #0f766e) !important;
+      border-top: 3px solid var(--day-c, #0f766e) !important;
+      background: var(--day-bg, #f0fdfa) !important;
+    }
+    .day-chip.is-current-day:not(.active) .day-chip-name {
+      color: var(--day-c, #0f766e) !important;
+      font-weight: 800 !important;
+    }
+
+    /* Hiệu ứng chấm đỏ phát sáng trực tiếp cho ĐANG HỌC */
+    .pulsing-dot-red {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      animation: pulseRedAnimation 1.5s infinite;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    @keyframes pulseRedAnimation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 5px rgba(239, 68, 68, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    /* Hiệu ứng chấm xanh phát sáng cho SẮP HỌC (> 60 phút) */
+    .pulsing-dot, .pulsing-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #16a34a;
+      box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+      animation: pulseGreenAnimation 1.5s infinite;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    @keyframes pulseGreenAnimation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 5px rgba(22, 163, 74, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
+
+    /* Hiệu ứng chấm vàng hổ phách cho SẮP HỌC (30 - 60 phút) */
+    .pulsing-dot-amber {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f59e0b;
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      animation: pulseAmberAnimation 1.5s infinite;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    @keyframes pulseAmberAnimation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 5px rgba(245, 158, 11, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+
+    /* Hiệu ứng chấm cam đỏ khẩn cấp cho SẮP HỌC (< 30 phút) */
+    .pulsing-dot-orange {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ea580c;
+      box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7);
+      animation: pulseOrangeAnimation 1.5s infinite;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+    @keyframes pulseOrangeAnimation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.7); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 5px rgba(234, 88, 12, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 88, 12, 0); }
+    }
+
+    /* THANH TRẠNG THÁI & ĐẾM NGƯỢC THỜI GIAN THỰC TÍCH HỢP TRÊN THẺ */
+    .card-live-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 7px;
+      margin: 3px 0 5px 0;
+      box-sizing: border-box;
+      font-size: 0.68rem;
+      font-weight: 700;
+      line-height: 1.25;
+      animation: fadeInLiveBar 0.3s ease-out;
+    }
+    @keyframes fadeInLiveBar {
+      from { opacity: 0; transform: translateY(-3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* ĐANG HỌC: MÀU ĐỎ TRỰC TIẾP (LIVE) */
+    .card-live-bar.during {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    .card-live-bar.during .live-bar-timer { color: #dc2626; }
+
+    /* SẮP HỌC & CHUẨN BỊ VÀO LỚP CÁC GIAI ĐOẠN ĐỔI TỪ XANH SANG CAM ĐỎ */
+    /* 1. SẮP HỌC: Xanh lá tươi mát khi qua ngày mới hoặc còn > 60 phút */
+    .card-live-bar.upcoming,
+    .card-live-bar.upcoming.stage-green {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      justify-content: center;
+      text-align: center;
+    }
+    .card-live-bar.upcoming .live-bar-timer,
+    .card-live-bar.upcoming.stage-green .live-bar-timer { color: #047857; }
+
+    /* 2. CHUẨN BỊ VÀO LỚP: Cam đỏ khẩn trương (Còn <= 60 phút) */
+    .card-live-bar.upcoming.stage-orange {
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      color: #9a3412;
+      justify-content: center;
+      text-align: center;
+    }
+    .card-live-bar.upcoming.stage-orange .live-bar-timer { color: #ea580c; }
+
+    .live-bar-single {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      width: 100%;
+    }
+    .live-bar-single.stage-green {
+      color: #065f46;
+    }
+    .live-bar-single.stage-green b {
+      color: #047857;
+      font-size: 0.76rem;
+      font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+    }
+    .live-bar-single.stage-orange {
+      color: #9a3412;
+    }
+    .live-bar-single.stage-orange b {
+      color: #ea580c;
+      font-size: 0.76rem;
+      font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+    }
+
+    .card-live-bar .live-bar-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 800;
+      font-size: 0.64rem;
+      letter-spacing: 0.2px;
+      flex-shrink: 0;
+    }
+    .card-live-bar .live-bar-timer {
+      font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+      font-weight: 800;
+      font-size: 0.72rem;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    /* HUY HIỆU TRÊN DÒNG TIÊU ĐỀ */
+    .badge-card-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      font-size: 0.60rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .badge-card-upcoming,
+    .badge-card-upcoming.stage-green {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      font-size: 0.60rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .badge-card-upcoming.stage-amber {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .badge-card-upcoming.stage-orange {
+      background: #ffedd5;
+      color: #c2410c;
+      border: 1px solid #fed7aa;
+    }
+
+    /* ============================================================
+       2. BẢNG CHI TIẾT MÔN HỌC (DETAILED SCHEDULE LIST)
+       ============================================================ */
+    .schedule-list-header {
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 6px 6px 4px;
+      margin-top: 0;
+      margin-bottom: 7px;
+      background: rgba(240, 253, 250, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1.5px solid rgba(15, 118, 110, 0.15);
+    }
+    .schedule-list-title-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .schedule-list-icon {
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    .schedule-list-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+    .schedule-list-main-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #0f766e;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .schedule-list-sub-title {
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .schedule-list-counter {
+      background: #ccfbf1;
+      color: #0f766e;
+      border: 1px solid #99f6e4;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 50px;
+    }
+
+    /* Khu vực cuộn danh sách */
+    #schedule-wrapper {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 2px;
+      margin-bottom: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #99f6e4 transparent;
+    }
+    #schedule-wrapper::-webkit-scrollbar { width: 4px; }
+    #schedule-wrapper::-webkit-scrollbar-thumb { background: #99f6e4; border-radius: 4px; }
+
+    /* THẺ THÔNG BÁO BÉ NGHỈ HỌC TRONG NGÀY (HIỆN RÕ CHỮ VÀ AVATAR) */
+    .child-no-lesson-card {
+      background: #ffffff;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+    }
+    .child-no-lesson-card.KFC { border-color: #87CEFF; background: #f0f9ff; }
+    .child-no-lesson-card.PEPSI { border-color: #FFD1DC; background: #fffbfc; }
+
+    .child-no-lesson-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      border: 1.5px solid #ffffff;
+    }
+    .child-no-lesson-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .no-lesson-main-text {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.3;
+    }
+    .no-lesson-sub-text {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #0f766e;
+      line-height: 1.3;
+    }
+
+    .smart-forward-notice {
+      background: #ffffff;
+      border: 1px solid #ccfbf1;
+      color: #0f766e;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 12px 14px;
+      border-radius: 14px;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.05);
+      text-align: center;
+    }
+    .smart-forward-badge {
+      display: inline-block;
+      background: #f0fdf9;
+      color: #0d9488;
+      border: 1px solid #99f6e4;
+      padding: 2px 9px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+      align-self: center;
+    }
+
+    .day-group-header {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #0f766e;
+      margin: 10px 0 6px 2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      background: rgba(204, 251, 241, 0.45);
+      border-radius: 9px;
+      border-left: 3px solid #0f766e;
+    }
+    .child-label-badge {
+      font-size: 0.68rem;
+      background: #ffffff;
+      color: #0f766e;
+      padding: 2px 7px;
+      border-radius: 50px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      border: 1px solid #99f6e4;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    /* THẺ MÔN HỌC CHI TIẾT - THEO MÀU NHẬN DIỆN RIÊNG CỦA TỪNG BÉ */
+    .agenda-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 9px 11px;
+      margin-bottom: 8px;
+      position: relative;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    /* 1. MÔN CỦA AN NHIÊN (KFC) - TÔNG XANH DA TRỜI (#87CEFF) */
+    .agenda-card.KFC {
+      background: linear-gradient(145deg, #ffffff 0%, #f0f9ff 55%, #e0f2fe 100%) !important;
+      border: 1.5px solid #87CEFF !important;
+      border-left: 5.5px solid #87CEFF !important;
+      box-shadow: 0 3px 12px rgba(135, 206, 255, 0.22);
+    }
+    .agenda-card.KFC .time-capsule-col {
+      background: #f0f9ff;
+      border: 1px solid #87CEFF;
+    }
+    .agenda-card.KFC .time-start-24,
+    .agenda-card.KFC .time-end-24 {
+      color: #0284c7;
+    }
+    .agenda-card.KFC .time-duration-chip {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #87CEFF;
+    }
+    /* Ô Địa chỉ bấm được mở Bản đồ cho An Nhiên */
+    .agenda-card.KFC .meta-chip.meta-chip-address {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #87CEFF;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .agenda-card.KFC .meta-chip.meta-chip-address:hover {
+      background: #bae6fd;
+      text-decoration: underline;
+    }
+    /* Nút Gọi cho An Nhiên (màu Xanh Lá chuẩn điện thoại) */
+    .agenda-card.KFC .action-btn.call {
+      background: #ecfdf5 !important;
+      color: #047857 !important;
+      border: 1px solid #a7f3d0 !important;
+      font-weight: 800 !important;
+    }
+    .agenda-card.KFC .btn-card-edit-corner {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+      color: #0284c7;
+    }
+    .agenda-card.KFC .btn-card-edit-corner:hover {
+      background: #e0f2fe;
+      border-color: #87CEFF;
+    }
+    .agenda-card.KFC .next-session-tag {
+      background: #f0f9ff;
+      color: #0284c7;
+      border-color: #87CEFF;
+    }
+    .agenda-card.KFC .meta-chip {
+      background: rgba(224, 242, 254, 0.65);
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+    .agenda-card.KFC .agenda-actions {
+      border-top: 1px dashed #87CEFF;
+    }
+
+    /* 2. MÔN CỦA THIÊN Ý (PEPSI) - TÔNG HỒNG PHẤN NHẸ NHÀNG (#FFD1DC) */
+    .agenda-card.PEPSI {
+      background: linear-gradient(145deg, #ffffff 0%, #fffbfc 55%, #fff0f4 100%) !important;
+      border: 1.5px solid #FFD1DC !important;
+      border-left: 5.5px solid #FFC4D0 !important;
+      box-shadow: 0 3px 12px rgba(255, 209, 220, 0.28);
+    }
+    .agenda-card.PEPSI .time-capsule-col {
+      background: #fffbfc;
+      border: 1px solid #FFD1DC;
+    }
+    .agenda-card.PEPSI .time-start-24,
+    .agenda-card.PEPSI .time-end-24 {
+      color: #db2777;
+    }
+    .agenda-card.PEPSI .time-duration-chip {
+      background: #fff0f4;
+      color: #be185d;
+      border: 1px solid #FFD1DC;
+    }
+    /* Ô Địa chỉ bấm được mở Bản đồ cho Thiên Ý */
+    .agenda-card.PEPSI .meta-chip.meta-chip-address {
+      background: #fff0f4;
+      color: #be185d;
+      border: 1px solid #FFD1DC;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .agenda-card.PEPSI .meta-chip.meta-chip-address:hover {
+      background: #fce7f3;
+      text-decoration: underline;
+    }
+    /* Nút Gọi cho Thiên Ý (màu Xanh Lá chuẩn điện thoại) */
+    .agenda-card.PEPSI .action-btn.call {
+      background: #ecfdf5 !important;
+      color: #047857 !important;
+      border: 1px solid #a7f3d0 !important;
+      font-weight: 800 !important;
+    }
+    .agenda-card.PEPSI .btn-card-edit-corner {
+      background: #fffbfc;
+      border-color: #fce7f3;
+      color: #db2777;
+    }
+    .agenda-card.PEPSI .btn-card-edit-corner:hover {
+      background: #fff0f4;
+      border-color: #FFD1DC;
+    }
+    .agenda-card.PEPSI .next-session-tag {
+      background: #fffbfc;
+      color: #be185d;
+      border-color: #FFD1DC;
+    }
+    .agenda-card.PEPSI .meta-chip {
+      background: rgba(255, 240, 244, 0.75);
+      color: #9d174d;
+      border: 1px solid #FFD1DC;
+    }
+    .agenda-card.PEPSI .agenda-actions {
+      border-top: 1px dashed #FFD1DC;
+    }
+
+    /* HIỆU ỨNG THẺ ĐANG HỌC (LIVE) - NỘI DUNG MỜ, CHỮ VÀ THANH "ĐANG HỌC" SÁNG RÕ */
+    .agenda-card.is-live {
+      box-shadow: none !important;
+      outline: none !important;
+    }
+    .agenda-card.KFC.is-live {
+      background: rgba(240, 249, 255, 0.45) !important;
+      border-left: 5.5px solid #87CEFF !important;
+      border-color: rgba(135, 206, 255, 0.45) !important;
+    }
+    .agenda-card.PEPSI.is-live {
+      background: rgba(255, 240, 244, 0.45) !important;
+      border-left: 5.5px solid #FFC4D0 !important;
+      border-color: rgba(255, 209, 220, 0.45) !important;
+    }
+
+    /* Chi tiết môn học được làm mờ dịu đi */
+    .agenda-card.is-live .agenda-left-col,
+    .agenda-card.is-live .time-capsule-col,
+    .agenda-card.is-live .child-badge-tag,
+    .agenda-card.is-live .subject-title,
+    .agenda-card.is-live .mini-child-chip,
+    .agenda-card.is-live .info-meta-chips,
+    .agenda-card.is-live .next-session-tag,
+    .agenda-card.is-live .agenda-actions,
+    .agenda-card.is-live .btn-card-edit-corner {
+      opacity: 0.42 !important;
+      filter: saturate(0.75);
+    }
+
+    /* RIÊNG CHỮ VÀ THANH "ĐANG HỌC" ĐƯỢC GIỮ SÁNG RÕ, NỔI BẬT THEO YÊU CẦU */
+    .agenda-card.is-live .badge-status-slot,
+    .agenda-card.is-live .card-live-bar-slot {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    .agenda-card.is-live .badge-card-live {
+      opacity: 1 !important;
+      background: #fee2e2 !important;
+      color: #b91c1c !important;
+      border: 1px solid #f87171 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 1px 4px rgba(239, 68, 68, 0.25) !important;
+    }
+    .agenda-card.is-live .card-live-bar.during {
+      opacity: 1 !important;
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+      border: 1.5px solid #f87171 !important;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.22) !important;
+    }
+    .agenda-card.is-live .card-live-bar.during .live-bar-left {
+      color: #b91c1c !important;
+      font-weight: 900 !important;
+    }
+    .agenda-card.is-live .card-live-bar.during .live-bar-timer {
+      color: #dc2626 !important;
+      font-weight: 900 !important;
+    }
+
+    /* HIỆU ỨNG THẺ SẮP HỌC (UPCOMING) */
+    .agenda-card.is-upcoming.stage-green {
+      box-shadow: 0 3px 12px rgba(16, 185, 129, 0.16) !important;
+    }
+    .agenda-card.is-upcoming.stage-amber {
+      box-shadow: 0 3px 12px rgba(245, 158, 11, 0.18) !important;
+    }
+    .agenda-card.is-upcoming.stage-orange {
+      box-shadow: 0 4px 14px rgba(234, 88, 12, 0.22) !important;
+    }
+
+    /* THẺ TẠM DỪNG HOẶC ĐÃ HỌC XONG */
+    .agenda-card.is-paused {
+      opacity: 0.75;
+      background: #f8fafc !important;
+      border: 1px solid #cbd5e1 !important;
+      border-left: 5px solid #94a3b8 !important;
+    }
+
+    .agenda-card.is-completed {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      border-left: 5px solid #cbd5e1 !important;
+      box-shadow: none !important;
+    }
+
+    /* Các chi tiết của thẻ đã xong được làm mờ đi */
+    .agenda-card.is-completed .agenda-left-col,
+    .agenda-card.is-completed .time-capsule-col,
+    .agenda-card.is-completed .child-badge-tag,
+    .agenda-card.is-completed .subject-title,
+    .agenda-card.is-completed .mini-child-chip,
+    .agenda-card.is-completed .info-meta-chips,
+    .agenda-card.is-completed .btn-card-edit-corner,
+    .agenda-card.is-completed .agenda-actions {
+      opacity: 0.42 !important;
+      filter: saturate(0.7);
+    }
+
+    /* Lịch học tiếp theo của ngày cũ: Mờ theo khung chi tiết */
+    .agenda-card.is-completed .next-session-tag {
+      opacity: 0.45 !important;
+      filter: saturate(0.7);
+      background: #f1f5f9 !important;
+      border-color: #e2e8f0 !important;
+      color: #64748b !important;
+    }
+
+    /* RIÊNG HÔM NAY KHI COMPLETED HIỆN LÊN: LỊCH HỌC TIẾP THEO SÁNG NỔI BẬT & NHẤP NHÁY MÀU ĐỎ THEO YÊU CẦU */
+    .agenda-card.is-completed .next-session-tag.highlight-live-completed {
+      opacity: 1 !important;
+      filter: none !important;
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+      color: #b91c1c !important;
+      border: 1.5px solid #ef4444 !important;
+      animation: pulseNextSessionHighlight 1.8s ease-in-out infinite !important;
+    }
+    .agenda-card.is-completed .next-session-tag.highlight-live-completed b {
+      color: #991b1b !important;
+      font-weight: 900 !important;
+    }
+
+    @keyframes pulseNextSessionHighlight {
+      0%, 100% {
+        box-shadow: 0 0 5px rgba(239, 68, 68, 0.4);
+        border-color: #f87171;
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 14px rgba(239, 68, 68, 0.85);
+        border-color: #dc2626;
+        transform: scale(1.02);
+      }
+    }
+
+    @keyframes stampIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-50%) rotate(-25deg) scale(1.65);
+      }
+      70% {
+        opacity: 0.95;
+        transform: translateY(-50%) rotate(-12deg) scale(0.95);
+      }
+      100% {
+        opacity: 0.95;
+        transform: translateY(-50%) rotate(-15deg) scale(1);
+      }
+    }
+
+    @keyframes pulseCompletedStamp {
+      0%, 100% {
+        opacity: 0.95;
+        transform: translateY(-50%) rotate(-15deg) scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35);
+      }
+      50% {
+        opacity: 0.35;
+        transform: translateY(-50%) rotate(-15deg) scale(0.96);
+        box-shadow: 0 0 14px 4px rgba(239, 68, 68, 0.2);
+      }
+    }
+
+    .stamp-completed-seal-red {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%) rotate(-15deg);
+      width: 96px;
+      height: 96px;
+      border: 2px dashed rgba(239, 68, 68, 0.8);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 10;
+      background: rgba(254, 242, 242, 0.5);
+      animation: stampIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulseCompletedStamp 1.6s ease-in-out 0.45s infinite;
+    }
+    .stamp-completed-seal-red::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 1px solid rgba(239, 68, 68, 0.55);
+      border-radius: 50%;
+    }
+    .stamp-red-text {
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: rgba(220, 38, 38, 0.95);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .stamp-red-star {
+      font-size: 0.68rem;
+      color: rgba(220, 38, 38, 0.9);
+      line-height: 1;
+    }
+
+    .agenda-body {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      position: relative;
+    }
+    .agenda-left-col {
+      flex: 0 0 84px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    /* HUY HIỆU TÊN BÉ TÁCH RIÊNG BÊN NGOÀI Ô GIỜ HỌC, TO RÕ RÀNG */
+    .child-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 3px 6px;
+      border-radius: 50px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: nowrap;
+      box-shadow: 0 1.5px 5px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+    }
+    .child-badge-tag.KFC {
+      background: #e0f2fe;
+      border: 1.5px solid #87CEFF;
+      color: #0284c7;
+    }
+    .child-badge-tag.PEPSI {
+      background: #fff0f4;
+      border: 1.5px solid #FFD1DC;
+      color: #db2777;
+    }
+    .child-badge-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
+    }
+    .child-badge-name {
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+    /* Ô GIỜ HỌC ĐỨNG ĐỘC LẬP BÊN DƯỚI HUY HIỆU BÉ */
+    .time-capsule-col {
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 5px 2px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+    .time-start-24 {
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: #0f766e;
+      line-height: 1;
+    }
+    .time-sep-icon {
+      font-size: 0.5rem;
+      color: #94a3b8;
+      line-height: 1;
+      margin: 1px 0;
+    }
+    .time-end-24 {
+      font-size: 0.94rem;
+      color: #0f766e;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .time-duration-chip {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #0f766e;
+      background: #ccfbf1;
+      padding: 1px 4px;
+      border-radius: 4px;
+      margin-top: 2px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .info-content-col {
+      flex: 1;
+      min-width: 0;
+      padding-right: 0;
+    }
+    
+    .subject-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 3px;
+      width: 100%;
+    }
+    .subject-title-left {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+    }
+    .subject-title {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+    
+    .subject-title-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .btn-card-edit-corner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border-radius: 6px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      font-size: 0.70rem;
+      cursor: pointer;
+      color: #64748b;
+      transition: all 0.15s ease;
+      line-height: 1;
+      box-sizing: border-box;
+    }
+    .btn-card-edit-corner:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: #0f172a;
+      transform: scale(1.08);
+    }
+    .btn-card-edit-corner:active {
+      transform: scale(0.95);
+    }
+    .mini-child-chip.KFC { background: #e0f2fe; color: #0284c7; border: 1px solid #87CEFF; }
+    .mini-child-chip.PEPSI { background: #fff5f8; color: #be185d; border: 1px solid #FFD1DC; }
+    .mini-avatar-img {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .info-meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 5px;
+    }
+    .meta-chip.meta-chip-address {
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      font-weight: 700;
+    }
+    .meta-chip.meta-chip-address:hover {
+      text-decoration: underline;
+      filter: brightness(0.96);
+      transform: translateY(-1px);
+    }
+    .meta-chip.meta-chip-address:active {
+      transform: scale(0.97);
+    }
+
+    .next-session-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 5px;
+      margin-top: 4px;
+      border: 1px solid #dbeafe;
+    }
+
+    .agenda-actions {
+      display: flex;
+      align-items: center;
+      margin-top: 6px;
+      padding-top: 5px;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .action-btn.call {
+      flex: 1;
+      width: 100%;
+      background: #ecfdf5 !important;
+      color: #047857 !important;
+      border: 1px solid #a7f3d0 !important;
+      font-weight: 800 !important;
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 0.74rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .action-btn.call:hover {
+      background: #d1fae5 !important;
+      border-color: #6ee7b7 !important;
+    }
+
+    /* Khu vực môn tạm dừng */
+    .paused-section-title {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #64748b;
+      margin: 14px 0 6px 3px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Nút Thêm Lịch */
+    .bottom-action-container {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      margin: 2px 0 3px 0;
+    }
+    .btn-add-bottom {
+      background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 8px 20px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 3px 10px rgba(15, 118, 110, 0.22);
+    }
+    .btn-add-bottom:active { transform: scale(0.97); }
+
+    .app-footer {
+      flex-shrink: 0;
+      text-align: center;
+      padding: 2px 0 1px 0;
+      border-top: 1px solid #ccfbf1;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #115e59;
+      opacity: 0.8;
+    }
+
+    /* MODAL NHẬP MẬT KHẨU */
+    .password-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 2000;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: max(10vh, 50px);
+      padding-bottom: 20px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    @media (min-width: 600px) {
+      .password-modal-overlay {
+        align-items: center;
+        padding-top: 0;
+      }
+    }
+    .password-card {
+      background: #ffffff;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 320px;
+      padding: 20px 18px 16px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+      animation: popInPassCard 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popInPassCard {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .pass-input {
+      width: 100%;
+      text-align: center;
+      letter-spacing: 6px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      padding: 8px;
+      margin: 10px 0 6px 0;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s;
+    }
+    .pass-input:focus { border-color: #0f766e; }
+    .pass-input.is-invalid {
+      border-color: #ef4444 !important;
+      background: #fef2f2 !important;
+      animation: shakeInput 0.3s ease-in-out;
+    }
+    @keyframes shakeInput {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .pass-error-box {
+      color: #b91c1c;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 6px 10px;
+      margin: 4px 0 10px;
+      display: none;
+      line-height: 1.35;
+      animation: fadeInPassErr 0.2s ease-out;
+    }
+    @keyframes fadeInPassErr {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MODAL PROFILE CÔNG CHÚA (INFO BABY) */
+    .baby-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 2100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .baby-profile-card {
+      width: 100%;
+      max-width: 330px;
+      background: #ffffff;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+      animation: popInBabyModal 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes popInBabyModal {
+      from { transform: scale(0.88); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .baby-profile-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      color: #64748b;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+      transition: all 0.15s ease;
+    }
+    .baby-profile-close-btn:hover {
+      background: #ffffff;
+      color: #0f172a;
+      transform: scale(1.1);
+    }
+    .baby-profile-header-banner {
+      padding: 22px 16px 14px 16px;
+      text-align: center;
+      position: relative;
+    }
+    .baby-profile-header-banner.KFC {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    }
+    .baby-profile-header-banner.PEPSI {
+      background: linear-gradient(135deg, #fff0f4 0%, #ffd1dc 100%);
+    }
+    .baby-profile-avatar-big {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 8px auto;
+      display: block;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+    }
+    .baby-profile-header-banner.KFC .baby-profile-avatar-big {
+      border: 3.5px solid #ffffff;
+      outline: 2px solid #87CEFF;
+    }
+    .baby-profile-header-banner.PEPSI .baby-profile-avatar-big {
+      border: 3.5px solid #ffffff;
+      outline: 2px solid #FFD1DC;
+    }
+    .baby-profile-name {
+      font-size: 1.18rem;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+    .baby-profile-header-banner.KFC .baby-profile-name { color: #0369a1; }
+    .baby-profile-header-banner.PEPSI .baby-profile-name { color: #db2777; }
+    .baby-profile-nickname-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 20px;
+      margin-top: 5px;
+      background: rgba(255, 255, 255, 0.92);
+    }
+    .baby-profile-header-banner.KFC .baby-profile-nickname-pill { color: #0284c7; }
+    .baby-profile-header-banner.PEPSI .baby-profile-nickname-pill { color: #be185d; }
+    .baby-profile-info-list {
+      padding: 14px 16px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .baby-info-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      background: #f8fafc;
+      border-radius: 9px;
+      border: 1px solid #f1f5f9;
+      font-size: 0.78rem;
+    }
+    .baby-info-item-label {
+      color: #64748b;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .baby-info-item-val {
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* MODAL FORM THÊM / SỬA (FIT-SCREEN) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    @media (min-width: 600px) { .modal-overlay { align-items: center; } }
+    .modal-sheet {
+      background: #ffffff;
+      border: 2px solid #ccfbf1;
+      width: 100%;
+      max-width: 450px;
+      border-radius: 20px 20px 0 0;
+      padding: 14px 16px;
+      max-height: 90vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
+      transition: all 0.25s ease;
+    }
+    @media (min-width: 600px) { .modal-sheet { border-radius: 16px; max-height: 88vh; } }
+
+    .modal-sheet.theme-kfc { border-color: #87CEFF; background: #f0f9ff; }
+    .modal-sheet.theme-pepsi { border-color: #FFD1DC; background: #fffbfc; }
+
+    .avatar-img {
+      width: 24px !important;
+      height: 24px !important;
+      border-radius: 50% !important;
+      object-fit: cover !important;
+      flex-shrink: 0 !important;
+      display: inline-block !important;
+      vertical-align: middle !important;
+    }
+
+    .form-item { margin-bottom: 6px; }
+    .form-item label { display: block; font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; color: var(--text-muted); }
+    .form-item input, .form-item select {
+      width: 100%;
+      padding: 6px 9px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      color: #0f172a;
+      font-size: 0.84rem;
+      outline: none;
+      font-family: inherit;
+    }
+
+    /* Custom Dropdown Chọn Bé */
+    .custom-dropdown-container { position: relative; user-select: none; }
+    .dropdown-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 9px;
+      padding: 5px 9px;
+      cursor: pointer;
+    }
+    .dropdown-trigger-content {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .dropdown-options-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid #ccfbf1;
+      border-radius: 11px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      z-index: 50;
+      overflow: hidden;
+    }
+    .dropdown-options-menu.show { display: block; }
+    .dropdown-opt-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    .dropdown-opt-item:hover, .dropdown-opt-item.selected { background: #f0fdf9; }
+    .dropdown-opt-item span { font-size: 0.8rem; font-weight: 800; color: #1e293b; }
+
+    /* Bộ chọn nhiều thứ */
+    .day-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      margin-bottom: 2px;
+    }
+    .day-btn-toggle {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 5px 0;
+      border-radius: 7px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      text-align: center;
+    }
+    .day-btn-toggle.active { background: #0f766e; color: white; border-color: #0f766e; }
+    .theme-kfc .day-btn-toggle.active { background: var(--kfc-accent) !important; border-color: var(--kfc-accent) !important; }
+    .theme-pepsi .day-btn-toggle.active { background: var(--pepsi-accent) !important; border-color: var(--pepsi-accent) !important; }
+
+    /* Bộ chọn giờ 24h */
+    .time-picker-24h-box {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 3px 5px;
+    }
+    .time-picker-24h-box select {
+      border: none !important;
+      background: transparent !important;
+      padding: 3px 2px !important;
+      font-weight: 800 !important;
+      color: #0f766e !important;
+      font-size: 0.88rem !important;
+      text-align: center;
+      cursor: pointer;
+    }
+    .theme-kfc .time-picker-24h-box select { color: var(--kfc-accent) !important; }
+    .theme-pepsi .time-picker-24h-box select { color: var(--pepsi-accent) !important; }
+
+    .btn-status-toggle {
+      border: none;
+      padding: 7px 9px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+    .btn-status-toggle.pause { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
+    .btn-status-toggle.resume { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+    .btn-delete-lesson {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fecaca;
+      padding: 7px 9px;
+      border-radius: 8px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .btn-delete-lesson:hover {
+      background: #fecaca;
+      color: #991b1b;
+    }
+
+    .btn-submit-dynamic {
+      flex: 2;
+      border: none;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: #fff;
+    }
+    .theme-kfc .btn-submit-dynamic {
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%) !important;
+      box-shadow: 0 3px 10px rgba(135, 206, 255, 0.35);
+    }
+    .theme-pepsi .btn-submit-dynamic {
+      background: linear-gradient(135deg, #f472b6 0%, #db2777 100%) !important;
+      box-shadow: 0 3px 10px rgba(255, 181, 197, 0.35);
+    }
+
+    /* ============================================================
+       MODAL THÔNG BÁO HOÀNG GIA IN-APP (ROYAL ALERT DIALOG)
+       (Thay thế hoàn toàn alert mặc định tránh chữ "Mã nhúng...")
+       ============================================================ */
+    .royal-alert-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.48);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 999999;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      animation: fadeInAlertBackdrop 0.2s ease-out;
+    }
+    @keyframes fadeInAlertBackdrop {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .royal-alert-backdrop.active {
+      display: flex;
+    }
+    .royal-alert-card {
+      background: #ffffff;
+      border-radius: 22px;
+      width: 100%;
+      max-width: 330px;
+      padding: 22px 20px 18px;
+      box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.05);
+      text-align: center;
+      box-sizing: border-box;
+      animation: popInAlertCard 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    @keyframes popInAlertCard {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .royal-alert-icon-ring {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #fff7ed, #ffedd5);
+      border: 2px solid #fdba74;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15);
+      animation: alertPulseRing 1.5s infinite alternate ease-in-out;
+    }
+    @keyframes alertPulseRing {
+      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15); }
+      100% { transform: scale(1.08); box-shadow: 0 6px 18px rgba(234, 88, 12, 0.28); }
+    }
+    .royal-alert-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 8px;
+      line-height: 1.35;
+    }
+    .royal-alert-body {
+      font-size: 0.82rem;
+      color: #334155;
+      line-height: 1.55;
+      white-space: pre-line;
+      margin: 0 0 18px;
+      padding: 0 4px;
+      text-align: center;
+    }
+    .royal-alert-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      color: #ffffff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+      transition: all 0.2s ease;
+    }
+    .royal-alert-btn:hover {
+      background: linear-gradient(135deg, #0f766e, #115e59);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(15, 118, 110, 0.35);
+    }
+    .royal-alert-btn:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar Canh Giữa - Floating Royal Island Bar -->
+  <div class="app-header">
+    <div class="header-left-slot">
+      <div class="shuttle-track">
+        <img src="https://lh3.googleusercontent.com/d/1zuVfqhX8uSq-X2gyC3uL8FK-WFaHPc9U" class="shuttle-hlny-logo" alt="Logo HLNY" title="HLNY">
+      </div>
+    </div>
+    <div class="header-center-box">
+      <div class="header-title-badge">
+        <img src="https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO" class="header-avatar-left" alt="An Nhiên" title="Bấm xem thông tin Công Chúa An Nhiên" onclick="openBabyProfileModal('KFC')">
+        <h1 class="header-gradient-title">LỊCH HỌC THÊM</h1>
+        <img src="https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr" class="header-avatar-right" alt="Thiên Ý" title="Bấm xem thông tin Công Chúa Thiên Ý" onclick="openBabyProfileModal('PEPSI')">
+      </div>
+      <div class="header-date-pill" onclick="openHeaderDatePicker(event)" title="Bấm để chọn ngày từ lịch">
+        <span>🗓️</span>
+        <span id="date-label">Đang tải ngày...</span>
+        <span class="header-date-dropdown-arrow">▼</span>
+        <input type="date" id="header-date-input" class="header-hidden-date-input" onchange="handleHeaderDateChange(this.value)" onclick="handleHeaderDateInputClick(event)">
+      </div>
+    </div>
+    <div class="header-right-slot">
+      <button class="btn-notif" id="btn-notif-toggle" title="Bật/Tắt chuông nhắc giờ học" onclick="toggleReminderAlert()">
+        <span id="notif-icon">🔔</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- BỘ LỌC CÔNG CHÚA INTERACTIVE PROFILE TABS -->
+  <div class="princess-profile-nav">
+    <button class="profile-nav-btn both active" data-child="Tất cả" onclick="selectChild('Tất cả')">
+      <span>👑 CẢ HAI</span>
+    </button>
+    <button class="profile-nav-btn kfc" data-child="KFC" onclick="selectChild('KFC')">
+      <img src="https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO" class="profile-nav-avatar" alt="An Nhiên">
+      <span>AN NHIÊN</span>
+    </button>
+    <button class="profile-nav-btn pepsi" data-child="PEPSI" onclick="selectChild('PEPSI')">
+      <img src="https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr" class="profile-nav-avatar" alt="Thiên Ý">
+      <span>THIÊN Ý</span>
+    </button>
+  </div>
+
+  <!-- KHUNG BỐ CỤC CHÍNH (CỘT DỌC BÊN TRÁI TRÊN DESKTOP, NGANG TRÊN MOBILE) -->
+  <div class="main-layout-container">
+    <aside class="calendar-sidebar-section">
+      <!-- BỘ CHUYỂN TUẦN (WEEK NAVIGATOR) -->
+      <div class="week-navigator-box">
+        <button class="week-nav-btn prev" onclick="changeWeek(-1)" title="Xem tuần trước">◀</button>
+        <div class="week-nav-info" onclick="resetToCurrentWeek()" title="Bấm để quay về tuần này">
+          <span class="week-nav-title" id="week-nav-title">Tuần này</span>
+          <span class="week-nav-range" id="week-nav-range">--/-- - --/--/----</span>
+        </div>
+        <button class="week-nav-btn next" onclick="changeWeek(1)" title="Xem tuần sau">▶</button>
+      </div>
+
+      <!-- DẢI LỊCH MINI CALENDAR STRIP -->
+      <div class="calendar-bar-wrapper">
+        <div class="day-chip mode-pill today-fixed-chip active" data-day="Hôm nay" onclick="selectDay('Hôm nay')">
+          <span style="font-size:0.75rem; font-weight:800;">⚡ HÔM NAY</span>
+        </div>
+        <div class="days-track" id="days-track">
+          <div class="day-chip mode-pill" data-day="Tất cả" onclick="selectDay('Tất cả')">
+            <span style="font-size:0.75rem; font-weight:800;">Cả tuần</span>
+          </div>
+          <div class="day-chip" id="chip-Thứ 2" data-day="Thứ 2" onclick="selectDay('Thứ 2')">
+            <span class="day-chip-name">T2</span>
+            <span class="day-chip-date" id="date-num-Thứ 2">--</span>
+          </div>
+          <div class="day-chip" id="chip-Thứ 3" data-day="Thứ 3" onclick="selectDay('Thứ 3')">
+            <span class="day-chip-name">T3</span>
+            <span class="day-chip-date" id="date-num-Thứ 3">--</span>
+          </div>
+          <div class="day-chip" id="chip-Thứ 4" data-day="Thứ 4" onclick="selectDay('Thứ 4')">
+            <span class="day-chip-name">T4</span>
+            <span class="day-chip-date" id="date-num-Thứ 4">--</span>
+          </div>
+          <div class="day-chip" id="chip-Thứ 5" data-day="Thứ 5" onclick="selectDay('Thứ 5')">
+            <span class="day-chip-name">T5</span>
+            <span class="day-chip-date" id="date-num-Thứ 5">--</span>
+          </div>
+          <div class="day-chip" id="chip-Thứ 6" data-day="Thứ 6" onclick="selectDay('Thứ 6')">
+            <span class="day-chip-name">T6</span>
+            <span class="day-chip-date" id="date-num-Thứ 6">--</span>
+          </div>
+          <div class="day-chip" id="chip-Thứ 7" data-day="Thứ 7" onclick="selectDay('Thứ 7')">
+            <span class="day-chip-name">T7</span>
+            <span class="day-chip-date" id="date-num-Thứ 7">--</span>
+          </div>
+          <div class="day-chip" id="chip-Chủ Nhật" data-day="Chủ Nhật" onclick="selectDay('Chủ Nhật')">
+            <span class="day-chip-name">CN</span>
+            <span class="day-chip-date" id="date-num-Chủ Nhật">--</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="schedule-main-content">
+      <div id="loading" style="text-align:center; padding: 20px 10px; color: var(--text-muted); font-size: 0.85rem;">
+        Đang tải dữ liệu lịch học...
+      </div>
+      
+      <div id="schedule-wrapper"></div>
+
+      <!-- Nút Thêm Lịch -->
+      <div class="bottom-action-container">
+        <button class="btn-add-bottom" onclick="openModal()">
+          <span style="font-size:1.1rem; line-height:1;">＋</span> Thêm Lịch Học Mới
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    © 2026 by FULL HOUSE. All Rights Reserved.
+  </footer>
+
+  <!-- HỘP THOẠI XÁC NHẬN MẬT KHẨU -->
+  <div class="password-modal-overlay" id="password-modal" onclick="if(event.target===this) closePasswordModal()">
+    <div class="password-card">
+      <div style="font-size: 2rem; margin-bottom: 2px;">🔒</div>
+      <h3 style="margin: 0; font-size: 1.1rem; color: #0f172a;">Xác Nhận Mật Khẩu</h3>
+      <p style="font-size: 0.76rem; color: var(--text-muted); margin: 4px 0 10px 0;">Vui lòng nhập mật khẩu để chỉnh sửa lịch học</p>
+      
+      <form id="password-form" onsubmit="handleVerifyPassword(event)">
+        <input type="password" 
+               inputmode="numeric" 
+               pattern="[0-9]*" 
+               class="pass-input" 
+               id="pass-input" 
+               placeholder="••••••••" 
+               required 
+               autofocus
+               oninput="clearPassError()">
+        <div id="pass-error-msg" class="pass-error-box"></div>
+        
+        <div style="display:flex; gap:8px;">
+          <button type="button" style="flex:1; background:#f1f5f9; color:#475569; border:none; padding:9px; border-radius:9px; font-weight:700;" onclick="closePasswordModal()">Hủy</button>
+          <button type="submit" id="btn-verify-pass" style="flex:1; background:#0f766e; color:#fff; border:none; padding:9px; border-radius:9px; font-weight:800; cursor:pointer;">Mở Khóa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL THÔNG TIN CÔNG CHÚA (TỪ SHEET 'INFO BABY') -->
+  <div class="baby-modal-backdrop" id="baby-profile-modal" onclick="handleBabyModalBackdropClick(event)">
+    <div class="baby-profile-card" id="baby-profile-card">
+      <button class="baby-profile-close-btn" onclick="closeBabyProfileModal()" title="Đóng">✕</button>
+      <div id="baby-profile-content">
+        <!-- Nội dung hiển thị từ sheet INFO BABY -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Thêm/Sửa Lịch (Fit-Screen) -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-sheet theme-kfc" id="modal-sheet">
+      <h3 id="modal-title" style="margin-top:0; margin-bottom:8px; font-size: 1.05rem; color:#0f172a;">Thêm Môn Học Mới</h3>
+      <form id="schedule-form" onsubmit="saveSchedule(event)">
+        <input type="hidden" id="form-rowId">
+        <input type="hidden" id="form-be" value="KFC">
+        <input type="hidden" id="form-trangThai" value="Đang học">
+        
+        <div class="form-item" style="margin-bottom:7px;">
+          <label>Chọn Công Chúa:</label>
+          <div class="custom-dropdown-container">
+            <div class="dropdown-trigger" onclick="togglePrincessDropdown()">
+              <div class="dropdown-trigger-content" id="dropdown-selected-label">
+                <img src="https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO" class="avatar-img" width="24" height="24" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" alt="An Nhiên">
+                <span>CÔNG CHÚA AN NHIÊN</span>
+              </div>
+              <span style="font-size:0.75rem; color:#64748b;">▼</span>
+            </div>
+            <div class="dropdown-options-menu" id="dropdown-menu-list">
+              <div class="dropdown-opt-item selected" onclick="pickPrincessItem('KFC', 'CÔNG CHÚA AN NHIÊN', AVATAR_MAP['KFC'])">
+                <img src="https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO" class="avatar-img" width="24" height="24" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" alt="An Nhiên">
+                <span>CÔNG CHÚA AN NHIÊN</span>
+              </div>
+              <div class="dropdown-opt-item" onclick="pickPrincessItem('PEPSI', 'CÔNG CHÚA THIÊN Ý', AVATAR_MAP['PEPSI'])">
+                <img src="https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr" class="avatar-img" width="24" height="24" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" alt="Thiên Ý">
+                <span>CÔNG CHÚA THIÊN Ý</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Chọn ngày học (Chạm vào để bật/tắt):</label>
+          <div class="day-selector-grid" id="day-selector-grid">
+            <div class="day-btn-toggle" data-val="Thứ 2" onclick="toggleDayBtn(this)">T2</div>
+            <div class="day-btn-toggle" data-val="Thứ 3" onclick="toggleDayBtn(this)">T3</div>
+            <div class="day-btn-toggle" data-val="Thứ 4" onclick="toggleDayBtn(this)">T4</div>
+            <div class="day-btn-toggle" data-val="Thứ 5" onclick="toggleDayBtn(this)">T5</div>
+            <div class="day-btn-toggle" data-val="Thứ 6" onclick="toggleDayBtn(this)">T6</div>
+            <div class="day-btn-toggle" data-val="Thứ 7" onclick="toggleDayBtn(this)">T7</div>
+            <div class="day-btn-toggle" data-val="Chủ Nhật" onclick="toggleDayBtn(this)">CN</div>
+          </div>
+        </div>
+
+        <!-- BỘ CHỌN GIỜ 24H -->
+        <div style="display:flex; gap:8px; margin-bottom:7px;">
+          <div class="form-item" style="flex:1;">
+            <label>Bắt đầu (Giờ 24h)</label>
+            <div class="time-picker-24h-box">
+              <select id="start-hour"></select>
+              <span>:</span>
+              <select id="start-minute"></select>
+            </div>
+          </div>
+          <div class="form-item" style="flex:1;">
+            <label>Kết thúc (Giờ 24h)</label>
+            <div class="time-picker-24h-box">
+              <select id="end-hour"></select>
+              <span>:</span>
+              <select id="end-minute"></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Môn học <span style="color:#ef4444; font-weight:800;">*</span></label>
+          <input type="text" id="form-monHoc" placeholder="Cô Trang, Piano, Bóng rổ, English,..." required>
+        </div>
+
+        <div class="form-item">
+          <label>Địa chỉ hiển thị <span style="color:#ef4444; font-weight:800;">*</span></label>
+          <input type="text" id="form-diaDiem" placeholder="VD: 131/23 Đường 26/3, Bình Hưng Hòa, Tp. HCM" required>
+        </div>
+
+        <div class="form-item" style="display:none;">
+          <label>Tọa độ GPS / Link Bản đồ</label>
+          <input type="text" id="form-toaDo" placeholder="VD: 10.7962, 106.6234 hoặc link Maps (để trống sẽ dùng Địa chỉ)">
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <div class="form-item" style="flex:1;">
+            <label>Người đưa đón <span style="color:#ef4444; font-weight:800;">*</span></label>
+            <input type="text" id="form-nguoiDon" placeholder="Ba Hưng/ Mẹ Nhí" required>
+          </div>
+          <div class="form-item" style="flex:1;">
+            <label>Số ĐT giáo viên / xe <span style="font-size:0.68rem; font-weight:normal; color:#64748b;">(tùy chọn)</span></label>
+            <input type="tel" id="form-sdt" placeholder="0909xxxxxx">
+          </div>
+        </div>
+
+        <div class="form-item">
+          <label>Ghi chú <span style="font-size:0.68rem; font-weight:normal; color:#64748b;">(tùy chọn)</span></label>
+          <input type="text" id="form-ghiChu" placeholder="Mang theo sách bài tập...">
+        </div>
+
+        <!-- HÀNG NÚT DƯỚI ĐÁY -->
+        <div style="display:flex; gap:6px; margin-top:10px;">
+          <button type="button" style="flex:1; background:#f1f5f9; color:#475569; border:none; padding:9px 6px; border-radius:8px; font-weight:700; font-size:0.8rem;" onclick="closeModal()">Hủy</button>
+          
+          <button type="button" class="btn-delete-lesson" id="btn-delete-lesson" style="display:none;" onclick="confirmDeleteCurrentLesson()">
+            <span>🗑️ Xóa môn</span>
+          </button>
+
+          <button type="button" class="btn-status-toggle pause" id="btn-status-toggle" style="display:none;" onclick="toggleLessonStatus()">
+            <span>⏸️ Tạm dừng</span>
+          </button>
+
+          <button type="submit" id="btn-submit-text" class="btn-submit-dynamic">Lưu Lịch</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL THÔNG BÁO HOÀNG GIA IN-APP (KHÔNG BỊ HIỆN CHỮ MÃ NHÚNG) -->
+  <div class="royal-alert-backdrop" id="royal-alert-modal" onclick="if(event.target===this) closeRoyalAlert()">
+    <div class="royal-alert-card">
+      <div class="royal-alert-icon-ring" id="royal-alert-icon">🔔</div>
+      <h3 class="royal-alert-title" id="royal-alert-title">Thông Báo Lịch Học</h3>
+      <div class="royal-alert-body" id="royal-alert-body"></div>
+      <button type="button" class="royal-alert-btn" onclick="closeRoyalAlert()">Đã Hiểu</button>
+    </div>
+  </div>
+
+  <!-- MODAL XÁC NHẬN HOÀNG GIA IN-APP (KHÔNG BỊ HIỆN CHỮ MÃ NHÚNG) -->
+  <div class="royal-alert-backdrop" id="royal-confirm-modal" onclick="if(event.target===this) closeRoyalConfirm(false)">
+    <div class="royal-alert-card">
+      <div class="royal-alert-icon-ring" id="royal-confirm-icon" style="background: linear-gradient(135deg, #fee2e2, #fecaca); border-color: #f87171;">🗑️</div>
+      <h3 class="royal-alert-title" id="royal-confirm-title">Xác Nhận Xóa</h3>
+      <div class="royal-alert-body" id="royal-confirm-body"></div>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="royal-alert-btn" style="flex: 1; background: #f1f5f9; color: #475569; box-shadow: none;" onclick="closeRoyalConfirm(false)">Hủy</button>
+        <button type="button" class="royal-alert-btn" id="royal-confirm-btn-yes" style="flex: 1; background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);" onclick="closeRoyalConfirm(true)">Xóa Ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbw1MDL6WfwxlOWJB8gRmC8gYo3Kfntt_5sqtGSP5mHnnxYEuG2WKlyR9lzKdjOktMeWAQ/exec';
+
+    // Đăng ký Service Worker cho PWA (Mũi tên cài đặt App trên GitHub Pages)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      });
+    }
+
+    const AVATAR_MAP = {
+      "KFC": "https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO",
+      "PEPSI": "https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr"
+    };
+
+    const SHORT_NAME_MAP = {
+      "KFC": "An Nhiên",
+      "PEPSI": "Thiên Ý"
+    };
+
+    const DISPLAY_NAME_MAP = {
+      "KFC": "CÔNG CHÚA AN NHIÊN",
+      "PEPSI": "CÔNG CHÚA THIÊN Ý"
+    };
+
+    const SUBJECT_PLACEHOLDER_MAP = {
+      "KFC": "Cô Trang, Piano, Bóng rổ, English,...",
+      "PEPSI": "Piano, English,..."
+    };
+
+    let appData = { danhSachBe: ["KFC", "PEPSI"], lichHoc: [] };
+    let activeChild = 'Tất cả';
+    let activeDay = 'Hôm nay';
+    let todayName = '';
+    let fullDateString = '';
+    let countdownTimer = null;
+    let isAlertEnabled = true;
+    let notifiedLessons = {};
+    let notifiedStartLessons = {};
+    let notifiedEndLessons = {};
+    let weekDatesMap = {};
+    let currentWeekOffset = 0;
+    
+    let pendingEditItem = null;
+
+    const DAYS_ORDER = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
+
+    const DAY_COLORS = {
+      "Thứ 2": { main: "#0284c7", bg: "#f0f9ff", border: "#bae6fd", text: "#0369a1" },
+      "Thứ 3": { main: "#8b5cf6", bg: "#f5f3ff", border: "#ddd6fe", text: "#6d28d9" },
+      "Thứ 4": { main: "#059669", bg: "#ecfdf5", border: "#a7f3d0", text: "#047857" },
+      "Thứ 5": { main: "#d97706", bg: "#fffbeb", border: "#fde68a", text: "#b45309" },
+      "Thứ 6": { main: "#e11d48", bg: "#fff1f2", border: "#fecdd3", text: "#be123c" },
+      "Thứ 7": { main: "#4f46e5", bg: "#eef2ff", border: "#c7d2fe", text: "#3730a3" },
+      "Chủ Nhật": { main: "#dc2626", bg: "#fef2f2", border: "#fecaca", text: "#b91c1c" }
+    };
+
+    function calculateWeekDates() {
+      const now = new Date();
+      const currentDayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
+      
+      let mondayDate = null;
+      let sundayDate = null;
+
+      DAYS_ORDER.forEach((dayName, idx) => {
+        const dayOffset = (idx + 1) - currentDayOfWeek + (currentWeekOffset * 7);
+        
+        const targetDate = new Date();
+        targetDate.setDate(now.getDate() + dayOffset);
+        const dd = String(targetDate.getDate()).padStart(2, '0');
+        const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+        const yyyy = targetDate.getFullYear();
+
+        if (idx === 0) mondayDate = new Date(targetDate);
+        if (idx === 6) sundayDate = new Date(targetDate);
+
+        const nextWeekDate = new Date();
+        nextWeekDate.setDate(now.getDate() + dayOffset + 7);
+        const nextDd = String(nextWeekDate.getDate()).padStart(2, '0');
+        const nextMm = String(nextWeekDate.getMonth() + 1).padStart(2, '0');
+
+        const isCurrentDay = (currentWeekOffset === 0) && (dayOffset === 0);
+        const isPastDay = (currentWeekOffset < 0) || (currentWeekOffset === 0 && dayOffset < 0);
+
+        weekDatesMap[dayName] = {
+          dayNum: dd,
+          dateStr: dd + '/' + mm,
+          fullDateStr: dd + '/' + mm + '/' + yyyy,
+          isoDateStr: `${yyyy}-${mm}-${dd}`,
+          nextWeekDateStr: nextDd + '/' + nextMm,
+          isPast: isPastDay,
+          isToday: isCurrentDay
+        };
+
+        const dateNumEl = document.getElementById('date-num-' + dayName);
+        if (dateNumEl) {
+          dateNumEl.innerText = dd + '/' + mm;
+        }
+        const chipEl = document.getElementById('chip-' + dayName);
+        if (chipEl) {
+          chipEl.classList.toggle('is-current-day', isCurrentDay);
+        }
+      });
+
+      updateWeekNavigatorUI(mondayDate, sundayDate);
+    }
+
+    function updateWeekNavigatorUI(monDate, sunDate) {
+      const titleEl = document.getElementById('week-nav-title');
+      const rangeEl = document.getElementById('week-nav-range');
+      if (!titleEl || !rangeEl || !monDate || !sunDate) return;
+
+      if (currentWeekOffset === 0) {
+        titleEl.innerText = 'Tuần này';
+      } else if (currentWeekOffset === 1) {
+        titleEl.innerText = 'Tuần sau';
+      } else if (currentWeekOffset === 2) {
+        titleEl.innerText = 'Tuần sau nữa';
+      } else if (currentWeekOffset > 2) {
+        titleEl.innerText = `+${currentWeekOffset} tuần nữa`;
+      } else if (currentWeekOffset === -1) {
+        titleEl.innerText = 'Tuần trước';
+      } else {
+        titleEl.innerText = `${Math.abs(currentWeekOffset)} tuần trước`;
+      }
+
+      const monDd = String(monDate.getDate()).padStart(2, '0');
+      const monMm = String(monDate.getMonth() + 1).padStart(2, '0');
+      const sunDd = String(sunDate.getDate()).padStart(2, '0');
+      const sunMm = String(sunDate.getMonth() + 1).padStart(2, '0');
+      const monYyyy = monDate.getFullYear();
+      const sunYyyy = sunDate.getFullYear();
+
+      if (monYyyy === sunYyyy) {
+        rangeEl.innerText = `${monDd}/${monMm} - ${sunDd}/${sunMm}/${sunYyyy}`;
+      } else {
+        rangeEl.innerText = `${monDd}/${monMm}/${monYyyy} - ${sunDd}/${sunMm}/${sunYyyy}`;
+      }
+    }
+
+    function changeWeek(delta) {
+      currentWeekOffset += delta;
+      calculateWeekDates();
+      if (activeDay === 'Hôm nay' && currentWeekOffset !== 0) {
+        activeDay = 'Tất cả';
+        document.querySelectorAll('.day-chip').forEach(chip => {
+          chip.classList.toggle('active', chip.getAttribute('data-day') === 'Tất cả');
+        });
+      }
+      renderTimeline();
+      if (window.updateRealtimeCards) window.updateRealtimeCards();
+    }
+
+    function resetToCurrentWeek() {
+      if (currentWeekOffset === 0) return;
+      currentWeekOffset = 0;
+      calculateWeekDates();
+      renderTimeline();
+      if (window.updateRealtimeCards) window.updateRealtimeCards();
+    }
+
+    function handleHeaderDateInputClick(e) {
+      if (e && typeof e.target.showPicker === 'function') {
+        try {
+          e.target.showPicker();
+        } catch (err) {}
+      }
+    }
+
+    function openHeaderDatePicker(e) {
+      const input = document.getElementById('header-date-input');
+      if (!input) return;
+      if (typeof input.showPicker === 'function') {
+        try {
+          input.showPicker();
+          return;
+        } catch (err) {}
+      }
+      input.focus();
+    }
+
+    function handleHeaderDateChange(dateVal) {
+      if (!dateVal) return;
+      const parts = dateVal.split('-').map(Number);
+      if (parts.length !== 3) return;
+      const [y, m, d] = parts;
+      const pickedDate = new Date(y, m - 1, d);
+      if (isNaN(pickedDate.getTime())) return;
+
+      const now = new Date();
+      const currentDayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
+      const thisMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (currentDayOfWeek - 1));
+
+      const pickedDayOfWeek = pickedDate.getDay() === 0 ? 7 : pickedDate.getDay();
+      const pickedMonday = new Date(y, m - 1, d - (pickedDayOfWeek - 1));
+
+      const diffDays = Math.round((pickedMonday.getTime() - thisMonday.getTime()) / (1000 * 60 * 60 * 24));
+      const weekDelta = Math.round(diffDays / 7);
+
+      currentWeekOffset = weekDelta;
+      calculateWeekDates();
+
+      const targetDayName = DAYS_ORDER[pickedDayOfWeek - 1];
+      selectDay(targetDayName);
+    }
+
+    function initTimePickers() {
+      const hSelects = [document.getElementById('start-hour'), document.getElementById('end-hour')];
+      const mSelects = [document.getElementById('start-minute'), document.getElementById('end-minute')];
+
+      hSelects.forEach(sel => {
+        sel.innerHTML = '';
+        for (let i = 0; i < 24; i++) {
+          const val = String(i).padStart(2, '0');
+          sel.innerHTML += `<option value="${val}">${val}</option>`;
+        }
+      });
+
+      mSelects.forEach(sel => {
+        sel.innerHTML = '';
+        for (let i = 0; i < 60; i += 5) {
+          const val = String(i).padStart(2, '0');
+          sel.innerHTML += `<option value="${val}">${val}</option>`;
+        }
+      });
+
+      document.getElementById('start-hour').value = "17";
+      document.getElementById('start-minute').value = "30";
+      document.getElementById('end-hour').value = "19";
+      document.getElementById('end-minute').value = "00";
+    }
+
+    function togglePrincessDropdown() {
+      document.getElementById('dropdown-menu-list').classList.toggle('show');
+    }
+
+    function pickPrincessItem(key, name, avatarUrl) {
+      document.getElementById('form-be').value = key;
+      document.getElementById('dropdown-selected-label').innerHTML = `
+        <img src="${avatarUrl}" class="avatar-img" width="24" height="24" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" alt="${name}">
+        <span>${name}</span>
+      `;
+      document.querySelectorAll('.dropdown-opt-item').forEach(it => {
+        it.classList.toggle('selected', it.innerText.includes(name));
+      });
+      document.getElementById('dropdown-menu-list').classList.remove('show');
+
+      const subInput = document.getElementById('form-monHoc');
+      if (subInput) {
+        subInput.placeholder = SUBJECT_PLACEHOLDER_MAP[key] || "Tên môn học...";
+      }
+
+      const modalSheet = document.getElementById('modal-sheet');
+      if (key === 'KFC') {
+        modalSheet.className = 'modal-sheet theme-kfc';
+      } else {
+        modalSheet.className = 'modal-sheet theme-pepsi';
+      }
+    }
+
+    function toggleLessonStatus() {
+      const statusInput = document.getElementById('form-trangThai');
+      const btn = document.getElementById('btn-status-toggle');
+
+      if (statusInput.value === 'Đang học') {
+        statusInput.value = 'Tạm dừng';
+        btn.className = 'btn-status-toggle resume';
+        btn.innerHTML = '<span>▶️ Tiếp tục</span>';
+      } else {
+        statusInput.value = 'Đang học';
+        btn.className = 'btn-status-toggle pause';
+        btn.innerHTML = '<span>⏸️ Tạm dừng</span>';
+      }
+    }
+
+    window.addEventListener('click', function(e) {
+      if (!e.target.closest('.custom-dropdown-container')) {
+        const menu = document.getElementById('dropdown-menu-list');
+        if (menu) menu.classList.remove('show');
+      }
+    });
+
+    function toggleDayBtn(el) {
+      el.classList.toggle('active');
+    }
+
+    function clearAllDays() {
+      document.querySelectorAll('.day-btn-toggle').forEach(btn => btn.classList.remove('active'));
+    }
+
+    function getSelectedDays() {
+      const selected = [];
+      document.querySelectorAll('.day-btn-toggle.active').forEach(btn => {
+        selected.push(btn.getAttribute('data-val'));
+      });
+      return selected;
+    }
+
+    function initApp() {
+      try {
+        const now = new Date();
+        const currentDayIdx = now.getDay() === 0 ? 7 : now.getDay();
+        todayName = DAYS_ORDER[currentDayIdx - 1];
+        fullDateString = todayName + ', ' + now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
+        const dateEl = document.getElementById('date-label');
+        if (dateEl) dateEl.innerText = fullDateString;
+
+        const dateInputEl = document.getElementById('header-date-input');
+        if (dateInputEl) {
+          const yyyy = now.getFullYear();
+          const mm = String(now.getMonth() + 1).padStart(2, '0');
+          const dd = String(now.getDate()).padStart(2, '0');
+          dateInputEl.value = `${yyyy}-${mm}-${dd}`;
+          dateInputEl.addEventListener('click', function(e) {
+            if (typeof this.showPicker === 'function') {
+              try { this.showPicker(); } catch (err) {}
+            }
+          });
+        }
+        
+        calculateWeekDates();
+        initTimePickers();
+        updateNotifIcon();
+      } catch (err) {
+        console.error("Lỗi chuẩn bị giao diện:", err);
+      }
+      loadData();
+    }
+
+    // Tự động khởi chạy app ngay lập tức (không phụ thuộc vào sự kiện mạng)
+    initApp();
+    window.addEventListener('load', function() {
+      if (!todayName) initApp();
+    });
+
+    let activeAudioCtx = null;
+
+    function stopLongAlarm() {
+      try {
+        if ("vibrate" in navigator) {
+          navigator.vibrate(0);
+        }
+        if (activeAudioCtx && activeAudioCtx.state !== 'closed') {
+          activeAudioCtx.close();
+          activeAudioCtx = null;
+        }
+      } catch (e) {}
+    }
+
+    function showRoyalAlert(title, body, iconChar) {
+      const modal = document.getElementById('royal-alert-modal');
+      const titleEl = document.getElementById('royal-alert-title');
+      const bodyEl = document.getElementById('royal-alert-body');
+      const iconEl = document.getElementById('royal-alert-icon');
+      if (!modal) return;
+      if (titleEl) titleEl.innerText = title || "Thông Báo Lịch Học";
+      if (bodyEl) bodyEl.innerText = body || "";
+      if (iconEl) iconEl.innerText = iconChar || "🔔";
+      modal.classList.add('active');
+    }
+
+    function closeRoyalAlert() {
+      const modal = document.getElementById('royal-alert-modal');
+      if (modal) modal.classList.remove('active');
+      stopLongAlarm();
+    }
+
+    let royalConfirmCallback = null;
+
+    function showRoyalConfirm(title, body, onConfirm, iconChar = '🗑️') {
+      const modal = document.getElementById('royal-confirm-modal');
+      const titleEl = document.getElementById('royal-confirm-title');
+      const bodyEl = document.getElementById('royal-confirm-body');
+      const iconEl = document.getElementById('royal-confirm-icon');
+      if (!modal) return;
+      if (titleEl) titleEl.innerText = title || "Xác Nhận Xóa";
+      if (bodyEl) bodyEl.innerText = body || "";
+      if (iconEl) iconEl.innerText = iconChar;
+      royalConfirmCallback = onConfirm;
+      modal.classList.add('active');
+    }
+
+    function closeRoyalConfirm(confirmed) {
+      const modal = document.getElementById('royal-confirm-modal');
+      if (modal) modal.classList.remove('active');
+      if (confirmed && typeof royalConfirmCallback === 'function') {
+        const cb = royalConfirmCallback;
+        royalConfirmCallback = null;
+        cb();
+      } else {
+        royalConfirmCallback = null;
+      }
+    }
+
+    function playLongAlarm15s() {
+      try {
+        stopLongAlarm();
+        if ("vibrate" in navigator) {
+          // Rung 15 giây dồn dập theo từng đợt ngắt quãng rõ ràng
+          navigator.vibrate([
+            800, 300, 800, 300, 800, 300, 800, 300, 800, 300,
+            800, 300, 800, 300, 800, 300, 800, 300, 800, 300,
+            800, 300, 800, 300, 800, 300, 800, 300, 800
+          ]);
+        }
+
+        activeAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (activeAudioCtx.state === 'suspended') {
+          activeAudioCtx.resume();
+        }
+
+        const chordNotes = [523.25, 659.25, 783.99, 1046.50];
+
+        for (let cycle = 0; cycle < 15; cycle++) {
+          chordNotes.forEach((freq, idx) => {
+            const osc = activeAudioCtx.createOscillator();
+            const gain = activeAudioCtx.createGain();
+            const startTime = activeAudioCtx.currentTime + (cycle * 1.0) + (idx * 0.12);
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, startTime);
+
+            gain.gain.setValueAtTime(0.28, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.45);
+
+            osc.connect(gain);
+            gain.connect(activeAudioCtx.destination);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.45);
+          });
+        }
+      } catch (e) {
+        console.log("Audio not supported", e);
+      }
+    }
+
+    const playLongAlarm5s = playLongAlarm15s;
+
+    function updateNotifIcon() {
+      const icon = document.getElementById('notif-icon');
+      if (isAlertEnabled) {
+        icon.innerText = '🔔';
+        icon.style.color = '#059669';
+      } else {
+        icon.innerText = '🔕';
+        icon.style.color = '#94a3b8';
+      }
+    }
+
+    function toggleReminderAlert() {
+      isAlertEnabled = !isAlertEnabled;
+      updateNotifIcon();
+      if (isAlertEnabled) {
+        playLongAlarm15s();
+        showRoyalAlert("ĐÃ BẬT CHUÔNG NHẮC", "Hệ thống sẽ phát chuông báo 15s và rung điện thoại khi sắp đến giờ học (trước 30 phút) và trước giờ tan học (trước 10 phút) của hai công chúa!", "🔔");
+      } else {
+        stopLongAlarm();
+        showRoyalAlert("ĐÃ TẮT CHUÔNG NHẮC", "Đã tắt âm thanh nhắc nhở giờ học.", "🔕");
+      }
+    }
+
+    function triggerAlert(title, body, iconChar) {
+      if (!isAlertEnabled) return;
+      playLongAlarm15s();
+      showRoyalAlert(title, body, iconChar || "🔔");
+    }
+
+    function loadData() {
+      const loadingEl = document.getElementById('loading');
+      if (loadingEl) {
+        loadingEl.style.display = 'block';
+        loadingEl.innerHTML = 'Đang tải dữ liệu lịch học...';
+      }
+
+      const loadTimer = setTimeout(() => {
+        if (loadingEl && loadingEl.style.display !== 'none' && (!appData || !appData.lichHoc || !appData.lichHoc.length)) {
+          loadingEl.innerHTML = `
+            <div style="color:#b45309; background:#fef3c7; padding:10px; border-radius:10px; font-size:0.8rem; text-align:center;">
+              ⏳ Kết nối mạng hơi chậm... <button onclick="loadData()" style="margin-left:6px; padding:3px 10px; border-radius:6px; background:#0f766e; color:#fff; border:none; font-weight:700; cursor:pointer;">Thử lại</button>
+            </div>
+          `;
+        }
+      }, 10000);
+
+      const onSuccess = (res) => {
+        clearTimeout(loadTimer);
+        if (res && res.error) {
+          if (loadingEl) {
+            loadingEl.style.display = 'block';
+            loadingEl.innerHTML = `
+              <div style="color:#b91c1c; background:#fee2e2; padding:10px; border-radius:10px; font-size:0.8rem; text-align:left;">
+                ⚠️ Lỗi đọc Google Sheet: ${res.error}
+                <div style="margin-top:6px;"><button onclick="loadData()" style="padding:3px 10px; border-radius:6px; background:#0f766e; color:#fff; border:none; font-weight:700; cursor:pointer;">Thử lại</button></div>
+              </div>
+            `;
+          }
+          return;
+        }
+
+        if (loadingEl) loadingEl.style.display = 'none';
+        appData = res || { danhSachBe: ["KFC", "PEPSI"], lichHoc: [] };
+        if (appData && appData.infoBaby) {
+          CACHED_INFO_BABY = appData.infoBaby;
+        }
+        renderTimeline();
+        startRealtimeClock();
+      };
+
+      const onFailure = (err) => {
+        clearTimeout(loadTimer);
+        if (loadingEl) {
+          loadingEl.style.display = 'block';
+          loadingEl.innerHTML = `
+            <div style="color:#b91c1c; background:#fee2e2; padding:10px; border-radius:10px; font-size:0.8rem; text-align:left;">
+              ⚠️ Lỗi kết nối máy chủ: ${err ? (err.message || err.toString()) : 'Không xác định'}
+              <div style="margin-top:6px;"><button onclick="loadData()" style="padding:3px 10px; border-radius:6px; background:#0f766e; color:#fff; border:none; font-weight:700; cursor:pointer;">Thử lại</button></div>
+            </div>
+          `;
+        }
+      };
+
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(onSuccess)
+          .withFailureHandler(onFailure)
+          .layDuLieuLichHoc();
+      } else {
+        // Tự động dùng Web API khi mở từ GitHub Pages hoặc bên ngoài GAS
+        fetch(GAS_API_URL + '?action=getData', { redirect: 'follow' })
+          .then(r => r.json())
+          .then(res => {
+            if (res && res.success) {
+              onSuccess(res.data);
+            } else {
+              onFailure(new Error(res ? res.error : 'Không có dữ liệu'));
+            }
+          })
+          .catch(onFailure);
+      }
+    }
+
+    function selectChild(childKey) {
+      activeChild = childKey;
+      document.querySelectorAll('.princess-profile-nav button').forEach(btn => {
+        const btnVal = btn.getAttribute('data-child');
+        if (btnVal === childKey) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      renderTimeline();
+      if (window.updateRealtimeCards) window.updateRealtimeCards();
+    }
+
+    function selectDay(dayKey) {
+      if (dayKey === 'Hôm nay') {
+        currentWeekOffset = 0;
+        calculateWeekDates();
+      }
+      activeDay = dayKey;
+      document.querySelectorAll('.day-chip').forEach(chip => {
+        if (chip.getAttribute('data-day') === dayKey) {
+          chip.classList.add('active');
+        } else {
+          chip.classList.remove('active');
+        }
+      });
+
+      const dateInputEl = document.getElementById('header-date-input');
+      if (dateInputEl) {
+        if (dayKey === 'Hôm nay') {
+          const now = new Date();
+          const yyyy = now.getFullYear();
+          const mm = String(now.getMonth() + 1).padStart(2, '0');
+          const dd = String(now.getDate()).padStart(2, '0');
+          dateInputEl.value = `${yyyy}-${mm}-${dd}`;
+        } else if (weekDatesMap[dayKey] && weekDatesMap[dayKey].isoDateStr) {
+          dateInputEl.value = weekDatesMap[dayKey].isoDateStr;
+        }
+      }
+
+      renderTimeline();
+      if (window.updateRealtimeCards) window.updateRealtimeCards();
+    }
+
+    function toMinutes(t) {
+      if (!t || !t.includes(':')) return 9999;
+      const parts = t.split(':');
+      return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+    }
+
+    function getNextUpcomingLesson(baseDayName, filteredList) {
+      const cycleDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
+      let baseIdx = cycleDays.indexOf(baseDayName);
+      if (baseIdx === -1) baseIdx = 0;
+
+      for (let i = 1; i <= 7; i++) {
+        let checkDay = cycleDays[(baseIdx + i) % 7];
+        let found = filteredList.filter(item => item.thu.toLowerCase() === checkDay.toLowerCase() && item.trangThai === 'Đang học');
+        if (found.length > 0) {
+          let dateStr = '';
+          if (weekDatesMap[checkDay]) {
+            let checkIdx = cycleDays.indexOf(checkDay);
+            dateStr = (checkIdx <= baseIdx) ? weekDatesMap[checkDay].nextWeekDateStr : weekDatesMap[checkDay].dateStr;
+          }
+          return { dayName: checkDay, dateStr: dateStr };
+        }
+      }
+      return null;
+    }
+
+    function renderTimeline() {
+      const wrapper = document.getElementById('schedule-wrapper');
+      wrapper.innerHTML = '';
+
+      const now = new Date();
+      const curM = now.getHours() * 60 + now.getMinutes();
+
+      let list = appData.lichHoc.filter(item => {
+        return (activeChild === 'Tất cả') || (item.be === activeChild);
+      });
+
+      // 1. Chế độ xem CẢ TUẦN
+      if (activeDay === 'Tất cả') {
+        let hasAny = false;
+
+        DAYS_ORDER.forEach(day => {
+          let dayItems = list.filter(i => i.thu.toLowerCase() === day.toLowerCase() && i.trangThai === 'Đang học');
+          let dateMeta = weekDatesMap[day];
+
+          if (dayItems.length > 0) {
+            hasAny = true;
+            dayItems.sort((a, b) => toMinutes(a.gioBatDau) - toMinutes(b.gioBatDau));
+
+            const dateInfo = dateMeta ? `(${dateMeta.dateStr})` : '';
+
+            let childLabel = '';
+            const hasKfc = dayItems.some(i => i.be === 'KFC');
+            const hasPepsi = dayItems.some(i => i.be === 'PEPSI');
+
+            if (hasKfc && hasPepsi) {
+              childLabel = 'AN NHIÊN & THIÊN Ý';
+            } else if (hasKfc) {
+              childLabel = 'AN NHIÊN';
+            } else if (hasPepsi) {
+              childLabel = 'THIÊN Ý';
+            }
+
+            const dColor = DAY_COLORS[day] || { main: "#0f766e", bg: "#f0fdfa", border: "#ccfbf1", text: "#0f766e" };
+            const dayTitle = document.createElement('div');
+            dayTitle.className = 'day-group-header';
+            dayTitle.style.borderLeft = `3.5px solid ${dColor.main}`;
+            dayTitle.style.background = dColor.bg;
+            dayTitle.innerHTML = `
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span style="color:${dColor.text};">📅 <b>${day}</b> <span style="font-size:0.75rem; color:#64748b; font-weight:600;">${dateInfo}</span></span>
+                ${childLabel ? `<span class="child-label-badge" style="color:${dColor.main}; border-color:${dColor.border};">👑 ${childLabel}</span>` : ''}
+              </div>
+              <span class="schedule-list-counter" style="background:${dColor.bg}; color:${dColor.main}; border-color:${dColor.border};">${dayItems.length} môn</span>
+            `;
+            wrapper.appendChild(dayTitle);
+
+            dayItems.forEach(item => {
+              const endM = item.gioKetThuc ? toMinutes(item.gioKetThuc) : toMinutes(item.gioBatDau) + 90;
+              const isItemPast = (dateMeta && dateMeta.isPast) || (currentWeekOffset === 0 && day.toLowerCase() === todayName.toLowerCase() && curM >= endM);
+              wrapper.appendChild(createAgendaCard(item, curM, isItemPast, false, list));
+            });
+          }
+        });
+
+        renderPausedLessonsSection(wrapper, list);
+        updateRealtimeCards();
+
+        if (!hasAny && list.filter(i => i.trangThai === 'Tạm dừng').length === 0) {
+          wrapper.innerHTML = `<div style="text-align:center; padding:30px 10px; color:var(--text-muted); font-size:0.85rem;">🎉 Chưa có lịch học nào được xếp!</div>`;
+        }
+        return;
+      }
+
+      // 2. Chế độ xem HÔM NAY hoặc TỪNG THỨ
+      let targetDay = (activeDay === 'Hôm nay') ? todayName : activeDay;
+      let targetDateMeta = weekDatesMap[targetDay];
+
+      let targetLessons = list.filter(item => item.thu.toLowerCase() === targetDay.toLowerCase() && item.trangThai === 'Đang học');
+      const isViewingToday = (currentWeekOffset === 0) && (activeDay === 'Hôm nay' || activeDay.toLowerCase() === todayName.toLowerCase());
+
+      // TRƯỜNG HỢP CẢ HAI BÉ ĐỀU KHÔNG CÓ LỊCH
+      if (targetLessons.length === 0) {
+        const nextUpcoming = getNextUpcomingLesson(targetDay, list);
+        const currentLabel = isViewingToday ? `Hôm nay (${targetDay})` : `${targetDay}${targetDateMeta ? ' (' + targetDateMeta.dateStr + ')' : ''}`;
+
+        const notice = document.createElement('div');
+        notice.className = 'smart-forward-notice';
+        notice.innerHTML = `
+          <div class="smart-forward-badge">📅 THÔNG BÁO LỊCH HỌC</div>
+          <div style="font-size:0.88rem; color:#1e293b;"><b>${currentLabel}</b> không có môn học nào.</div>
+          ${nextUpcoming ? `<div style="color:#0f766e; font-size:0.82rem; margin-top:2px;">👉 Lịch học tiếp theo: <b>${nextUpcoming.dayName} (${nextUpcoming.dateStr})</b></div>` : ''}
+        `;
+        wrapper.appendChild(notice);
+
+        renderPausedLessonsSection(wrapper, list, targetDay);
+        return;
+      }
+
+      // THÊM TIÊU ĐỀ KHU VỰC BẢNG CHI TIẾT MÔN HỌC
+      const dateText = targetDateMeta ? targetDateMeta.dateStr : '';
+      const displayDayTitle = isViewingToday 
+        ? `HÔM NAY • ${todayName.toUpperCase()}${dateText ? ' (' + dateText + ')' : ''}` 
+        : `${targetDay.toUpperCase()}${dateText ? ' (' + dateText + ')' : ''}`;
+      
+      const targetDayColor = DAY_COLORS[targetDay] || { main: "#0f766e", bg: "#f0fdfa", border: "#99f6e4" };
+      let headerColor = targetDayColor;
+      if (activeChild === 'KFC') {
+        headerColor = { main: "#0284c7", bg: "#f0f9ff", border: "#87CEFF" };
+      } else if (activeChild === 'PEPSI') {
+        headerColor = { main: "#db2777", bg: "#fff5f8", border: "#FFD1DC" };
+      }
+
+      const scheduleHeader = document.createElement('div');
+      scheduleHeader.className = 'schedule-list-header';
+      scheduleHeader.style.borderBottom = '1.5px solid ' + headerColor.border;
+      scheduleHeader.innerHTML = `
+        <div class="schedule-list-title-box">
+          <span class="schedule-list-icon">📋</span>
+          <div class="schedule-list-text-wrap">
+            <span class="schedule-list-main-title" style="color:${headerColor.main};">LỊCH HỌC CẢ NGÀY</span>
+            <span class="schedule-list-sub-title">Toàn bộ môn: <b>${displayDayTitle}</b></span>
+          </div>
+        </div>
+        <span class="schedule-list-counter" style="background:${headerColor.bg}; color:${headerColor.main}; border-color:${headerColor.border};">${targetLessons.length} môn</span>
+      `;
+      wrapper.appendChild(scheduleHeader);
+
+      targetLessons.sort((a, b) => toMinutes(a.gioBatDau) - toMinutes(b.gioBatDau));
+      targetLessons.forEach(item => {
+        const endM = item.gioKetThuc ? toMinutes(item.gioKetThuc) : toMinutes(item.gioBatDau) + 90;
+        const isItemPast = (targetDateMeta && targetDateMeta.isPast) || (currentWeekOffset === 0 && targetDay.toLowerCase() === todayName.toLowerCase() && curM >= endM);
+        wrapper.appendChild(createAgendaCard(item, curM, isItemPast, false, list));
+      });
+
+      // NẾU ĐANG CHỌN "CẢ HAI", HIỂN THỊ RÕ RÀNG THẺ THÔNG BÁO CHO BÉ NÀO KHÔNG CÓ MÔN HỌC
+      if (activeChild === 'Tất cả') {
+        ["KFC", "PEPSI"].forEach(childKey => {
+          const childLessonsToday = targetLessons.filter(i => i.be === childKey);
+          if (childLessonsToday.length === 0) {
+            const shortPrincessName = SHORT_NAME_MAP[childKey];
+            const nextChildUpcoming = getNextUpcomingLesson(targetDay, appData.lichHoc.filter(i => i.be === childKey));
+            const noLessonDayText = isViewingToday ? 'hôm nay' : `${targetDay}${targetDateMeta ? ' (' + targetDateMeta.dateStr + ')' : ''}`;
+            
+            const noLessonCard = document.createElement('div');
+            noLessonCard.className = `child-no-lesson-card ${childKey}`;
+            noLessonCard.innerHTML = `
+              <img src="${AVATAR_MAP[childKey]}" class="child-no-lesson-avatar" alt="${shortPrincessName}">
+              <div class="child-no-lesson-info">
+                <div class="no-lesson-main-text">Công chúa <b>${shortPrincessName}</b> ${noLessonDayText} không có môn học nào.</div>
+                ${nextChildUpcoming ? `<div class="no-lesson-sub-text">👉 Lịch học tiếp theo: <b>${nextChildUpcoming.dayName} (${nextChildUpcoming.dateStr})</b></div>` : ''}
+              </div>
+            `;
+            wrapper.appendChild(noLessonCard);
+          }
+        });
+      }
+
+      renderPausedLessonsSection(wrapper, list, targetDay);
+      updateRealtimeCards();
+    }
+
+    function renderPausedLessonsSection(wrapper, list, filterDay = null) {
+      let paused = list.filter(i => i.trangThai === 'Tạm dừng');
+      if (filterDay) {
+        paused = paused.filter(i => i.thu.toLowerCase() === filterDay.toLowerCase());
+      }
+      if (paused.length > 0) {
+        const pTitle = document.createElement('div');
+        pTitle.className = 'paused-section-title';
+        pTitle.innerHTML = `<span>⏸️ Môn đang tạm dừng (${paused.length})</span>`;
+        wrapper.appendChild(pTitle);
+
+        paused.forEach(item => {
+          const pCard = createAgendaCard(item, -1, false, true, list);
+          wrapper.appendChild(pCard);
+        });
+      }
+    }
+
+    function createAgendaCard(item, curM, isPast = false, isPaused = false, currentList = []) {
+      const startM = toMinutes(item.gioBatDau);
+      const endM = item.gioKetThuc ? toMinutes(item.gioKetThuc) : startM + 90;
+      const isToday = (currentWeekOffset === 0) && (item.thu.toLowerCase() === todayName.toLowerCase());
+
+      const rawGps = (item.toaDo !== undefined && item.toaDo !== null) ? item.toaDo.toString().trim() : '';
+      const rawAddr = (item.diaDiem !== undefined && item.diaDiem !== null) ? item.diaDiem.toString().trim() : '';
+
+      // Ưu tiên 1: Tọa độ GPS (nếu có cột GPS), nếu không có mới dùng Địa chỉ
+      const mapTarget = rawGps || rawAddr;
+      let mapUrl = '';
+      if (mapTarget) {
+        if (mapTarget.indexOf('http') === 0) {
+          mapUrl = mapTarget;
+        } else {
+          mapUrl = "https:" + "/" + "/www.google.com/maps/search/?api=1&query=" + encodeURIComponent(mapTarget);
+        }
+      }
+
+      const avatarUrl = AVATAR_MAP[item.be] || '';
+      const shortName = SHORT_NAME_MAP[item.be] || item.be;
+
+      const durationM = Math.max(0, endM - startM);
+      const durH = Math.floor(durationM / 60);
+      const durRemM = durationM % 60;
+      let durationStr = durRemM + 'p';
+      if (durH > 0) {
+        durationStr = durH + 'h' + (durRemM > 0 ? durRemM + 'p' : '');
+      }
+
+      let nextLessonText = '';
+      const nextForChild = getNextUpcomingLesson(item.thu, currentList.filter(i => i.be === item.be));
+      if (nextForChild) {
+        nextLessonText = `${nextForChild.dayName} (${nextForChild.dateStr})`;
+      }
+
+      const card = document.createElement('div');
+      card.className = `agenda-card ${item.be} ${isPaused ? 'is-paused' : ''} ${isPast ? 'is-completed' : ''}`;
+      card.setAttribute('data-child', item.be);
+      card.setAttribute('data-day', item.thu);
+      card.setAttribute('data-start-m', startM);
+      card.setAttribute('data-end-m', endM);
+      card.setAttribute('data-start-time', item.gioBatDau || '');
+      card.setAttribute('data-end-time', item.gioKetThuc || '');
+      card.setAttribute('data-pickup', item.nguoiDon || '');
+      card.setAttribute('data-status', item.trangThai);
+      card.setAttribute('data-row-id', item.rowId || '');
+      card.setAttribute('data-subject', item.monHoc);
+
+      card.innerHTML = `
+        <!-- DẤU MỘC COMPLETED PHÍA PHẢI BẢNG -->
+        ${isPast ? `
+          <div class="stamp-completed-seal-red">
+            <span class="stamp-red-star">★ ★ ★</span>
+            <span class="stamp-red-text">COMPLETED</span>
+            <span class="stamp-red-star">★ ★ ★</span>
+          </div>
+        ` : ''}
+
+        <div class="agenda-body">
+          <div class="agenda-left-col">
+            <div class="child-badge-tag ${item.be}">
+              ${avatarUrl ? `<img src="${avatarUrl}" class="child-badge-avatar" alt="${shortName}">` : ''}
+              <span class="child-badge-name">${shortName}</span>
+            </div>
+
+            <div class="time-capsule-col">
+              <div class="time-start-24">${item.gioBatDau}</div>
+              <div class="time-sep-icon">▼</div>
+              <div class="time-end-24">${item.gioKetThuc || '--:--'}</div>
+              <div class="time-duration-chip">⏱️ ${durationStr}</div>
+            </div>
+          </div>
+          
+          <div class="info-content-col">
+            <div class="subject-title-row">
+              <div class="subject-title-left">
+                <span class="subject-title" title="${item.monHoc}">${item.monHoc}</span>
+                <span class="badge-status-slot"></span>
+              </div>
+              <div class="subject-title-right">
+                <button class="btn-card-edit-corner" title="Sửa lịch học" onclick='requestEditWithPassword(${JSON.stringify(item)})'>✏️</button>
+              </div>
+            </div>
+
+            <!-- VỊ TRÍ ĐẶT THANH ĐANG HỌC / SẮP HỌC ĐẾM NGƯỢC THỜI GIAN THỰC -->
+            <div class="card-live-bar-slot"></div>
+
+            <div class="info-meta-chips">
+              ${rawAddr ? (mapUrl 
+                ? `<a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="meta-chip meta-chip-address" title="${rawGps ? 'Mở Google Maps theo Tọa độ GPS' : 'Mở Google Maps theo Địa chỉ'}">📍 ${rawAddr} ↗</a>` 
+                : `<span class="meta-chip">📍 ${rawAddr}</span>`
+              ) : (rawGps ? (mapUrl 
+                ? `<a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="meta-chip meta-chip-address" title="Mở Google Maps theo Tọa độ GPS">📍 ${rawGps} ↗</a>` 
+                : `<span class="meta-chip">📍 ${rawGps}</span>`
+              ) : '')}
+              ${item.nguoiDon ? `<span class="meta-chip">🚗 Đón: <b>${item.nguoiDon}</b></span>` : ''}
+              ${item.ghiChu ? `<span class="meta-chip">📝 ${item.ghiChu}</span>` : ''}
+              ${isPaused ? `<span class="meta-chip" style="background:#ffedd5; color:#c2410c; font-weight:800;">⏸️ Tạm dừng</span>` : ''}
+            </div>
+
+            ${nextLessonText ? `
+              <div class="next-session-tag ${isToday && isPast ? 'highlight-live-completed' : ''}">
+                <span>🗓️ Lịch học tiếp theo:</span> <b>${nextLessonText}</b>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        ${item.sdt ? `
+          <div class="agenda-actions">
+            <a href="tel:${item.sdt}" class="action-btn call" title="Gọi ${item.sdt}">📞 Gọi</a>
+          </div>
+        ` : ''}
+      `;
+      return card;
+    }
+
+    function updateRealtimeCards() {
+      if (currentWeekOffset !== 0) return;
+      const now = new Date();
+      const curH = now.getHours();
+      const curM = now.getMinutes();
+      const curS = now.getSeconds();
+      const curSec = (curH * 60 + curM) * 60 + curS;
+
+      const wrapper = document.getElementById('schedule-wrapper');
+      if (!wrapper) return;
+
+      const cards = Array.from(wrapper.querySelectorAll('.agenda-card'));
+      if (cards.length === 0) return;
+
+      // Group today's active lessons by child
+      const todayCards = cards.filter(card => {
+        const day = card.getAttribute('data-day') || '';
+        const status = card.getAttribute('data-status') || '';
+        return day.toLowerCase() === todayName.toLowerCase() && status !== 'Tạm dừng';
+      });
+
+      const children = ["KFC", "PEPSI"];
+      children.forEach(child => {
+        const childCards = todayCards.filter(c => c.getAttribute('data-child') === child);
+        if (childCards.length === 0) return;
+
+        // Sort ascending by start time
+        childCards.sort((a, b) => parseInt(a.getAttribute('data-start-m'), 10) - parseInt(b.getAttribute('data-start-m'), 10));
+
+        // Find the earliest upcoming lesson today
+        let upcomingCard = null;
+        for (let c of childCards) {
+          const sSec = parseInt(c.getAttribute('data-start-m'), 10) * 60;
+          if (curSec < sSec) {
+            upcomingCard = c;
+            break;
+          }
+        }
+
+        childCards.forEach(card => {
+          const startM = parseInt(card.getAttribute('data-start-m'), 10);
+          const endM = parseInt(card.getAttribute('data-end-m'), 10);
+          const startSec = startM * 60;
+          const endSec = endM * 60;
+          const monHoc = card.getAttribute('data-subject') || '';
+          const startTimeStr = card.getAttribute('data-start-time') || '';
+          const shortName = SHORT_NAME_MAP[child] || child;
+
+          const badgeSlot = card.querySelector('.badge-status-slot');
+          const liveBarSlot = card.querySelector('.card-live-bar-slot');
+
+          // 1. ĐÃ HỌC XONG (COMPLETED): curSec >= endSec
+          if (curSec >= endSec) {
+            if (!card.classList.contains('is-completed')) {
+              card.classList.add('is-completed');
+              card.classList.remove('is-live', 'is-upcoming', 'stage-green', 'stage-amber', 'stage-orange');
+              if (badgeSlot) badgeSlot.innerHTML = '';
+              if (liveBarSlot) liveBarSlot.innerHTML = '';
+            }
+            if (!card.querySelector('.stamp-completed-seal-red')) {
+              const stamp = document.createElement('div');
+              stamp.className = 'stamp-completed-seal-red';
+              stamp.innerHTML = `
+                <span class="stamp-red-star">★ ★ ★</span>
+                <span class="stamp-red-text">COMPLETED</span>
+                <span class="stamp-red-star">★ ★ ★</span>
+              `;
+              card.appendChild(stamp);
+            }
+
+            // Sáng nổi bật & nhấp nháy chữ Lịch học tiếp theo khi đã Completed trong ngày hôm nay
+            const nextTag = card.querySelector('.next-session-tag');
+            if (nextTag && !nextTag.classList.contains('highlight-live-completed')) {
+              nextTag.classList.add('highlight-live-completed');
+            }
+          }
+          // 2. ĐANG HỌC (LIVE - ĐỎ NỔI BẬT): curSec is between startSec and endSec
+          else if (curSec >= startSec && curSec < endSec) {
+            card.classList.add('is-live');
+            card.classList.remove('is-completed', 'is-upcoming', 'stage-green', 'stage-amber', 'stage-orange');
+            const oldStamp = card.querySelector('.stamp-completed-seal-red');
+            if (oldStamp) oldStamp.remove();
+
+            const nextTag = card.querySelector('.next-session-tag');
+            if (nextTag) nextTag.classList.remove('highlight-live-completed');
+
+            const diff = endSec - curSec;
+            const h = Math.floor(diff / 3600);
+            const m = Math.floor((diff % 3600) / 60);
+            const s = diff % 60;
+            const timeStr = (h > 0 ? h + 'h ' : '') + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+
+            if (badgeSlot && !badgeSlot.querySelector('.badge-card-live')) {
+              badgeSlot.innerHTML = `<span class="badge-card-live"><span class="pulsing-dot-red"></span>Đang học</span>`;
+            }
+
+            if (liveBarSlot) {
+              liveBarSlot.innerHTML = `
+                <div class="card-live-bar during">
+                  <span class="live-bar-left"><span class="pulsing-dot-red"></span> ĐANG HỌC</span>
+                  <span class="live-bar-timer">⏱️ Tan lớp sau: <b>${timeStr}</b></span>
+                </div>
+              `;
+            }
+
+            // TRƯỚC GIỜ TAN HỌC: Báo trước 10 phút (diff <= 600 && diff > 0)
+            const lessonEndKey = `${child}_${monHoc}_${endM}`;
+            if (diff <= 600 && diff > 0 && !notifiedEndLessons[lessonEndKey]) {
+              notifiedEndLessons[lessonEndKey] = true;
+              const remainingEndMins = Math.ceil(diff / 60);
+              const endTimeVal = card.getAttribute('data-end-time') || '--:--';
+              const pickupPerson = card.getAttribute('data-pickup') || '';
+              triggerAlert(
+                `🚗 SẮP TAN HỌC: Công chúa ${shortName} sắp tan môn ${monHoc}!`,
+                `📖 Môn: ${monHoc}\n⏱️ Tan lớp lúc: ${endTimeVal}\n⏳ Còn ${remainingEndMins} phút nữa tan lớp.${pickupPerson ? '\n🚗 Người đón: ' + pickupPerson : '\nBa mẹ chuẩn bị đi đón bé nhé!'}`,
+                '🚗'
+              );
+            }
+          }
+          // 3. SẮP HỌC (UPCOMING): The earliest upcoming lesson today
+          else if (card === upcomingCard) {
+            const diff = startSec - curSec;
+
+            if (diff > 0) {
+              card.classList.add('is-upcoming');
+              card.classList.remove('is-completed', 'is-live');
+              const oldStamp = card.querySelector('.stamp-completed-seal-red');
+              if (oldStamp) oldStamp.remove();
+
+              const h = Math.floor(diff / 3600);
+              const m = Math.floor((diff % 3600) / 60);
+              const s = diff % 60;
+              const timeStr = (h > 0 ? h + 'h ' : '') + m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+
+              // Giai đoạn:
+              // - Còn <= 1 tiếng (<= 3600s): Cam đỏ "⚡ CHUẨN BỊ VÀO LỚP: timeStr"
+              // - Còn > 1 tiếng (> 3600s) (ví dụ khi vừa qua ngày mới): Xanh lá "⏳ SẮP HỌC: timeStr"
+              // Cả hai đều hiển thị gọn gàng trên 1 dòng duy nhất, không còn giai đoạn thừa "(CÒN 1H)"
+              if (diff <= 3600) {
+                card.classList.remove('stage-green', 'stage-amber');
+                card.classList.add('stage-orange');
+
+                if (badgeSlot) {
+                  badgeSlot.innerHTML = `<span class="badge-card-upcoming stage-orange"><span class="pulsing-dot-orange"></span> Chuẩn bị vào lớp</span>`;
+                }
+
+                if (liveBarSlot) {
+                  liveBarSlot.innerHTML = `
+                    <div class="card-live-bar upcoming stage-orange">
+                      <span class="live-bar-single stage-orange">
+                        <span class="pulsing-dot-orange"></span>
+                        CHUẨN BỊ VÀO LỚP: <b>${timeStr}</b>
+                      </span>
+                    </div>
+                  `;
+                }
+
+                // SẮP ĐẾN GIỜ HỌC: Báo trước 30 phút (diff <= 1800 && diff > 0)
+                const lessonStartKey = `${child}_${monHoc}_${startM}`;
+                if (diff <= 1800 && !notifiedStartLessons[lessonStartKey]) {
+                  notifiedStartLessons[lessonStartKey] = true;
+                  const remainingMins = Math.ceil(diff / 60);
+                  const startTimeVal = startTimeStr || card.getAttribute('data-start-time') || '';
+                  triggerAlert(
+                    `⏰ CHUẨN BỊ VÀO LỚP: Công chúa ${shortName} sắp vào lớp!`,
+                    `📖 Môn: ${monHoc}\n⏱️ Giờ học: ${startTimeVal}\n⏳ Còn ${remainingMins} phút nữa vào lớp, chuẩn bị sách vở và xuất phát nhé!`,
+                    '⏰'
+                  );
+                }
+              } else {
+                // > 1 tiếng (Ví dụ đầu ngày mới, hoặc các tiết học buổi chiều):
+                // Khôi phục SẮP HỌC màu xanh lá tươi mát
+                card.classList.remove('stage-orange', 'stage-amber');
+                card.classList.add('stage-green');
+
+                if (badgeSlot) {
+                  badgeSlot.innerHTML = `<span class="badge-card-upcoming stage-green"><span class="pulsing-dot-green"></span> Sắp học</span>`;
+                }
+
+                if (liveBarSlot) {
+                  liveBarSlot.innerHTML = `
+                    <div class="card-live-bar upcoming stage-green">
+                      <span class="live-bar-single stage-green">
+                        <span class="pulsing-dot-green"></span>
+                        SẮP HỌC: <b>${timeStr}</b>
+                      </span>
+                    </div>
+                  `;
+                }
+              }
+            } else {
+              card.classList.remove('is-upcoming', 'stage-green', 'stage-amber', 'stage-orange');
+              if (badgeSlot) badgeSlot.innerHTML = '';
+              if (liveBarSlot) liveBarSlot.innerHTML = '';
+              const oldStamp = card.querySelector('.stamp-completed-seal-red');
+              if (oldStamp) oldStamp.remove();
+            }
+          }
+          // 4. FUTURE (Later today)
+          else {
+            card.classList.remove('is-completed', 'is-live', 'is-upcoming', 'stage-green', 'stage-amber', 'stage-orange');
+            if (badgeSlot) badgeSlot.innerHTML = '';
+            if (liveBarSlot) liveBarSlot.innerHTML = '';
+            const oldStamp = card.querySelector('.stamp-completed-seal-red');
+            if (oldStamp) oldStamp.remove();
+          }
+        });
+      });
+    }
+
+    function startRealtimeClock() {
+      if (countdownTimer) clearInterval(countdownTimer);
+      updateRealtimeCards();
+      countdownTimer = setInterval(updateRealtimeCards, 1000);
+      window.updateRealtimeCards = updateRealtimeCards;
+      window.tickCountdown = updateRealtimeCards;
+    }
+
+    let CACHED_INFO_BABY = [];
+
+    function handleBabyModalBackdropClick(e) {
+      if (e.target.id === 'baby-profile-modal') {
+        closeBabyProfileModal();
+      }
+    }
+
+    function closeBabyProfileModal() {
+      const modal = document.getElementById('baby-profile-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function calculateAge(dateStr) {
+      if (!dateStr) return '';
+      const str = dateStr.toString().trim();
+      let d, m, y;
+      if (str.includes('/')) {
+        const parts = str.split('/');
+        if (parts.length === 3) {
+          d = parseInt(parts[0], 10);
+          m = parseInt(parts[1], 10) - 1;
+          y = parseInt(parts[2], 10);
+        }
+      } else if (str.includes('-')) {
+        const parts = str.split('-');
+        if (parts.length === 3) {
+          if (parts[0].length === 4) {
+            y = parseInt(parts[0], 10);
+            m = parseInt(parts[1], 10) - 1;
+            d = parseInt(parts[2], 10);
+          } else {
+            d = parseInt(parts[0], 10);
+            m = parseInt(parts[1], 10) - 1;
+            y = parseInt(parts[2], 10);
+          }
+        }
+      }
+      if (!y || isNaN(y) || isNaN(m) || isNaN(d)) return '';
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const birthDate = new Date(y, m, d);
+
+      let ageYears = today.getFullYear() - birthDate.getFullYear();
+      let lastBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+
+      if (today < lastBirthday) {
+        ageYears--;
+        lastBirthday = new Date(today.getFullYear() - 1, birthDate.getMonth(), birthDate.getDate());
+      }
+
+      const diffMs = today.getTime() - lastBirthday.getTime();
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (ageYears <= 0) {
+        return diffDays > 0 ? (diffDays + ' ngày') : 'Sơ sinh';
+      }
+      if (diffDays === 0) {
+        return `${ageYears} tuổi tròn (Hôm nay sinh nhật 🎉)`;
+      }
+      return `${ageYears} tuổi ${diffDays} ngày`;
+    }
+
+    function openBabyProfileModal(beKey) {
+      const modal = document.getElementById('baby-profile-modal');
+      const content = document.getElementById('baby-profile-content');
+      if (!modal || !content) return;
+
+      modal.style.display = 'flex';
+      renderBabyProfile(beKey);
+
+      // Nếu chưa có dữ liệu cache từ sheet INFO BABY, tải qua google.script.run
+      if (!CACHED_INFO_BABY || CACHED_INFO_BABY.length === 0) {
+        if (window.google && google.script && google.script.run) {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (res && res.success && res.rawData) {
+                CACHED_INFO_BABY = res.rawData;
+                renderBabyProfile(beKey);
+              }
+            })
+            .layThongTinBaby();
+        }
+      }
+    }
+
+    function renderBabyProfile(beKey) {
+      const content = document.getElementById('baby-profile-content');
+      if (!content) return;
+
+      const avatar = AVATAR_MAP[beKey] || '';
+      const fallbackName = beKey === 'KFC' ? 'CAO AN NHIÊN' : 'CAO THIÊN Ý';
+      const fallbackNick = beKey === 'KFC' ? 'KFC' : 'PEPSI';
+      const fallbackDob = beKey === 'KFC' ? '24/12/2016' : '12/12/2021';
+
+      let hoTen = fallbackName;
+      let nick = fallbackNick;
+      let ngaySinh = fallbackDob;
+      let extraFields = [];
+
+      if (CACHED_INFO_BABY && CACHED_INFO_BABY.length > 1) {
+        const headers = CACHED_INFO_BABY[0];
+        for (let i = 1; i < CACHED_INFO_BABY.length; i++) {
+          const row = CACHED_INFO_BABY[i];
+          const rowStr = row.join(' ').toUpperCase();
+          if (rowStr.includes(beKey.toUpperCase())) {
+            for (let j = 0; j < headers.length; j++) {
+              const h = (headers[j] || '').trim();
+              const val = (row[j] || '').trim();
+              const hLow = h.toLowerCase();
+              if (hLow.includes('nick') || hLow.includes('biệt')) {
+                nick = val || nick;
+              } else if (hLow.includes('họ') || hLow.includes('tên') || hLow.includes('name')) {
+                hoTen = val || hoTen;
+              } else if (hLow.includes('ngày') || hLow.includes('sinh') || hLow.includes('tháng') || hLow.includes('năm') || hLow.includes('dob')) {
+                ngaySinh = val || ngaySinh;
+              } else if (val) {
+                extraFields.push({ label: h, val: val });
+              }
+            }
+            break;
+          }
+        }
+      }
+
+      const ageStr = calculateAge(ngaySinh);
+
+      content.innerHTML = `
+        <div class="baby-profile-header-banner ${beKey}">
+          <img src="${avatar}" class="baby-profile-avatar-big" alt="${hoTen}">
+          <h3 class="baby-profile-name">👑 ${hoTen}</h3>
+          <div class="baby-profile-nickname-pill">🎀 Công Chúa: <b>${nick}</b></div>
+        </div>
+        <div class="baby-profile-info-list">
+          <div class="baby-info-item-row">
+            <span class="baby-info-item-label">🎂 Ngày sinh</span>
+            <span class="baby-info-item-val">${ngaySinh}</span>
+          </div>
+          ${ageStr ? `
+            <div class="baby-info-item-row">
+              <span class="baby-info-item-label">🎈 Tuổi hiện tại</span>
+              <span class="baby-info-item-val">${ageStr}</span>
+            </div>
+          ` : ''}
+          ${extraFields.map(f => `
+            <div class="baby-info-item-row">
+              <span class="baby-info-item-label">📌 ${f.label}</span>
+              <span class="baby-info-item-val">${f.val}</span>
+            </div>
+          `).join('')}
+          <div style="margin-top: 8px; text-align:center;">
+            <button type="button" onclick="closeBabyProfileModal()" style="width:100%; padding:9px; border-radius:10px; border:none; background:${beKey === 'KFC' ? '#e0f2fe' : '#fff0f4'}; color:${beKey === 'KFC' ? '#0369a1' : '#be185d'}; font-weight:800; cursor:pointer;">Đóng</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function clearPassError() {
+      const errBox = document.getElementById('pass-error-msg');
+      const passInp = document.getElementById('pass-input');
+      if (errBox) {
+        errBox.style.display = 'none';
+        errBox.innerText = '';
+      }
+      if (passInp) passInp.classList.remove('is-invalid');
+    }
+
+    function requestEditWithPassword(item) {
+      pendingEditItem = item;
+      const passInp = document.getElementById('pass-input');
+      clearPassError();
+      if (passInp) passInp.value = '';
+      document.getElementById('password-modal').style.display = 'flex';
+      setTimeout(() => {
+        if (passInp) passInp.focus();
+      }, 100);
+    }
+
+    function closePasswordModal() {
+      document.getElementById('password-modal').style.display = 'none';
+      const passInp = document.getElementById('pass-input');
+      if (passInp) passInp.value = '';
+      clearPassError();
+      pendingEditItem = null;
+    }
+
+    function handleVerifyPassword(event) {
+      if (event) event.preventDefault();
+      const passInp = document.getElementById('pass-input');
+      const passVal = passInp.value;
+      const btn = document.getElementById('btn-verify-pass');
+      const errBox = document.getElementById('pass-error-msg');
+
+      btn.innerText = 'Kiểm tra...';
+      btn.disabled = true;
+      clearPassError();
+
+      const onVerifySuccess = (res) => {
+        btn.innerText = 'Mở Khóa';
+        btn.disabled = false;
+        if (res && res.dung) {
+          const itemToOpen = pendingEditItem;
+          closePasswordModal();
+          if (itemToOpen) {
+            openModal(itemToOpen);
+          }
+        } else {
+          if (errBox) {
+            errBox.innerText = '⚠️ Mật khẩu không đúng, vui lòng thử lại!';
+            errBox.style.display = 'block';
+          }
+          if (passInp) {
+            passInp.classList.add('is-invalid');
+            passInp.select();
+          }
+        }
+      };
+
+      const onVerifyFail = (err) => {
+        btn.innerText = 'Mở Khóa';
+        btn.disabled = false;
+        if (errBox) {
+          errBox.innerText = '❌ Lỗi kết nối: ' + (err.message || err);
+          errBox.style.display = 'block';
+        }
+      };
+
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(onVerifySuccess)
+          .withFailureHandler(onVerifyFail)
+          .kiemTraMatKhau(passVal);
+      } else {
+        fetch(GAS_API_URL + '?action=checkPass&pass=' + encodeURIComponent(passVal), { redirect: 'follow' })
+          .then(r => r.json())
+          .then(res => onVerifySuccess(res.data || res))
+          .catch(onVerifyFail);
+      }
+    }
+
+    function openModal(item = null) {
+      const modal = document.getElementById('modal');
+      const title = document.getElementById('modal-title');
+      const btn = document.getElementById('btn-submit-text');
+      const statusBtn = document.getElementById('btn-status-toggle');
+      const deleteBtn = document.getElementById('btn-delete-lesson');
+
+      if (item) {
+        title.innerText = "Chỉnh Sửa Môn Học";
+        btn.innerText = "Cập nhật";
+        document.getElementById('form-rowId').value = item.rowId;
+        
+        const princessFullName = item.be === 'KFC' ? 'CÔNG CHÚA AN NHIÊN' : 'CÔNG CHÚA THIÊN Ý';
+        pickPrincessItem(item.be, princessFullName, AVATAR_MAP[item.be]);
+
+        if (deleteBtn) deleteBtn.style.display = 'inline-flex';
+        statusBtn.style.display = 'inline-flex';
+        document.getElementById('form-trangThai').value = item.trangThai || 'Đang học';
+        if (item.trangThai === 'Tạm dừng') {
+          statusBtn.className = 'btn-status-toggle resume';
+          statusBtn.innerHTML = '<span>▶️ Tiếp tục</span>';
+        } else {
+          statusBtn.className = 'btn-status-toggle pause';
+          statusBtn.innerHTML = '<span>⏸️ Tạm dừng</span>';
+        }
+
+        clearAllDays();
+        document.querySelectorAll('.day-btn-toggle').forEach(b => {
+          if (b.getAttribute('data-val') === item.thu) b.classList.add('active');
+        });
+
+        const sParts = (item.gioBatDau || '17:30').split(':');
+        document.getElementById('start-hour').value = sParts[0].padStart(2, '0');
+        document.getElementById('start-minute').value = (sParts[1] || '00').padStart(2, '0');
+
+        const eParts = (item.gioKetThuc || '19:00').split(':');
+        document.getElementById('end-hour').value = eParts[0].padStart(2, '0');
+        document.getElementById('end-minute').value = (eParts[1] || '00').padStart(2, '0');
+
+        document.getElementById('form-monHoc').value = item.monHoc;
+        document.getElementById('form-diaDiem').value = item.diaDiem;
+        document.getElementById('form-toaDo').value = item.toaDo || '';
+        document.getElementById('form-nguoiDon').value = item.nguoiDon;
+        document.getElementById('form-ghiChu').value = item.ghiChu;
+        document.getElementById('form-sdt').value = item.sdt || '';
+      } else {
+        title.innerText = "Thêm Môn Học Mới";
+        btn.innerText = "Lưu Lịch";
+        document.getElementById('schedule-form').reset();
+        document.getElementById('form-rowId').value = '';
+        document.getElementById('form-toaDo').value = '';
+        
+        if (deleteBtn) deleteBtn.style.display = 'none';
+        statusBtn.style.display = 'none';
+        document.getElementById('form-trangThai').value = 'Đang học';
+        
+        const defaultBe = (activeChild === 'PEPSI') ? 'PEPSI' : 'KFC';
+        const defaultFullName = defaultBe === 'KFC' ? 'CÔNG CHÚA AN NHIÊN' : 'CÔNG CHÚA THIÊN Ý';
+        pickPrincessItem(defaultBe, defaultFullName, AVATAR_MAP[defaultBe]);
+
+        clearAllDays();
+        const defaultDay = (activeDay !== 'Tất cả' && activeDay !== 'Hôm nay') ? activeDay : todayName;
+        document.querySelectorAll('.day-btn-toggle').forEach(b => {
+          if (b.getAttribute('data-val') === defaultDay) b.classList.add('active');
+        });
+
+        document.getElementById('start-hour').value = "17";
+        document.getElementById('start-minute').value = "30";
+        document.getElementById('end-hour').value = "19";
+        document.getElementById('end-minute').value = "00";
+      }
+      modal.style.display = 'flex';
+    }
+
+    function confirmDeleteCurrentLesson() {
+      const rowId = document.getElementById('form-rowId').value;
+      const be = document.getElementById('form-be').value;
+      const monHoc = document.getElementById('form-monHoc').value || 'môn học này';
+      if (!rowId || !be) return;
+
+      showRoyalConfirm(
+        "Xác Nhận Xóa Môn Học",
+        `Ba mẹ có chắc chắn muốn xóa môn "${monHoc}" này khỏi lịch học không?`,
+        function() {
+          const btnDelete = document.getElementById('btn-delete-lesson');
+          if (btnDelete) {
+            btnDelete.innerText = 'Đang xóa...';
+            btnDelete.disabled = true;
+          }
+
+          const onDeleteSuccess = () => {
+            if (btnDelete) {
+              btnDelete.innerText = '🗑️ Xóa môn';
+              btnDelete.disabled = false;
+            }
+            closeModal();
+            showRoyalAlert("Đã Xóa Môn Học", `Đã xóa môn "${monHoc}" thành công!`, "🗑️");
+            loadData();
+          };
+
+          const onDeleteFail = (err) => {
+            if (btnDelete) {
+              btnDelete.innerText = '🗑️ Xóa môn';
+              btnDelete.disabled = false;
+            }
+            showRoyalAlert("Lỗi Xóa Dữ Liệu", 'Không thể xóa môn: ' + (err.message || err), "❌");
+          };
+
+          if (window.google && google.script && google.script.run) {
+            google.script.run
+              .withSuccessHandler(onDeleteSuccess)
+              .withFailureHandler(onDeleteFail)
+              .xoaMonHoc({ be, rowId });
+          } else {
+            fetch(GAS_API_URL + '?action=delete&payload=' + encodeURIComponent(JSON.stringify({ be, rowId })), { redirect: 'follow' })
+              .then(r => r.json())
+              .then(res => {
+                if (res && res.success) onDeleteSuccess();
+                else onDeleteFail(new Error(res ? res.error : 'Lỗi xóa môn'));
+              })
+              .catch(onDeleteFail);
+          }
+        },
+        "🗑️"
+      );
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      const menu = document.getElementById('dropdown-menu-list');
+      if (menu) menu.classList.remove('show');
+    }
+
+    function saveSchedule(e) {
+      e.preventDefault();
+      const selectedDays = getSelectedDays();
+      if (selectedDays.length === 0) {
+        showRoyalAlert("Thiếu Thông Tin", "Vui lòng chạm chọn ít nhất 1 ngày học trong tuần!", "⚠️");
+        return;
+      }
+
+      const monHoc = document.getElementById('form-monHoc').value.trim();
+      if (!monHoc) {
+        showRoyalAlert("Thiếu Thông Tin", "Vui lòng nhập Tên Môn Học!", "⚠️");
+        document.getElementById('form-monHoc').focus();
+        return;
+      }
+
+      const diaDiem = document.getElementById('form-diaDiem').value.trim();
+      if (!diaDiem) {
+        showRoyalAlert("Thiếu Thông Tin", "Vui lòng nhập Địa Chỉ hiển thị!", "⚠️");
+        document.getElementById('form-diaDiem').focus();
+        return;
+      }
+
+      const nguoiDon = document.getElementById('form-nguoiDon').value.trim();
+      if (!nguoiDon) {
+        showRoyalAlert("Thiếu Thông Tin", "Vui lòng nhập Người Đưa Đón bé!", "⚠️");
+        document.getElementById('form-nguoiDon').focus();
+        return;
+      }
+
+      const sH = document.getElementById('start-hour').value;
+      const sM = document.getElementById('start-minute').value;
+      const eH = document.getElementById('end-hour').value;
+      const eM = document.getElementById('end-minute').value;
+
+      const startTotalMin = parseInt(sH, 10) * 60 + parseInt(sM, 10);
+      const endTotalMin = parseInt(eH, 10) * 60 + parseInt(eM, 10);
+      if (endTotalMin <= startTotalMin) {
+        showRoyalAlert("Giờ Học Chưa Hợp Lệ", "Giờ kết thúc phải sau giờ bắt đầu môn học!", "⚠️");
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-text');
+      btn.innerText = 'Đang lưu...';
+      btn.disabled = true;
+
+      const payload = {
+        rowId: document.getElementById('form-rowId').value,
+        be: document.getElementById('form-be').value,
+        danhSachThu: selectedDays,
+        thu: selectedDays[0],
+        gioBatDau: sH + ':' + sM,
+        gioKetThuc: eH + ':' + eM,
+        monHoc: monHoc,
+        diaDiem: diaDiem,
+        toaDo: document.getElementById('form-toaDo').value.trim(),
+        nguoiDon: nguoiDon,
+        trangThai: document.getElementById('form-trangThai').value || 'Đang học',
+        ghiChu: document.getElementById('form-ghiChu').value.trim(),
+        sdt: document.getElementById('form-sdt').value.trim()
+      };
+
+      const onSaveSuccess = () => {
+        btn.disabled = false;
+        closeModal();
+        loadData();
+      };
+
+      const onSaveFail = (err) => {
+        btn.disabled = false;
+        btn.innerText = 'Lưu Lịch';
+        showRoyalAlert('Lỗi Lưu Dữ Liệu', 'Không thể lưu: ' + (err.message || err), '❌');
+      };
+
+      if (window.google && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(onSaveSuccess)
+          .withFailureHandler(onSaveFail)
+          .luuMonHocHangLoat(payload);
+      } else {
+        fetch(GAS_API_URL + '?action=save&payload=' + encodeURIComponent(JSON.stringify(payload)), { redirect: 'follow' })
+          .then(r => r.json())
+          .then(res => {
+            if (res && res.success) onSaveSuccess();
+            else onSaveFail(new Error(res ? res.error : 'Lỗi lưu dữ liệu'));
+          })
+          .catch(onSaveFail);
+      }
+    }
+
+    // Đảm bảo khởi chạy ứng dụng 100%
+    if (!todayName) {
+      initApp();
+    }
+  </script>
+</body>
+</html>
