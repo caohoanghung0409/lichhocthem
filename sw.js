@@ -1,5 +1,5 @@
 // Service Worker cho PWA Lịch Học Thêm
-const CACHE_NAME = 'lichhoc-pwa-v5';
+const CACHE_NAME = 'lichhoc-pwa-v6';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
