@@ -3294,6 +3294,76 @@
       showRoyalAlert(title, body, iconChar || "🔔");
     }
 
+    /* ĐỒNG BỘ BÁO THỨC HỆ THỐNG VỚI ỨNG DỤNG ANDROID APK (CHẠY NGẦM BUNG POPUP KỂ CẢ KHI TẮT APP) */
+    function syncAlarmsWithNativeApp() {
+      if (!window.AndroidBridge || typeof window.AndroidBridge.scheduleAlarm !== 'function') return;
+      if (!appData || !appData.lichHoc || !Array.isArray(appData.lichHoc)) return;
+
+      try {
+        const now = new Date();
+        const cycleDays = ["Chủ Nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+        const currentDayOfWeek = now.getDay();
+
+        appData.lichHoc.forEach((item, index) => {
+          if (item.trangThai !== 'Đang học') return;
+          if (!item.gioBatDau || !item.gioBatDau.includes(':')) return;
+
+          const targetDayIdx = cycleDays.indexOf(item.thu);
+          if (targetDayIdx === -1) return;
+
+          let daysAhead = (targetDayIdx - currentDayOfWeek + 7) % 7;
+          const startParts = item.gioBatDau.split(':');
+          const startH = parseInt(startParts[0], 10);
+          const startM = parseInt(startParts[1], 10);
+
+          const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysAhead, startH, startM, 0, 0);
+          if (daysAhead === 0 && targetDate.getTime() <= now.getTime()) {
+            targetDate.setDate(targetDate.getDate() + 7);
+          }
+
+          const shortName = SHORT_NAME_MAP[item.be] || item.be;
+          const lessonTitle = item.monHoc || 'Môn học';
+
+          // 1. Báo trước 30 phút giờ vào học
+          const alertStartMs = targetDate.getTime() - (30 * 60 * 1000);
+          if (alertStartMs > now.getTime()) {
+            const alarmId1 = (index * 2) + 1;
+            window.AndroidBridge.scheduleAlarm(
+              alarmId1,
+              `⏰ SẮP VÀO LỚP: Bé ${shortName}!`,
+              `Môn: ${lessonTitle}\nGiờ học: ${item.gioBatDau}\nCòn 30 phút nữa vào lớp, chuẩn bị xuất phát nhé!`,
+              alertStartMs
+            );
+          }
+
+          // 2. Báo trước 10 phút giờ tan học
+          if (item.gioKetThuc && item.gioKetThuc.includes(':')) {
+            const endParts = item.gioKetThuc.split(':');
+            const endH = parseInt(endParts[0], 10);
+            const endM = parseInt(endParts[1], 10);
+            const endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysAhead, endH, endM, 0, 0);
+            if (daysAhead === 0 && endDate.getTime() <= now.getTime()) {
+              endDate.setDate(endDate.getDate() + 7);
+            }
+
+            const alertEndMs = endDate.getTime() - (10 * 60 * 1000);
+            if (alertEndMs > now.getTime()) {
+              const alarmId2 = (index * 2) + 2;
+              const pickup = item.nguoiDon ? `\n🚗 Người đón: ${item.nguoiDon}` : '';
+              window.AndroidBridge.scheduleAlarm(
+                alarmId2,
+                `🚗 SẮP TAN HỌC: Bé ${shortName}!`,
+                `Môn: ${lessonTitle}\nTan lớp lúc: ${item.gioKetThuc}\nCòn 10 phút nữa tan lớp.${pickup}`,
+                alertEndMs
+              );
+            }
+          }
+        });
+      } catch (err) {
+        console.warn('Lỗi đồng bộ báo thức với Android:', err);
+      }
+    }
+
     function loadData(isRefresh = false, callback = null) {
       const loadingEl = document.getElementById('loading');
       if (loadingEl && !isRefresh) {
@@ -3336,6 +3406,7 @@
         }
         renderTimeline();
         startRealtimeClock();
+        syncAlarmsWithNativeApp();
 
         if (typeof callback === 'function') {
           callback(null, res);
