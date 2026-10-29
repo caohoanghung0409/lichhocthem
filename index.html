@@ -3031,52 +3031,53 @@
       });
     }
 
+    const SWIPE_SEQUENCE = [
+      'Hôm nay',
+      'Tất cả',
+      'Thứ 2',
+      'Thứ 3',
+      'Thứ 4',
+      'Thứ 5',
+      'Thứ 6',
+      'Thứ 7',
+      'Chủ Nhật'
+    ];
+
     function switchDayBySwipe(direction) {
-      // Xác định thứ hiện tại đang hiển thị
-      let curDayName = activeDay;
-      if (activeDay === 'Hôm nay') {
-        curDayName = todayName;
-      } else if (activeDay === 'Tất cả') {
-        curDayName = todayName || 'Thứ 2';
+      let idx = SWIPE_SEQUENCE.indexOf(activeDay);
+      if (idx === -1) {
+        if (activeDay && activeDay.toLowerCase() === todayName.toLowerCase()) {
+          idx = SWIPE_SEQUENCE.indexOf(todayName);
+        }
+        if (idx === -1) idx = 0;
       }
 
-      let idx = DAYS_ORDER.indexOf(curDayName);
-      if (idx === -1) idx = 0;
-
-      let nextIdx = idx;
-      let weekDelta = 0;
+      let targetIdx = idx;
 
       if (direction === 'next') {
-        // Vuốt sang trái: tiến tới ngày kế tiếp
-        if (idx === DAYS_ORDER.length - 1) {
-          // Đang ở Chủ Nhật -> sang Thứ 2 của tuần kế tiếp
-          weekDelta = 1;
-          nextIdx = 0;
+        // Vuốt sang trái: tiến theo dải ngày (Hôm nay -> Cả tuần -> Thứ 2 -> ... -> Chủ Nhật)
+        if (idx < SWIPE_SEQUENCE.length - 1) {
+          targetIdx = idx + 1;
         } else {
-          nextIdx = idx + 1;
+          // Đã ở Chủ Nhật: KHÔNG qua tuần mới, giữ nguyên ở Chủ Nhật
+          return;
         }
       } else if (direction === 'prev') {
-        // Vuốt sang phải: lùi về ngày trước đó
-        if (idx === 0) {
-          // Đang ở Thứ 2 -> lùi về Chủ Nhật của tuần trước
-          weekDelta = -1;
-          nextIdx = DAYS_ORDER.length - 1;
+        // Vuốt sang phải: lùi theo dải ngày (Chủ Nhật -> ... -> Thứ 2 -> Cả tuần -> Hôm nay)
+        if (idx > 0) {
+          targetIdx = idx - 1;
         } else {
-          nextIdx = idx - 1;
+          // Đã ở Hôm nay: KHÔNG qua tuần cũ, giữ nguyên ở Hôm nay
+          return;
         }
       }
 
-      const targetDay = DAYS_ORDER[nextIdx];
-      if (!targetDay) return;
+      const targetDay = SWIPE_SEQUENCE[targetIdx];
+      if (!targetDay || targetDay === activeDay) return;
 
       // Phản hồi rung nhẹ trên điện thoại
       if (navigator.vibrate) {
         try { navigator.vibrate(12); } catch (e) {}
-      }
-
-      if (weekDelta !== 0) {
-        currentWeekOffset += weekDelta;
-        calculateWeekDates();
       }
 
       // Kích hoạt animation trượt trang mượt mà
@@ -3370,11 +3371,9 @@
       }
       activeDay = dayKey;
 
-      const isTodaySelected = (dayKey === 'Hôm nay' || (currentWeekOffset === 0 && dayKey === todayName));
-
       document.querySelectorAll('.day-chip').forEach(chip => {
         const chipDay = chip.getAttribute('data-day');
-        if (chipDay === dayKey || (isTodaySelected && (chipDay === 'Hôm nay' || chipDay === todayName))) {
+        if (chipDay === dayKey) {
           chip.classList.add('active');
         } else {
           chip.classList.remove('active');
@@ -3396,10 +3395,14 @@
 
       // Tự động cuộn dải lịch ngày vào giữa tầm nhìn
       try {
-        const scrollDay = (dayKey === 'Hôm nay') ? todayName : dayKey;
-        const targetChip = document.getElementById(`chip-${scrollDay}`) || document.querySelector(`.day-chip[data-day="${scrollDay}"]`);
-        if (targetChip && targetChip.scrollIntoView) {
-          targetChip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        if (dayKey === 'Hôm nay') {
+          const track = document.getElementById('days-track');
+          if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          const targetChip = document.getElementById(`chip-${dayKey}`) || document.querySelector(`.day-chip[data-day="${dayKey}"]`);
+          if (targetChip && targetChip.scrollIntoView) {
+            targetChip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
         }
       } catch (e) {}
 
