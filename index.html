@@ -145,6 +145,37 @@
       to { transform: rotate(360deg); }
     }
 
+    /* HIỆU ỨNG CHUYỂN NGÀY KHI VUỐT TRÁI / PHẢI */
+    @keyframes slideDayFromRight {
+      0% {
+        opacity: 0.35;
+        transform: translateX(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideDayFromLeft {
+      0% {
+        opacity: 0.35;
+        transform: translateX(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .day-slide-next {
+      animation: slideDayFromRight 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) forwards !important;
+    }
+
+    .day-slide-prev {
+      animation: slideDayFromLeft 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) forwards !important;
+    }
+
     /* Top Bar Canh Giữa - Floating Royal Island Bar */
     .app-header {
       display: flex;
@@ -964,6 +995,7 @@
       scrollbar-color: #99f6e4 transparent;
       overscroll-behavior-y: contain;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
     }
     #schedule-wrapper::-webkit-scrollbar { width: 4px; }
     #schedule-wrapper::-webkit-scrollbar-thumb { background: #99f6e4; border-radius: 4px; }
@@ -2899,6 +2931,168 @@
       touchArea.addEventListener('touchcancel', onTouchEnd);
     }
 
+    /* VUỐT QUA TRÁI / PHẢI ĐỂ CHUYỂN NGÀY (SWIPE GESTURE NAVIGATION) */
+    function initDaySwipeGesture() {
+      const touchArea = document.querySelector('.schedule-main-content') || document.getElementById('schedule-wrapper');
+      if (!touchArea) return;
+
+      let startX = 0;
+      let startY = 0;
+      let startTime = 0;
+      let gestureState = 'idle'; // 'idle' | 'tracking' | 'horizontal' | 'vertical' | 'ignored'
+
+      touchArea.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length !== 1) {
+          gestureState = 'ignored';
+          return;
+        }
+
+        const touch = e.touches[0];
+        // Bỏ qua nếu vuốt sát mép màn hình (để không xung đột thao tác Back của hệ điều hành)
+        if (touch.clientX < 22 || touch.clientX > window.innerWidth - 22) {
+          gestureState = 'ignored';
+          return;
+        }
+
+        // Bỏ qua nếu chạm vào nút bấm, liên kết bản đồ, gọi điện hoặc hộp thoại
+        if (e.target.closest('button, input, select, textarea, a, .bottom-action-container, #days-track, .calendar-bar-wrapper, .password-modal-overlay, .modal, .swal2-container')) {
+          gestureState = 'ignored';
+          return;
+        }
+
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startTime = Date.now();
+        gestureState = 'tracking';
+      }, { passive: true });
+
+      touchArea.addEventListener('touchmove', (e) => {
+        if (gestureState !== 'tracking' && gestureState !== 'horizontal') return;
+        if (!e.touches || e.touches.length !== 1) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const dx = currentX - startX;
+        const dy = currentY - startY;
+
+        if (gestureState === 'tracking') {
+          // Khi di chuyển vượt 8px, xác định hướng cử chỉ
+          if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+            if (Math.abs(dx) > Math.abs(dy) * 1.25) {
+              gestureState = 'horizontal';
+            } else {
+              gestureState = 'vertical';
+            }
+          }
+        }
+      }, { passive: true });
+
+      const onTouchEnd = (e) => {
+        if (gestureState !== 'horizontal') {
+          gestureState = 'idle';
+          return;
+        }
+        gestureState = 'idle';
+
+        const touch = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+        if (!touch) return;
+
+        const dx = touch.clientX - startX;
+        const dy = touch.clientY - startY;
+        const elapsed = Date.now() - startTime;
+
+        // Ngưỡng vuốt ngang hợp lệ: khoảng cách ngang >= 42px và thời gian vuốt < 800ms
+        if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy) * 1.2 && elapsed < 800) {
+          if (dx < 0) {
+            // Vuốt sang TRÁI (ngón tay kéo sang trái): Xem ngày TIẾP THEO (vd: T5 -> T6)
+            switchDayBySwipe('next');
+          } else {
+            // Vuốt sang PHẢI (ngón tay kéo sang phải): Xem ngày TRƯỚC ĐÓ (vd: T5 -> T4)
+            switchDayBySwipe('prev');
+          }
+        }
+      };
+
+      touchArea.addEventListener('touchend', onTouchEnd);
+      touchArea.addEventListener('touchcancel', onTouchEnd);
+
+      // Hỗ trợ thêm phím mũi tên Trái / Phải trên máy tính hoặc bàn phím ngoài
+      window.addEventListener('keydown', (e) => {
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+        const modalOpen = document.getElementById('modal') && document.getElementById('modal').style.display === 'flex';
+        const passModalOpen = document.getElementById('password-modal') && document.getElementById('password-modal').style.display === 'flex';
+        if (modalOpen || passModalOpen) return;
+
+        if (e.key === 'ArrowLeft') {
+          switchDayBySwipe('prev');
+        } else if (e.key === 'ArrowRight') {
+          switchDayBySwipe('next');
+        }
+      });
+    }
+
+    function switchDayBySwipe(direction) {
+      // Xác định thứ hiện tại đang hiển thị
+      let curDayName = activeDay;
+      if (activeDay === 'Hôm nay') {
+        curDayName = todayName;
+      } else if (activeDay === 'Tất cả') {
+        curDayName = todayName || 'Thứ 2';
+      }
+
+      let idx = DAYS_ORDER.indexOf(curDayName);
+      if (idx === -1) idx = 0;
+
+      let nextIdx = idx;
+      let weekDelta = 0;
+
+      if (direction === 'next') {
+        // Vuốt sang trái: tiến tới ngày kế tiếp
+        if (idx === DAYS_ORDER.length - 1) {
+          // Đang ở Chủ Nhật -> sang Thứ 2 của tuần kế tiếp
+          weekDelta = 1;
+          nextIdx = 0;
+        } else {
+          nextIdx = idx + 1;
+        }
+      } else if (direction === 'prev') {
+        // Vuốt sang phải: lùi về ngày trước đó
+        if (idx === 0) {
+          // Đang ở Thứ 2 -> lùi về Chủ Nhật của tuần trước
+          weekDelta = -1;
+          nextIdx = DAYS_ORDER.length - 1;
+        } else {
+          nextIdx = idx - 1;
+        }
+      }
+
+      const targetDay = DAYS_ORDER[nextIdx];
+      if (!targetDay) return;
+
+      // Phản hồi rung nhẹ trên điện thoại
+      if (navigator.vibrate) {
+        try { navigator.vibrate(12); } catch (e) {}
+      }
+
+      if (weekDelta !== 0) {
+        currentWeekOffset += weekDelta;
+        calculateWeekDates();
+      }
+
+      // Kích hoạt animation trượt trang mượt mà
+      const wrapper = document.getElementById('schedule-wrapper');
+      if (wrapper) {
+        wrapper.classList.remove('day-slide-next', 'day-slide-prev');
+        void wrapper.offsetWidth; // Buộc trình duyệt reflow để kích hoạt lại animation
+        wrapper.classList.add(direction === 'next' ? 'day-slide-next' : 'day-slide-prev');
+        setTimeout(() => {
+          wrapper.classList.remove('day-slide-next', 'day-slide-prev');
+        }, 280);
+      }
+
+      selectDay(targetDay);
+    }
+
     function initApp() {
       try {
         const now = new Date();
@@ -2925,6 +3119,7 @@
         initTimePickers();
         updateNotifIcon();
         initPullToRefresh();
+        initDaySwipeGesture();
       } catch (err) {
         console.error("Lỗi chuẩn bị giao diện:", err);
       }
@@ -3174,8 +3369,12 @@
         calculateWeekDates();
       }
       activeDay = dayKey;
+
+      const isTodaySelected = (dayKey === 'Hôm nay' || (currentWeekOffset === 0 && dayKey === todayName));
+
       document.querySelectorAll('.day-chip').forEach(chip => {
-        if (chip.getAttribute('data-day') === dayKey) {
+        const chipDay = chip.getAttribute('data-day');
+        if (chipDay === dayKey || (isTodaySelected && (chipDay === 'Hôm nay' || chipDay === todayName))) {
           chip.classList.add('active');
         } else {
           chip.classList.remove('active');
@@ -3194,6 +3393,15 @@
           dateInputEl.value = weekDatesMap[dayKey].isoDateStr;
         }
       }
+
+      // Tự động cuộn dải lịch ngày vào giữa tầm nhìn
+      try {
+        const scrollDay = (dayKey === 'Hôm nay') ? todayName : dayKey;
+        const targetChip = document.getElementById(`chip-${scrollDay}`) || document.querySelector(`.day-chip[data-day="${scrollDay}"]`);
+        if (targetChip && targetChip.scrollIntoView) {
+          targetChip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      } catch (e) {}
 
       renderTimeline();
       if (window.updateRealtimeCards) window.updateRealtimeCards();
