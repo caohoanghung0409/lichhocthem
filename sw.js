@@ -1,12 +1,13 @@
 // Service Worker cho PWA Lịch Học Thêm
-const CACHE_NAME = 'lichhoc-pwa-v19';
+const CACHE_NAME = 'lichhoc-pwa-v20';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './version.json'
 ];
 
 self.addEventListener('install', (e) => {
