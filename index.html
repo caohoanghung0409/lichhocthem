@@ -146,34 +146,122 @@
     }
 
     /* HIỆU ỨNG CHUYỂN NGÀY KHI VUỐT TRÁI / PHẢI (MƯỢT MÀ, KHÔNG RUNG LẮC TOÀN TRANG) */
-    @keyframes slideDayFromRight {
+    @keyframes slideDayToNext {
       0% {
-        opacity: 0.35;
-        transform: translateX(18px);
+        opacity: 0.12;
+        transform: translate3d(56px, 0, 0) scale(0.982);
+        filter: blur(1.5px);
       }
       100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
       }
     }
 
-    @keyframes slideDayFromLeft {
+    @keyframes slideDayToPrev {
       0% {
-        opacity: 0.35;
-        transform: translateX(-18px);
+        opacity: 0.12;
+        transform: translate3d(-56px, 0, 0) scale(0.982);
+        filter: blur(1.5px);
       }
       100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
       }
     }
 
     .day-slide-next {
-      animation: slideDayFromRight 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) forwards !important;
+      animation: slideDayToNext 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+      will-change: transform, opacity, filter;
     }
 
     .day-slide-prev {
-      animation: slideDayFromLeft 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) forwards !important;
+      animation: slideDayToPrev 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+      will-change: transform, opacity, filter;
+    }
+
+    /* HIỆU ỨNG ĐÀN HỒI NẢY LÒ XO KHI CHẠM GIỚI HẠN (HÔM NAY & CHỦ NHẬT - YÊU CẦU 2) */
+    @keyframes elasticBounceRight {
+      0% { transform: translate3d(0, 0, 0); }
+      25% { transform: translate3d(46px, 0, 0); }
+      50% { transform: translate3d(-14px, 0, 0); }
+      75% { transform: translate3d(5px, 0, 0); }
+      100% { transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes elasticBounceLeft {
+      0% { transform: translate3d(0, 0, 0); }
+      25% { transform: translate3d(-46px, 0, 0); }
+      50% { transform: translate3d(14px, 0, 0); }
+      75% { transform: translate3d(-5px, 0, 0); }
+      100% { transform: translate3d(0, 0, 0); }
+    }
+
+    .day-bounce-edge-right {
+      animation: elasticBounceRight 0.44s cubic-bezier(0.2, 0.85, 0.3, 1) !important;
+      will-change: transform;
+    }
+
+    .day-bounce-edge-left {
+      animation: elasticBounceLeft 0.44s cubic-bezier(0.2, 0.85, 0.3, 1) !important;
+      will-change: transform;
+    }
+
+    /* Rung lắc & lóe sáng tab chip khi chạm giới hạn */
+    @keyframes chipBoundaryWiggle {
+      0%, 100% { transform: scale(1) translateX(0); }
+      20% { transform: scale(1.14) translateX(5px); box-shadow: 0 0 18px rgba(15, 118, 110, 0.85); filter: brightness(1.2); }
+      40% { transform: scale(1.14) translateX(-5px); box-shadow: 0 0 18px rgba(15, 118, 110, 0.85); filter: brightness(1.2); }
+      60% { transform: scale(1.08) translateX(3px); }
+      80% { transform: scale(1.04) translateX(-1px); }
+    }
+
+    .chip-boundary-wiggle {
+      animation: chipBoundaryWiggle 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
+    }
+
+    /* Hiệu ứng nảy nhẹ khi chọn Tab (Tab Pop) */
+    @keyframes tabPopBounce {
+      0% { transform: scale(0.92); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .tab-pop-bounce {
+      animation: tabPopBounce 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+
+    /* TOAST THÔNG BÁO GIỚI HẠN TUẦN HỌC (FLOATING BOUNDARY TOAST) */
+    .boundary-toast-pill {
+      position: fixed;
+      top: 108px;
+      left: 50%;
+      transform: translate3d(-50%, -14px, 0);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(15, 118, 110, 0.96));
+      color: #ffffff;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 13.5px;
+      font-weight: 750;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 12px rgba(45, 212, 191, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: opacity 0.24s ease, transform 0.28s cubic-bezier(0.18, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .boundary-toast-pill.show {
+      opacity: 1;
+      transform: translate3d(-50%, 0, 0);
     }
 
     /* HIỆU ỨNG NHẤP NHÁY (BLINK) CHO TAB NGÀY ĐANG ĐƯỢC CHỌN (YÊU CẦU 3) */
@@ -3068,6 +3156,71 @@
       'Chủ Nhật'
     ];
 
+    let boundaryToastTimer = null;
+    function triggerBoundaryEffect(edge) {
+      const wrapper = document.getElementById('schedule-wrapper');
+      const isToday = (edge === 'today');
+
+      // 1. Phản hồi rung haptic trên điện thoại (nhịp đôi tinh tế)
+      if (navigator.vibrate) {
+        try { navigator.vibrate([22, 50, 22]); } catch (e) {}
+      }
+
+      // 2. Kích hoạt hiệu ứng đàn hồi nảy lò xo trên container lịch học
+      if (wrapper) {
+        wrapper.classList.remove('day-slide-next', 'day-slide-prev', 'day-bounce-edge-right', 'day-bounce-edge-left');
+        void wrapper.offsetWidth; // Buộc reflow để kích hoạt lại animation
+        wrapper.classList.add(isToday ? 'day-bounce-edge-right' : 'day-bounce-edge-left');
+        setTimeout(() => {
+          wrapper.classList.remove('day-bounce-edge-right', 'day-bounce-edge-left');
+        }, 460);
+      }
+
+      // 3. Rung lắc & lóe sáng tab chip tương ứng
+      const targetDayName = isToday ? 'Hôm nay' : 'Chủ Nhật';
+      const chip = document.querySelector(`.day-chip[data-day="${targetDayName}"]`);
+      if (chip) {
+        chip.classList.remove('chip-boundary-wiggle');
+        void chip.offsetWidth;
+        chip.classList.add('chip-boundary-wiggle');
+        setTimeout(() => {
+          chip.classList.remove('chip-boundary-wiggle');
+        }, 460);
+
+        // Cuộn dải tab để tab chạm giới hạn luôn hiển thị rõ ràng
+        try {
+          if (isToday) {
+            const track = document.getElementById('days-track');
+            if (track) track.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        } catch (e) {}
+      }
+
+      // 4. Hiển thị Toast Mini thông báo giới hạn mềm mại
+      let toastEl = document.getElementById('boundary-toast-pill');
+      if (!toastEl) {
+        toastEl = document.createElement('div');
+        toastEl.id = 'boundary-toast-pill';
+        toastEl.className = 'boundary-toast-pill';
+        document.body.appendChild(toastEl);
+      }
+
+      const toastIcon = isToday ? '⏮️' : '⏭️';
+      const toastText = isToday 
+        ? 'Đang ở Hôm nay rồi nè Ba mẹ!' 
+        : 'Đã là Chủ Nhật - ngày cuối tuần rồi nè Ba mẹ!';
+
+      toastEl.innerHTML = `<span>${toastIcon}</span> <span>${toastText}</span>`;
+      toastEl.classList.add('show');
+
+      if (boundaryToastTimer) clearTimeout(boundaryToastTimer);
+      boundaryToastTimer = setTimeout(() => {
+        toastEl.classList.remove('show');
+      }, 1400);
+    }
+
     function switchDayBySwipe(direction) {
       let idx = SWIPE_SEQUENCE.indexOf(activeDay);
       if (idx === -1) {
@@ -3084,7 +3237,8 @@
         if (idx < SWIPE_SEQUENCE.length - 1) {
           targetIdx = idx + 1;
         } else {
-          // Đã ở Chủ Nhật: KHÔNG qua tuần mới, giữ nguyên ở Chủ Nhật
+          // Đã ở Chủ Nhật mà vuốt sang trái tiếp: hiệu ứng chạm mốc cuối tuần (Yêu cầu 2)
+          triggerBoundaryEffect('sunday');
           return;
         }
       } else if (direction === 'prev') {
@@ -3092,7 +3246,8 @@
         if (idx > 0) {
           targetIdx = idx - 1;
         } else {
-          // Đã ở Hôm nay: KHÔNG qua tuần cũ, giữ nguyên ở Hôm nay
+          // Đã ở Hôm nay mà vuốt tiếp sang phải (ngược hướng qua Cả tuần): hiệu ứng chạm mốc đầu tuần (Yêu cầu 2)
+          triggerBoundaryEffect('today');
           return;
         }
       }
@@ -3100,23 +3255,12 @@
       const targetDay = SWIPE_SEQUENCE[targetIdx];
       if (!targetDay || targetDay === activeDay) return;
 
-      // Phản hồi rung nhẹ trên điện thoại
+      // Phản hồi rung nhẹ trên điện thoại khi sang ngày
       if (navigator.vibrate) {
-        try { navigator.vibrate(12); } catch (e) {}
+        try { navigator.vibrate(14); } catch (e) {}
       }
 
-      // Kích hoạt animation trượt trang mượt mà
-      const wrapper = document.getElementById('schedule-wrapper');
-      if (wrapper) {
-        wrapper.classList.remove('day-slide-next', 'day-slide-prev');
-        void wrapper.offsetWidth; // Buộc trình duyệt reflow để kích hoạt lại animation
-        wrapper.classList.add(direction === 'next' ? 'day-slide-next' : 'day-slide-prev');
-        setTimeout(() => {
-          wrapper.classList.remove('day-slide-next', 'day-slide-prev');
-        }, 280);
-      }
-
-      selectDay(targetDay);
+      selectDay(targetDay, direction);
     }
 
     function initApp() {
@@ -3463,11 +3607,39 @@
       if (window.updateRealtimeCards) window.updateRealtimeCards();
     }
 
-    function selectDay(dayKey) {
+    function selectDay(dayKey, direction) {
       if (dayKey === 'Hôm nay') {
         currentWeekOffset = 0;
         calculateWeekDates();
       }
+
+      // Xử lý khi bấm lại vào chính tab đang được chọn
+      if (dayKey === activeDay) {
+        if (dayKey === 'Hôm nay') {
+          triggerBoundaryEffect('today');
+        } else if (dayKey === 'Chủ Nhật') {
+          triggerBoundaryEffect('sunday');
+        } else {
+          const chip = document.querySelector(`.day-chip[data-day="${dayKey}"]`);
+          if (chip) {
+            chip.classList.remove('tab-pop-bounce');
+            void chip.offsetWidth;
+            chip.classList.add('tab-pop-bounce');
+            setTimeout(() => chip.classList.remove('tab-pop-bounce'), 320);
+          }
+        }
+        return;
+      }
+
+      // Nếu không truyền direction nhưng đã có activeDay, tự động xác định hướng chuyển động
+      if (!direction && activeDay) {
+        const prevIdx = SWIPE_SEQUENCE.indexOf(activeDay);
+        const newIdx = SWIPE_SEQUENCE.indexOf(dayKey);
+        if (prevIdx !== -1 && newIdx !== -1) {
+          direction = (newIdx > prevIdx) ? 'next' : 'prev';
+        }
+      }
+
       activeDay = dayKey;
 
       // Kiểm tra nếu tab đang chọn trùng với ngày hôm nay (trong tuần hiện tại)
@@ -3496,6 +3668,14 @@
 
         chip.classList.toggle('active', shouldActive);
         chip.classList.toggle('tab-blinking', shouldBlink);
+
+        // Hiệu ứng Pop nhẹ cho chip được kích hoạt
+        if (shouldActive && direction) {
+          chip.classList.remove('tab-pop-bounce');
+          void chip.offsetWidth;
+          chip.classList.add('tab-pop-bounce');
+          setTimeout(() => chip.classList.remove('tab-pop-bounce'), 320);
+        }
       });
 
       const dateInputEl = document.getElementById('header-date-input');
@@ -3526,6 +3706,19 @@
 
       renderTimeline();
       if (window.updateRealtimeCards) window.updateRealtimeCards();
+
+      // KÍCH HOẠT HIỆU ỨNG TRƯỢT NGÀY MƯỢT MÀ SAU KHI DỰNG XONG THẺ (YÊU CẦU 1)
+      if (direction) {
+        const wrapper = document.getElementById('schedule-wrapper');
+        if (wrapper) {
+          wrapper.classList.remove('day-slide-next', 'day-slide-prev', 'day-bounce-edge-right', 'day-bounce-edge-left');
+          void wrapper.offsetWidth;
+          wrapper.classList.add(direction === 'next' ? 'day-slide-next' : 'day-slide-prev');
+          setTimeout(() => {
+            wrapper.classList.remove('day-slide-next', 'day-slide-prev');
+          }, 360);
+        }
+      }
     }
 
     function toMinutes(t) {
