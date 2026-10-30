@@ -2105,33 +2105,33 @@
     .baby-gallery-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 10001;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 12px;
       animation: fadeInBackdrop 0.25s ease forwards;
     }
     .baby-gallery-card {
       background: #ffffff;
       border-radius: 24px;
       width: 100%;
-      max-width: 440px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      max-width: 420px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       animation: scaleUpCard 0.28s cubic-bezier(0.18, 1, 0.3, 1) forwards;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
     .baby-gallery-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px;
+      padding: 12px 16px;
       background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
       border-bottom: 1px solid #e2e8f0;
     }
@@ -2141,7 +2141,7 @@
       gap: 2px;
     }
     .baby-gallery-title {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       font-weight: 850;
       color: #0f172a;
     }
@@ -2149,6 +2149,24 @@
       font-size: 0.72rem;
       font-weight: 700;
       color: #0f766e;
+    }
+    .baby-gallery-rotate-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f766e;
+      font-size: 0.78rem;
+      font-weight: 750;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: all 0.2s ease;
+    }
+    .baby-gallery-rotate-btn:active {
+      transform: scale(0.94);
     }
     .baby-gallery-close-btn {
       width: 32px;
@@ -2173,8 +2191,8 @@
     .baby-gallery-viewport {
       position: relative;
       width: 100%;
-      height: 360px;
-      max-height: 52vh;
+      height: 460px;
+      max-height: 62vh;
       background: #090d16;
       display: flex;
       align-items: center;
@@ -2189,17 +2207,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px;
+      padding: 8px;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .baby-gallery-img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
-      border-radius: 8px;
+      border-radius: 10px;
       transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
       will-change: transform, opacity;
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      image-orientation: from-image;
     }
     .gallery-nav-arrow {
       position: absolute;
@@ -2209,7 +2229,7 @@
       height: 38px;
       border-radius: 50%;
       border: none;
-      background: rgba(255, 255, 255, 0.24);
+      background: rgba(255, 255, 255, 0.28);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       color: #ffffff;
@@ -2221,18 +2241,33 @@
       z-index: 5;
       transition: all 0.2s ease;
     }
-    .gallery-nav-arrow:hover {
-      background: rgba(255, 255, 255, 0.45);
-      transform: translateY(-50%) scale(1.1);
+    .gallery-nav-arrow:active {
+      transform: translateY(-50%) scale(0.9);
     }
     .gallery-nav-arrow.prev { left: 10px; }
     .gallery-nav-arrow.next { right: 10px; }
+    .gallery-progress-bar-container {
+      width: 88%;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 10px auto 4px auto;
+    }
+    .gallery-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #0f766e, #14b8a6);
+      border-radius: 4px;
+      transition: width 0.22s ease;
+    }
     .gallery-dots-indicator {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 12px 16px 4px 16px;
+      padding: 10px 16px 2px 16px;
+      max-width: 100%;
+      overflow-x: auto;
     }
     .gallery-dot {
       width: 8px;
@@ -2253,6 +2288,7 @@
       font-weight: 600;
       color: #94a3b8;
       padding-bottom: 12px;
+      padding-top: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2727,7 +2763,10 @@
           <span class="baby-gallery-title" id="baby-gallery-title">👑 Album Ảnh Công Chúa</span>
           <span class="baby-gallery-counter" id="baby-gallery-counter">1 / 1</span>
         </div>
-        <button class="baby-gallery-close-btn" onclick="closeBabyGalleryModal()" title="Đóng Album">✕</button>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button type="button" class="baby-gallery-rotate-btn" onclick="rotateCurrentBabyPhoto()" title="Xoay ảnh 90°">🔄 Xoay</button>
+          <button type="button" class="baby-gallery-close-btn" onclick="closeBabyGalleryModal()" title="Đóng Album">✕</button>
+        </div>
       </div>
 
       <!-- Khung hiển thị ảnh có cử chỉ vuốt ngón tay (Swipe Gesture) -->
@@ -2739,12 +2778,17 @@
         <button class="gallery-nav-arrow next" onclick="nextBabyPhoto()" title="Ảnh tiếp theo">▶</button>
       </div>
 
+      <!-- Thanh tiến trình ảnh khi có nhiều ảnh -->
+      <div class="gallery-progress-bar-container" id="gallery-progress-container" style="display:none;">
+        <div class="gallery-progress-bar" id="gallery-progress-bar" style="width: 0%;"></div>
+      </div>
+
       <!-- Dải chấm tròn chỉ số ảnh (Dots indicator) -->
       <div class="gallery-dots-indicator" id="gallery-dots-indicator"></div>
 
       <!-- Hướng dẫn cử chỉ thân thiện -->
       <div class="gallery-swipe-hint">
-        <span>👈 Vuốt sang trái / phải để xem thêm ảnh 👉</span>
+        <span>👈 Vuốt sang trái / phải để lướt ảnh 👉</span>
       </div>
     </div>
   </div>
@@ -4711,12 +4755,67 @@
     }
 
     /* DỮ LIỆU ALBUM ẢNH CỦA TỪNG BÉ (HỖ TRỢ LINK GOOGLE DRIVE) */
+    const DRIVE_ALBUM_SHARED = [
+      "https://lh3.googleusercontent.com/d/1GlIvaCotw67NDmrpM9furtksud5zs5-y",
+      "https://lh3.googleusercontent.com/d/1VkEG4Z8RHtlpyROeEToWKYv8rkkpYe_1",
+      "https://lh3.googleusercontent.com/d/1j9G5MnM1uC7YpuSm-nl4Fg6c2JioUpGk",
+      "https://lh3.googleusercontent.com/d/1XIOqz1Gj0btsIOiLNTTKbNF16jSpBbvz",
+      "https://lh3.googleusercontent.com/d/1EJF5jmu3KQz6joQeDrNEyLpdkHJadsgt",
+      "https://lh3.googleusercontent.com/d/1QlQIAsoLLxzmqxQfpu4zxIsW1TJXHat9",
+      "https://lh3.googleusercontent.com/d/1jc6N5NgTa9Be4jzIln65-En3WjpLbNb9",
+      "https://lh3.googleusercontent.com/d/1F33lIEB9uLHipfflx_DnEfOUhWsMUDVx",
+      "https://lh3.googleusercontent.com/d/1K_i8Gug0iAtXDVL5N_SwC_NCJlr5-neB",
+      "https://lh3.googleusercontent.com/d/1D9fp0mUHZIJZ99TZ6VAai4ggmhCJhdab",
+      "https://lh3.googleusercontent.com/d/1sxIjsSoUcabrlguzGlJ_wgmRLDwl9mfY",
+      "https://lh3.googleusercontent.com/d/1zw3kzHUL4w7LMKLeKp5ZeP9-xBUPQ12d",
+      "https://lh3.googleusercontent.com/d/12mY-8R_c8pv0AmOP-zqk71IvH2Peev2k",
+      "https://lh3.googleusercontent.com/d/1IYfErG80o6mdJ_juwNDU-salRWXJaDn3",
+      "https://lh3.googleusercontent.com/d/1ycMvOadg4cr05mqVys6LTlQRcythHtqt",
+      "https://lh3.googleusercontent.com/d/1FrC62Psny80sxen7UAdfEM6Lbwpqgs6s",
+      "https://lh3.googleusercontent.com/d/1ID3lETWG_kEcrLFjakcKugcpNgBaGrhe",
+      "https://lh3.googleusercontent.com/d/1aS8RYpV31iKAWQGyIHEtj5cbHLxM1Ugk",
+      "https://lh3.googleusercontent.com/d/14LgzzqAQRU4gQdixEanGHJNolnW7dSJv",
+      "https://lh3.googleusercontent.com/d/1R8SJFFTjm64w-ByiwEpq9ErqchMRucoz",
+      "https://lh3.googleusercontent.com/d/11c82mjxmHJeKSYpb0C6P9CHmaXqeIZml",
+      "https://lh3.googleusercontent.com/d/1JJzhlMDxNCeniO1FfSj7frN16GrLLSKG",
+      "https://lh3.googleusercontent.com/d/1KMRpOZRt1mtmOri0Q-vOAMvU7549togY",
+      "https://lh3.googleusercontent.com/d/1hXJq7xSAJf8uS8zhZYt54raLbozuavB7",
+      "https://lh3.googleusercontent.com/d/1CDXzLP7DOAObv1SbTDmi4Tzzr3dZn7qE",
+      "https://lh3.googleusercontent.com/d/1cS8AYxtstcbKSo5pnby1SFbCQMmtE35W",
+      "https://lh3.googleusercontent.com/d/1js3ZpzME_rvurKJhG427acXSdg8yyTiA",
+      "https://lh3.googleusercontent.com/d/1c_7f4SQOqELkd0Yq-PLz_eyMJKi3zo_W",
+      "https://lh3.googleusercontent.com/d/1wSLmwDILaO-OZVFUdjdhYlvkWFbPAnaL",
+      "https://lh3.googleusercontent.com/d/10zWhMugpTHhWHuChWq5Ar9qvrJ47VIuK",
+      "https://lh3.googleusercontent.com/d/1Vo8yVTz1FLer4xPVt5t6eglhhXG83poN",
+      "https://lh3.googleusercontent.com/d/1TqkBwiqSujTi__Xm_o0B4wNueLlUCPlG",
+      "https://lh3.googleusercontent.com/d/1mxAP_d6hP3Ita1a5YFuT_x9iEGVL8pDY",
+      "https://lh3.googleusercontent.com/d/1Ucwy-tn4XAVxHN_F8qGOE-1Dk3C-D7vJ",
+      "https://lh3.googleusercontent.com/d/1wq0362MD6l0ul3UB6HEHdZK2Cevuf0R3",
+      "https://lh3.googleusercontent.com/d/1G9qkBZ4rhhhw5P6gzFiZhAzvILNkUcfH",
+      "https://lh3.googleusercontent.com/d/1-QxdFg0uBLTgjl3uJUTH0DwprZrYXDoN",
+      "https://lh3.googleusercontent.com/d/15VCTI1DNhHvjDnzS9t7XvxWUUv3HUwqy",
+      "https://lh3.googleusercontent.com/d/1pZiIjEV4FnHTl0tQT1z6pmKIMzDGhbXI",
+      "https://lh3.googleusercontent.com/d/1vkV39OH8YnSgacpGfHeQcl68IC1OuGC3",
+      "https://lh3.googleusercontent.com/d/1aFG-M2CkynM2Xe9CyZoe-RWgZMAvSqMT",
+      "https://lh3.googleusercontent.com/d/1zA8zvjOGlSIMPZWyhavbcbZ8ayNivkdJ",
+      "https://lh3.googleusercontent.com/d/1fL-bbxLnDFKWN4BzZKxxKKAXOOLoOVDY",
+      "https://lh3.googleusercontent.com/d/1_8xUO7RfNN6Crf0X68ZbciAbCn6xhhlt",
+      "https://lh3.googleusercontent.com/d/13GFIkX426sLonTMDdECfGURvy198WCi5",
+      "https://lh3.googleusercontent.com/d/1ACQZqgIe28eOQerGYj7XglUeDOfEQXMl",
+      "https://lh3.googleusercontent.com/d/10hLXGhjPZva-EEg2x5RwY1iblQw2Pa0e",
+      "https://lh3.googleusercontent.com/d/1hXuOTIrylhm6aZex42AX7Bz_Lk23A2Qz",
+      "https://lh3.googleusercontent.com/d/1yidXuaMMLt9TtOcqUNDpzQG5jAQ_JTAK",
+      "https://lh3.googleusercontent.com/d/1usSOSQ-5z8qrTopfemeREwgsLPyqTfiq"
+];
+
     const BABY_GALLERY_DATA = {
       "KFC": [
-        "https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO"
+        "https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO",
+        ...DRIVE_ALBUM_SHARED
       ],
       "PEPSI": [
-        "https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr"
+        "https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr",
+        ...DRIVE_ALBUM_SHARED
       ]
     };
 
@@ -4724,6 +4823,8 @@
     let currentGalleryIdx = 0;
     let galleryTouchStartX = 0;
     let galleryTouchStartY = 0;
+    let currentGalleryRotation = 0;
+    let userRotatedIndexes = {};
 
     function convertDriveUrl(urlOrId) {
       if (!urlOrId) return '';
@@ -4743,6 +4844,7 @@
     function openBabyGallery(beKey) {
       currentGalleryBaby = beKey;
       currentGalleryIdx = 0;
+      userRotatedIndexes = {};
 
       // Đồng bộ thêm ảnh từ sheet INFO BABY nếu có cột album/ảnh
       syncGalleryFromCachedInfo(beKey);
@@ -4753,7 +4855,7 @@
 
       const titleEl = document.getElementById('baby-gallery-title');
       if (titleEl) {
-        titleEl.innerText = beKey === 'KFC' ? '👑 Album Ảnh Bé An Nhiên (KFC)' : '👑 Album Ảnh Bé Thiên Ý (PEPSI)';
+        titleEl.innerText = beKey === 'KFC' ? '👑 Album Bé An Nhiên (KFC)' : '👑 Album Bé Thiên Ý (PEPSI)';
       }
 
       renderGalleryCurrentPhoto();
@@ -4801,6 +4903,37 @@
       }
     }
 
+    function applyGalleryRotation(deg) {
+      const imgEl = document.getElementById('baby-gallery-img');
+      const viewport = document.getElementById('baby-gallery-viewport');
+      if (!imgEl) return;
+
+      const is90or270 = (deg % 180 !== 0);
+      if (!is90or270) {
+        imgEl.style.transform = `rotate(${deg}deg) scale(1)`;
+      } else {
+        const Wv = (viewport && viewport.clientWidth) ? (viewport.clientWidth - 16) : 340;
+        const Hv = (viewport && viewport.clientHeight) ? (viewport.clientHeight - 16) : 440;
+        const Wn = imgEl.naturalWidth || 1200;
+        const Hn = imgEl.naturalHeight || 1600;
+        const scale0 = Math.min(Wv / Wn, Hv / Hn);
+        const w0 = Wn * scale0;
+        const h0 = Hn * scale0;
+        if (w0 > 0 && h0 > 0) {
+          const S = Math.min(Wv / h0, Hv / w0);
+          imgEl.style.transform = `rotate(${deg}deg) scale(${S.toFixed(4)})`;
+        } else {
+          imgEl.style.transform = `rotate(${deg}deg)`;
+        }
+      }
+    }
+
+    function rotateCurrentBabyPhoto() {
+      currentGalleryRotation = (currentGalleryRotation + 90) % 360;
+      userRotatedIndexes[currentGalleryIdx] = currentGalleryRotation;
+      applyGalleryRotation(currentGalleryRotation);
+    }
+
     function renderGalleryCurrentPhoto() {
       const photos = BABY_GALLERY_DATA[currentGalleryBaby] || [];
       if (photos.length === 0) return;
@@ -4811,25 +4944,56 @@
       const imgEl = document.getElementById('baby-gallery-img');
       const counterEl = document.getElementById('baby-gallery-counter');
       const dotsEl = document.getElementById('gallery-dots-indicator');
+      const progressContainerEl = document.getElementById('gallery-progress-container');
+      const progressBarEl = document.getElementById('gallery-progress-bar');
 
       if (imgEl) {
-        imgEl.style.opacity = '0.3';
+        imgEl.style.opacity = '0.25';
         imgEl.style.transform = 'scale(0.96)';
-        imgEl.src = photos[currentGalleryIdx];
-        setTimeout(() => {
+
+        const onImgLoaded = function() {
           imgEl.style.opacity = '1';
-          imgEl.style.transform = 'scale(1)';
-        }, 120);
+          if (userRotatedIndexes[currentGalleryIdx] !== undefined) {
+            currentGalleryRotation = userRotatedIndexes[currentGalleryIdx];
+          } else {
+            // Mặc định là đứng: Nếu ảnh gốc nằm ngang (naturalWidth > naturalHeight), tự động xoay 90 độ
+            if (imgEl.naturalWidth > imgEl.naturalHeight) {
+              currentGalleryRotation = 90;
+            } else {
+              currentGalleryRotation = 0;
+            }
+          }
+          applyGalleryRotation(currentGalleryRotation);
+        };
+
+        imgEl.onload = onImgLoaded;
+        imgEl.src = photos[currentGalleryIdx];
+        if (imgEl.complete && imgEl.naturalWidth) {
+          onImgLoaded();
+        }
       }
 
       if (counterEl) {
         counterEl.innerText = `Ảnh ${currentGalleryIdx + 1} / ${photos.length}`;
       }
 
-      if (dotsEl) {
-        dotsEl.innerHTML = photos.map((_, i) => `
-          <div class="gallery-dot ${i === currentGalleryIdx ? 'active' : ''}" onclick="goToBabyPhoto(${i})"></div>
-        `).join('');
+      if (photos.length > 10) {
+        if (dotsEl) dotsEl.style.display = 'none';
+        if (progressContainerEl) {
+          progressContainerEl.style.display = 'block';
+          if (progressBarEl) {
+            const pct = Math.round(((currentGalleryIdx + 1) / photos.length) * 100);
+            progressBarEl.style.width = pct + '%';
+          }
+        }
+      } else {
+        if (progressContainerEl) progressContainerEl.style.display = 'none';
+        if (dotsEl) {
+          dotsEl.style.display = 'flex';
+          dotsEl.innerHTML = photos.map((_, i) => `
+            <div class="gallery-dot ${i === currentGalleryIdx ? 'active' : ''}" onclick="goToBabyPhoto(${i})"></div>
+          `).join('');
+        }
       }
     }
 
