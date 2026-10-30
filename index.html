@@ -2882,11 +2882,57 @@
 
   <script>
     const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbw1MDL6WfwxlOWJB8gRmC8gYo3Kfntt_5sqtGSP5mHnnxYEuG2WKlyR9lzKdjOktMeWAQ/exec';
+    const CURRENT_APP_VERSION = 'v1.2.0';
 
-    // Đăng ký Service Worker cho PWA (Mũi tên cài đặt App trên GitHub Pages)
+    // CƠ CHẾ TỰ ĐỘNG CẬP NHẬT GIAO DIỆN MỚI NHẤT TRÊN CẢ WEB & APP APK
+    function checkForAppUpdate(callback) {
+      fetch('version.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+          if (!data || !data.version) {
+            if (callback) callback(false);
+            return;
+          }
+          const installedVer = localStorage.getItem('lichhoc_installed_ver');
+          if (installedVer && installedVer !== data.version) {
+            console.log('Phát hiện bản cập nhật giao diện mới:', data.version, 'Bản hiện tại:', installedVer);
+            localStorage.setItem('lichhoc_installed_ver', data.version);
+            if (callback) callback(true);
+            window.location.reload(true);
+          } else {
+            localStorage.setItem('lichhoc_installed_ver', data.version);
+            if (callback) callback(false);
+          }
+        })
+        .catch(() => {
+          if (callback) callback(false);
+        });
+    }
+
+    // 1. Tự động kiểm tra ngay khi mở trang
+    checkForAppUpdate();
+
+    // 2. Tự động kiểm tra mỗi khi Ba mẹ quay lại App từ ứng dụng khác (Background -> Foreground)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        checkForAppUpdate();
+      }
+    });
+
+    // 3. Đăng ký & Tự động cập nhật Service Worker cho PWA & APK WebView
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.register('sw.js').then(reg => {
+          reg.update().catch(() => {});
+        }).catch(() => {});
+      });
+
+      let swReloading = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!swReloading) {
+          swReloading = true;
+          window.location.reload();
+        }
       });
     }
 
@@ -3246,22 +3292,29 @@
           ptrBox.style.opacity = '1';
           ptrIcon.className = 'ptr-icon spin';
           ptrIcon.style.transform = 'none';
-          ptrText.innerText = 'Đang tải lịch học mới nhất...';
+          ptrText.innerText = 'Đang kiểm tra & cập nhật...';
 
-          loadData(true, (err) => {
-            ptrIcon.className = 'ptr-icon';
-            ptrIcon.innerText = err ? '⚠️' : '✓';
-            ptrText.innerText = err ? 'Không thể làm mới' : 'Đã cập nhật mới nhất!';
-            setTimeout(() => {
-              ptrBox.style.height = '0px';
-              ptrBox.style.opacity = '0';
+          checkForAppUpdate((hasNewVersion) => {
+            if (hasNewVersion) {
+              ptrText.innerText = 'Đang nạp bản cập nhật mới...';
+              return;
+            }
+
+            loadData(true, (err) => {
+              ptrIcon.className = 'ptr-icon';
+              ptrIcon.innerText = err ? '⚠️' : '✓';
+              ptrText.innerText = err ? 'Không thể làm mới' : 'Đã cập nhật mới nhất!';
               setTimeout(() => {
-                ptrIcon.innerText = '↓';
-                ptrIcon.className = 'ptr-icon';
-                ptrText.innerText = 'Kéo xuống để làm mới...';
-                isRefreshing = false;
-              }, 300);
-            }, 600);
+                ptrBox.style.height = '0px';
+                ptrBox.style.opacity = '0';
+                setTimeout(() => {
+                  ptrIcon.innerText = '↓';
+                  ptrIcon.className = 'ptr-icon';
+                  ptrText.innerText = 'Kéo xuống để làm mới...';
+                  isRefreshing = false;
+                }, 300);
+              }, 600);
+            });
           });
         } else {
           ptrBox.style.height = '0px';
