@@ -1499,23 +1499,23 @@
       0%, 100% {
         opacity: 1;
         transform: translateY(-50%) rotate(-15deg) scale(1);
-        box-shadow: 0 0 16px rgba(127, 255, 0, 0.45);
+        box-shadow: 0 0 18px rgba(0, 255, 0, 0.5);
       }
       50% {
-        opacity: 0.85;
+        opacity: 0.88;
         transform: translateY(-50%) rotate(-15deg) scale(0.97);
-        box-shadow: 0 0 6px rgba(127, 255, 0, 0.2);
+        box-shadow: 0 0 6px rgba(0, 255, 0, 0.25);
       }
     }
 
     .stamp-completed-seal-red {
       position: absolute;
-      top: 50%;
+      top: 40%;
       right: 14px;
       transform: translateY(-50%) rotate(-15deg);
-      width: 96px;
-      height: 96px;
-      border: 2.5px dashed #7fff00;
+      width: 98px;
+      height: 98px;
+      border: 3.5px dashed #00FF00;
       border-radius: 50%;
       display: flex;
       flex-direction: column;
@@ -1524,31 +1524,33 @@
       pointer-events: none;
       z-index: 10;
       background: rgba(240, 253, 244, 0.98);
-      box-shadow: 0 4px 18px rgba(127, 255, 0, 0.35);
+      box-shadow: 0 4px 18px rgba(0, 255, 0, 0.35);
       animation: stampIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulseCompletedStamp 1.6s ease-in-out 0.45s infinite;
     }
     .stamp-completed-seal-red::before {
       content: '';
       position: absolute;
-      inset: 3px;
-      border: 1.5px solid #7fff00;
+      inset: 4px;
+      border: 2px solid #00FF00;
       border-radius: 50%;
     }
     .stamp-red-text {
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 950;
-      color: #7fff00;
+      color: #00FF00;
       letter-spacing: 2px;
       text-transform: uppercase;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      text-shadow: 0 1px 3px rgba(15, 81, 50, 0.95), 0 0 2px #064e3b;
+      text-shadow: 0 1px 3px rgba(6, 78, 59, 0.95), 0 0 2px #047857;
+      margin: 1px 0;
+      transform: translateY(-1px);
     }
     .stamp-red-star {
       font-size: 0.72rem;
-      color: #7fff00;
+      color: #00FF00;
       letter-spacing: 2.5px;
       line-height: 1;
-      text-shadow: 0 1px 2px rgba(15, 81, 50, 0.85);
+      text-shadow: 0 1px 2px rgba(6, 78, 59, 0.85);
     }
 
     .agenda-body {
