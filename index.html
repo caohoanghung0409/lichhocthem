@@ -1499,12 +1499,12 @@
       0%, 100% {
         opacity: 1;
         transform: translateY(-50%) rotate(-15deg) scale(1);
-        box-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+        box-shadow: 0 0 16px rgba(127, 255, 0, 0.45);
       }
       50% {
-        opacity: 0.82;
+        opacity: 0.85;
         transform: translateY(-50%) rotate(-15deg) scale(0.97);
-        box-shadow: 0 0 4px rgba(16, 185, 129, 0.2);
+        box-shadow: 0 0 6px rgba(127, 255, 0, 0.2);
       }
     }
 
@@ -1515,7 +1515,7 @@
       transform: translateY(-50%) rotate(-15deg);
       width: 96px;
       height: 96px;
-      border: 2.5px dashed #059669;
+      border: 2.5px dashed #7fff00;
       border-radius: 50%;
       display: flex;
       flex-direction: column;
@@ -1523,31 +1523,32 @@
       justify-content: center;
       pointer-events: none;
       z-index: 10;
-      background: rgba(240, 253, 244, 0.95);
-      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
+      background: rgba(240, 253, 244, 0.98);
+      box-shadow: 0 4px 18px rgba(127, 255, 0, 0.35);
       animation: stampIn 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulseCompletedStamp 1.6s ease-in-out 0.45s infinite;
     }
     .stamp-completed-seal-red::before {
       content: '';
       position: absolute;
       inset: 3px;
-      border: 1.5px solid rgba(16, 185, 129, 0.85);
+      border: 1.5px solid #7fff00;
       border-radius: 50%;
     }
     .stamp-red-text {
       font-size: 0.76rem;
       font-weight: 950;
-      color: #047857;
+      color: #7fff00;
       letter-spacing: 2px;
       text-transform: uppercase;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      text-shadow: 0 1px 2px rgba(4, 120, 87, 0.22);
+      text-shadow: 0 1px 3px rgba(15, 81, 50, 0.95), 0 0 2px #064e3b;
     }
     .stamp-red-star {
       font-size: 0.72rem;
-      color: #059669;
+      color: #7fff00;
       letter-spacing: 2.5px;
       line-height: 1;
+      text-shadow: 0 1px 2px rgba(15, 81, 50, 0.85);
     }
 
     .agenda-body {
@@ -1987,14 +1988,51 @@
     .baby-profile-header-banner.PEPSI {
       background: linear-gradient(135deg, #fff0f4 0%, #ffd1dc 100%);
     }
+    .baby-profile-avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      margin: 0 auto 6px auto;
+    }
     .baby-profile-avatar-big {
-      width: 78px;
-      height: 78px;
+      width: 82px;
+      height: 82px;
       border-radius: 50%;
       object-fit: cover;
-      margin: 0 auto 8px auto;
+      margin: 0 auto;
       display: block;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+      transition: transform 0.22s ease, filter 0.22s ease;
+      cursor: pointer;
+    }
+    .baby-profile-avatar-wrapper:hover .baby-profile-avatar-big {
+      transform: scale(1.05);
+      filter: brightness(1.05);
+    }
+    .baby-photo-badge {
+      position: absolute;
+      bottom: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1.5px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      pointer-events: none;
+    }
+    .baby-profile-header-banner.KFC .baby-photo-badge {
+      background: #0284c7;
+    }
+    .baby-profile-header-banner.PEPSI .baby-photo-badge {
+      background: #db2777;
     }
     .baby-profile-header-banner.KFC .baby-profile-avatar-big {
       border: 3.5px solid #ffffff;
@@ -2051,6 +2089,164 @@
     .baby-info-item-val {
       font-weight: 800;
       color: #0f172a;
+    }
+
+    /* MODAL ALBUM ẢNH CÔNG CHÚA (PHOTO GALLERY LIGHTBOX) */
+    .baby-gallery-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeInBackdrop 0.25s ease forwards;
+    }
+    .baby-gallery-card {
+      background: #ffffff;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: scaleUpCard 0.28s cubic-bezier(0.18, 1, 0.3, 1) forwards;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .baby-gallery-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .baby-gallery-title-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .baby-gallery-title {
+      font-size: 0.98rem;
+      font-weight: 850;
+      color: #0f172a;
+    }
+    .baby-gallery-counter {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #0f766e;
+    }
+    .baby-gallery-close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: #e2e8f0;
+      color: #475569;
+      font-size: 1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .baby-gallery-close-btn:hover {
+      background: #cbd5e1;
+      color: #0f172a;
+      transform: scale(1.05);
+    }
+    .baby-gallery-viewport {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      max-height: 52vh;
+      background: #090d16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      touch-action: pan-y;
+      user-select: none;
+    }
+    .gallery-img-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .baby-gallery-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      will-change: transform, opacity;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .gallery-nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.24);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #ffffff;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: all 0.2s ease;
+    }
+    .gallery-nav-arrow:hover {
+      background: rgba(255, 255, 255, 0.45);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .gallery-nav-arrow.prev { left: 10px; }
+    .gallery-nav-arrow.next { right: 10px; }
+    .gallery-dots-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 16px 4px 16px;
+    }
+    .gallery-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .gallery-dot.active {
+      width: 24px;
+      border-radius: 10px;
+      background: #0f766e;
+    }
+    .gallery-swipe-hint {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #94a3b8;
+      padding-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     /* MODAL FORM THÊM / SỬA (FIT-SCREEN) */
@@ -2509,6 +2705,36 @@
       <button class="baby-profile-close-btn" onclick="closeBabyProfileModal()" title="Đóng">✕</button>
       <div id="baby-profile-content">
         <!-- Nội dung hiển thị từ sheet INFO BABY -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ALBUM ẢNH CÔNG CHÚA (PHOTO GALLERY LIGHTBOX - HỖ TRỢ LINK GOOGLE DRIVE) -->
+  <div class="baby-gallery-backdrop" id="baby-gallery-modal" onclick="handleBabyGalleryBackdropClick(event)">
+    <div class="baby-gallery-card" id="baby-gallery-card">
+      <div class="baby-gallery-header">
+        <div class="baby-gallery-title-box">
+          <span class="baby-gallery-title" id="baby-gallery-title">👑 Album Ảnh Công Chúa</span>
+          <span class="baby-gallery-counter" id="baby-gallery-counter">1 / 1</span>
+        </div>
+        <button class="baby-gallery-close-btn" onclick="closeBabyGalleryModal()" title="Đóng Album">✕</button>
+      </div>
+
+      <!-- Khung hiển thị ảnh có cử chỉ vuốt ngón tay (Swipe Gesture) -->
+      <div class="baby-gallery-viewport" id="baby-gallery-viewport">
+        <button class="gallery-nav-arrow prev" onclick="prevBabyPhoto()" title="Ảnh trước">◀</button>
+        <div class="gallery-img-container" id="gallery-img-container">
+          <img id="baby-gallery-img" src="" alt="Ảnh công chúa" class="baby-gallery-img">
+        </div>
+        <button class="gallery-nav-arrow next" onclick="nextBabyPhoto()" title="Ảnh tiếp theo">▶</button>
+      </div>
+
+      <!-- Dải chấm tròn chỉ số ảnh (Dots indicator) -->
+      <div class="gallery-dots-indicator" id="gallery-dots-indicator"></div>
+
+      <!-- Hướng dẫn cử chỉ thân thiện -->
+      <div class="gallery-swipe-hint">
+        <span>👈 Vuốt sang trái / phải để xem thêm ảnh 👉</span>
       </div>
     </div>
   </div>
@@ -4387,8 +4613,11 @@
 
       content.innerHTML = `
         <div class="baby-profile-header-banner ${beKey}">
-          <img src="${avatar}" class="baby-profile-avatar-big" alt="${hoTen}">
-          <h3 class="baby-profile-name">👑 ${hoTen}</h3>
+          <div class="baby-profile-avatar-wrapper" onclick="openBabyGallery('${beKey}')" title="Bấm để xem Album Ảnh của bé">
+            <img src="${avatar}" class="baby-profile-avatar-big" alt="${hoTen}">
+            <div class="baby-photo-badge">📸 Xem ảnh</div>
+          </div>
+          <h3 class="baby-profile-name" style="margin-top:8px;">👑 ${hoTen}</h3>
           <div class="baby-profile-nickname-pill">🎀 Công Chúa: <b>${nick}</b></div>
         </div>
         <div class="baby-profile-info-list">
@@ -4408,11 +4637,182 @@
               <span class="baby-info-item-val">${f.val}</span>
             </div>
           `).join('')}
-          <div style="margin-top: 8px; text-align:center;">
-            <button type="button" onclick="closeBabyProfileModal()" style="width:100%; padding:9px; border-radius:10px; border:none; background:${beKey === 'KFC' ? '#e0f2fe' : '#fff0f4'}; color:${beKey === 'KFC' ? '#0369a1' : '#be185d'}; font-weight:800; cursor:pointer;">Đóng</button>
+          <div style="margin-top: 10px; display:flex; flex-direction:column; gap:8px;">
+            <button type="button" onclick="openBabyGallery('${beKey}')" style="width:100%; padding:10px; border-radius:12px; border:none; background:${beKey === 'KFC' ? 'linear-gradient(135deg, #0284c7, #0369a1)' : 'linear-gradient(135deg, #db2777, #be185d)'}; color:#ffffff; font-weight:800; font-size:0.86rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow:0 3px 10px rgba(0,0,0,0.15);">
+              <span>📸</span> <span>Mở Album Ảnh Công Chúa</span>
+            </button>
+            <button type="button" onclick="closeBabyProfileModal()" style="width:100%; padding:9px; border-radius:10px; border:none; background:#f1f5f9; color:#475569; font-weight:800; cursor:pointer;">Đóng</button>
           </div>
         </div>
       `;
+    }
+
+    /* DỮ LIỆU ALBUM ẢNH CỦA TỪNG BÉ (HỖ TRỢ LINK GOOGLE DRIVE) */
+    const BABY_GALLERY_DATA = {
+      "KFC": [
+        "https://lh3.googleusercontent.com/d/1YQn_45Gx2NLRky-SrNxnhtrq6yTWiYYO"
+      ],
+      "PEPSI": [
+        "https://lh3.googleusercontent.com/d/17-IZagNtgHUAHOx0lRA76FtbnmYP8myr"
+      ]
+    };
+
+    let currentGalleryBaby = 'KFC';
+    let currentGalleryIdx = 0;
+    let galleryTouchStartX = 0;
+    let galleryTouchStartY = 0;
+
+    function convertDriveUrl(urlOrId) {
+      if (!urlOrId) return '';
+      urlOrId = urlOrId.trim();
+      if (urlOrId.startsWith('http') && urlOrId.includes('googleusercontent.com')) return urlOrId;
+      let fileId = urlOrId;
+      const match1 = urlOrId.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match1) {
+        fileId = match1[1];
+      } else {
+        const match2 = urlOrId.match(/id=([a-zA-Z0-9_-]+)/);
+        if (match2) fileId = match2[1];
+      }
+      return `https://lh3.googleusercontent.com/d/${fileId}`;
+    }
+
+    function openBabyGallery(beKey) {
+      currentGalleryBaby = beKey;
+      currentGalleryIdx = 0;
+
+      // Đồng bộ thêm ảnh từ sheet INFO BABY nếu có cột album/ảnh
+      syncGalleryFromCachedInfo(beKey);
+
+      const modal = document.getElementById('baby-gallery-modal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+
+      const titleEl = document.getElementById('baby-gallery-title');
+      if (titleEl) {
+        titleEl.innerText = beKey === 'KFC' ? '👑 Album Ảnh Bé An Nhiên (KFC)' : '👑 Album Ảnh Bé Thiên Ý (PEPSI)';
+      }
+
+      renderGalleryCurrentPhoto();
+      initGallerySwipe();
+    }
+
+    function closeBabyGalleryModal() {
+      const modal = document.getElementById('baby-gallery-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function handleBabyGalleryBackdropClick(e) {
+      if (e.target.id === 'baby-gallery-modal') {
+        closeBabyGalleryModal();
+      }
+    }
+
+    function syncGalleryFromCachedInfo(beKey) {
+      if (!CACHED_INFO_BABY || CACHED_INFO_BABY.length < 2) return;
+      const headers = CACHED_INFO_BABY[0];
+      for (let i = 1; i < CACHED_INFO_BABY.length; i++) {
+        const row = CACHED_INFO_BABY[i];
+        const rowStr = row.join(' ').toUpperCase();
+        if (rowStr.includes(beKey.toUpperCase())) {
+          for (let j = 0; j < headers.length; j++) {
+            const h = (headers[j] || '').toLowerCase();
+            if (h.includes('album') || h.includes('ảnh') || h.includes('photo') || h.includes('hình')) {
+              const cellVal = (row[j] || '').trim();
+              if (cellVal) {
+                const parts = cellVal.split(/[\n,;]+/);
+                parts.forEach(p => {
+                  const cleaned = p.trim();
+                  if (cleaned) {
+                    const directUrl = convertDriveUrl(cleaned);
+                    if (!BABY_GALLERY_DATA[beKey].includes(directUrl)) {
+                      BABY_GALLERY_DATA[beKey].push(directUrl);
+                    }
+                  }
+                });
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    function renderGalleryCurrentPhoto() {
+      const photos = BABY_GALLERY_DATA[currentGalleryBaby] || [];
+      if (photos.length === 0) return;
+
+      if (currentGalleryIdx < 0) currentGalleryIdx = photos.length - 1;
+      if (currentGalleryIdx >= photos.length) currentGalleryIdx = 0;
+
+      const imgEl = document.getElementById('baby-gallery-img');
+      const counterEl = document.getElementById('baby-gallery-counter');
+      const dotsEl = document.getElementById('gallery-dots-indicator');
+
+      if (imgEl) {
+        imgEl.style.opacity = '0.3';
+        imgEl.style.transform = 'scale(0.96)';
+        imgEl.src = photos[currentGalleryIdx];
+        setTimeout(() => {
+          imgEl.style.opacity = '1';
+          imgEl.style.transform = 'scale(1)';
+        }, 120);
+      }
+
+      if (counterEl) {
+        counterEl.innerText = `Ảnh ${currentGalleryIdx + 1} / ${photos.length}`;
+      }
+
+      if (dotsEl) {
+        dotsEl.innerHTML = photos.map((_, i) => `
+          <div class="gallery-dot ${i === currentGalleryIdx ? 'active' : ''}" onclick="goToBabyPhoto(${i})"></div>
+        `).join('');
+      }
+    }
+
+    function nextBabyPhoto() {
+      const photos = BABY_GALLERY_DATA[currentGalleryBaby] || [];
+      if (photos.length <= 1) return;
+      currentGalleryIdx = (currentGalleryIdx + 1) % photos.length;
+      renderGalleryCurrentPhoto();
+    }
+
+    function prevBabyPhoto() {
+      const photos = BABY_GALLERY_DATA[currentGalleryBaby] || [];
+      if (photos.length <= 1) return;
+      currentGalleryIdx = (currentGalleryIdx - 1 + photos.length) % photos.length;
+      renderGalleryCurrentPhoto();
+    }
+
+    function goToBabyPhoto(idx) {
+      currentGalleryIdx = idx;
+      renderGalleryCurrentPhoto();
+    }
+
+    function initGallerySwipe() {
+      const viewport = document.getElementById('baby-gallery-viewport');
+      if (!viewport || viewport._swipeInitialized) return;
+      viewport._swipeInitialized = true;
+
+      viewport.addEventListener('touchstart', (e) => {
+        if (!e.touches || e.touches.length !== 1) return;
+        galleryTouchStartX = e.touches[0].clientX;
+        galleryTouchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      viewport.addEventListener('touchend', (e) => {
+        const touch = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+        if (!touch) return;
+        const dx = touch.clientX - galleryTouchStartX;
+        const dy = touch.clientY - galleryTouchStartY;
+        if (Math.abs(dx) >= 35 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          if (dx < 0) {
+            nextBabyPhoto();
+          } else {
+            prevBabyPhoto();
+          }
+        }
+      }, { passive: true });
     }
 
     function clearPassError() {
