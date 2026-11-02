@@ -2188,6 +2188,26 @@
       color: #0f172a;
       transform: scale(1.05);
     }
+    .baby-gallery-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f766e;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      transition: all 0.2s ease;
+    }
+    .baby-gallery-icon-btn:active {
+      transform: scale(0.92);
+      background: #f0fdfa;
+    }
     .baby-gallery-viewport {
       position: relative;
       width: 100%;
@@ -2198,8 +2218,9 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      touch-action: pan-y;
+      touch-action: none;
       user-select: none;
+      -webkit-user-select: none;
     }
     .gallery-img-container {
       width: 100%;
@@ -2763,7 +2784,9 @@
           <span class="baby-gallery-title" id="baby-gallery-title">👑 Album Ảnh Công Chúa</span>
           <span class="baby-gallery-counter" id="baby-gallery-counter">1 / 1</span>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button type="button" class="baby-gallery-icon-btn" onclick="zoomInBabyPhoto()" title="Phóng to ảnh">🔍+</button>
+          <button type="button" class="baby-gallery-icon-btn" onclick="zoomOutBabyPhoto()" title="Thu nhỏ ảnh">🔍-</button>
           <button type="button" class="baby-gallery-rotate-btn" onclick="rotateCurrentBabyPhoto()" title="Xoay ảnh 90°">🔄 Xoay</button>
           <button type="button" class="baby-gallery-close-btn" onclick="closeBabyGalleryModal()" title="Đóng Album">✕</button>
         </div>
@@ -2788,7 +2811,7 @@
 
       <!-- Hướng dẫn cử chỉ thân thiện -->
       <div class="gallery-swipe-hint">
-        <span>👈 Vuốt sang trái / phải để lướt ảnh 👉</span>
+        <span>👈 Vuốt đổi ảnh • 2 ngón tay / Chạm đúp để Zoom 👉</span>
       </div>
     </div>
   </div>
@@ -4060,6 +4083,55 @@
       return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
     }
 
+    function getNextLessonForSubject(currentItem) {
+      if (!appData || !appData.lichHoc || !currentItem) return null;
+      const cycleDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
+      const baseDayName = currentItem.thu;
+      const be = currentItem.be;
+      const monHoc = (currentItem.monHoc || '').trim().toLowerCase();
+      const curStartM = toMinutes(currentItem.gioBatDau);
+
+      let baseIdx = cycleDays.indexOf(baseDayName);
+      if (baseIdx === -1) baseIdx = 0;
+
+      // Lọc danh sách buổi học của đúng môn này và đúng bé này
+      const subjectLessons = appData.lichHoc.filter(i => 
+        i.be === be && 
+        (i.monHoc || '').trim().toLowerCase() === monHoc && 
+        i.trangThai === 'Đang học'
+      );
+
+      if (subjectLessons.length === 0) return null;
+
+      // 1. Kiểm tra cùng ngày có buổi nào của môn này muộn hơn không
+      const sameDayLater = subjectLessons.filter(i => 
+        i.thu.toLowerCase() === baseDayName.toLowerCase() && 
+        toMinutes(i.gioBatDau) > curStartM
+      );
+      if (sameDayLater.length > 0) {
+        sameDayLater.sort((a, b) => toMinutes(a.gioBatDau) - toMinutes(b.gioBatDau));
+        let dateStr = weekDatesMap[baseDayName] ? weekDatesMap[baseDayName].dateStr : '';
+        return { dayName: baseDayName, dateStr: dateStr };
+      }
+
+      // 2. Tìm trong chu kỳ 7 ngày tiếp theo (từ ngày mai đến cùng thứ này tuần sau)
+      for (let i = 1; i <= 7; i++) {
+        let checkDay = cycleDays[(baseIdx + i) % 7];
+        let found = subjectLessons.filter(i => i.thu.toLowerCase() === checkDay.toLowerCase());
+        if (found.length > 0) {
+          found.sort((a, b) => toMinutes(a.gioBatDau) - toMinutes(b.gioBatDau));
+          let dateStr = '';
+          if (weekDatesMap[checkDay]) {
+            let checkIdx = cycleDays.indexOf(checkDay);
+            dateStr = (checkIdx <= baseIdx) ? weekDatesMap[checkDay].nextWeekDateStr : weekDatesMap[checkDay].dateStr;
+          }
+          return { dayName: checkDay, dateStr: dateStr };
+        }
+      }
+
+      return null;
+    }
+
     function getNextUpcomingLesson(baseDayName, filteredList) {
       const cycleDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
       let baseIdx = cycleDays.indexOf(baseDayName);
@@ -4285,9 +4357,9 @@
       }
 
       let nextLessonText = '';
-      const nextForChild = getNextUpcomingLesson(item.thu, currentList.filter(i => i.be === item.be));
-      if (nextForChild) {
-        nextLessonText = `${nextForChild.dayName} (${nextForChild.dateStr})`;
+      const nextForSubject = getNextLessonForSubject(item);
+      if (nextForSubject) {
+        nextLessonText = `${nextForSubject.dayName} (${nextForSubject.dateStr})`;
       }
 
       const card = document.createElement('div');
@@ -4898,6 +4970,25 @@
     let currentGalleryRotation = 0;
     let userRotatedIndexes = {};
 
+    let galleryZoomScale = 1;
+    let galleryPanX = 0;
+    let galleryPanY = 0;
+    let isPinching = false;
+    let isPanning = false;
+    let initialPinchDist = 0;
+    let initialPinchScale = 1;
+    let panStartX = 0;
+    let panStartY = 0;
+    let initialPanX = 0;
+    let initialPanY = 0;
+    let lastTapTime = 0;
+
+    function resetBabyPhotoZoom() {
+      galleryZoomScale = 1;
+      galleryPanX = 0;
+      galleryPanY = 0;
+    }
+
     function convertDriveUrl(urlOrId) {
       if (!urlOrId) return '';
       urlOrId = urlOrId.trim();
@@ -4914,6 +5005,7 @@
     }
 
     function openBabyGallery(beKey) {
+      resetBabyPhotoZoom();
       currentGalleryBaby = beKey;
       currentGalleryIdx = 0;
       userRotatedIndexes = {};
@@ -4935,6 +5027,7 @@
     }
 
     function closeBabyGalleryModal() {
+      resetBabyPhotoZoom();
       const modal = document.getElementById('baby-gallery-modal');
       if (modal) modal.style.display = 'none';
     }
@@ -4981,9 +5074,8 @@
       if (!imgEl) return;
 
       const is90or270 = (deg % 180 !== 0);
-      if (!is90or270) {
-        imgEl.style.transform = `rotate(${deg}deg) scale(1)`;
-      } else {
+      let baseScale = 1;
+      if (is90or270) {
         const Wv = (viewport && viewport.clientWidth) ? (viewport.clientWidth - 16) : 340;
         const Hv = (viewport && viewport.clientHeight) ? (viewport.clientHeight - 16) : 440;
         const Wn = imgEl.naturalWidth || 1200;
@@ -4992,17 +5084,34 @@
         const w0 = Wn * scale0;
         const h0 = Hn * scale0;
         if (w0 > 0 && h0 > 0) {
-          const S = Math.min(Wv / h0, Hv / w0);
-          imgEl.style.transform = `rotate(${deg}deg) scale(${S.toFixed(4)})`;
-        } else {
-          imgEl.style.transform = `rotate(${deg}deg)`;
+          baseScale = Math.min(Wv / h0, Hv / w0);
         }
       }
+
+      const totalScale = (baseScale * galleryZoomScale).toFixed(4);
+      imgEl.style.transform = `translate(${galleryPanX}px, ${galleryPanY}px) rotate(${deg}deg) scale(${totalScale})`;
+      imgEl.style.cursor = galleryZoomScale > 1.05 ? 'grab' : 'zoom-in';
     }
 
     function rotateCurrentBabyPhoto() {
       currentGalleryRotation = (currentGalleryRotation + 90) % 360;
       userRotatedIndexes[currentGalleryIdx] = currentGalleryRotation;
+      galleryPanX = 0;
+      galleryPanY = 0;
+      applyGalleryRotation(currentGalleryRotation);
+    }
+
+    function zoomInBabyPhoto() {
+      galleryZoomScale = Math.min(galleryZoomScale + 0.5, 4.0);
+      applyGalleryRotation(currentGalleryRotation);
+    }
+
+    function zoomOutBabyPhoto() {
+      galleryZoomScale = Math.max(galleryZoomScale - 0.5, 1.0);
+      if (galleryZoomScale === 1.0) {
+        galleryPanX = 0;
+        galleryPanY = 0;
+      }
       applyGalleryRotation(currentGalleryRotation);
     }
 
@@ -5072,6 +5181,7 @@
     function nextBabyPhoto() {
       const photos = BABY_GALLERY_DATA[currentGalleryBaby] || [];
       if (photos.length <= 1) return;
+      resetBabyPhotoZoom();
       currentGalleryIdx = (currentGalleryIdx + 1) % photos.length;
       renderGalleryCurrentPhoto();
     }
@@ -5079,11 +5189,13 @@
     function prevBabyPhoto() {
       const photos = BABY_GALLERY_DATA[currentGalleryBaby] || [];
       if (photos.length <= 1) return;
+      resetBabyPhotoZoom();
       currentGalleryIdx = (currentGalleryIdx - 1 + photos.length) % photos.length;
       renderGalleryCurrentPhoto();
     }
 
     function goToBabyPhoto(idx) {
+      resetBabyPhotoZoom();
       currentGalleryIdx = idx;
       renderGalleryCurrentPhoto();
     }
@@ -5093,25 +5205,122 @@
       if (!viewport || viewport._swipeInitialized) return;
       viewport._swipeInitialized = true;
 
+      // 1. Cảm ứng trên màn hình điện thoại (Touch gestures: Pinch Zoom, Double Tap, Drag Pan, Swipe)
       viewport.addEventListener('touchstart', (e) => {
-        if (!e.touches || e.touches.length !== 1) return;
-        galleryTouchStartX = e.touches[0].clientX;
-        galleryTouchStartY = e.touches[0].clientY;
-      }, { passive: true });
+        if (!e.touches) return;
+
+        if (e.touches.length === 2) {
+          // Bắt đầu Pinch-to-zoom (2 ngón tay)
+          isPinching = true;
+          isPanning = false;
+          initialPinchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          initialPinchScale = galleryZoomScale;
+        } else if (e.touches.length === 1) {
+          isPinching = false;
+
+          // Xử lý Chạm đúp (Double tap to zoom)
+          const now = Date.now();
+          if (now - lastTapTime < 320) {
+            lastTapTime = 0;
+            if (galleryZoomScale > 1.1) {
+              resetBabyPhotoZoom();
+            } else {
+              galleryZoomScale = 2.5;
+              galleryPanX = 0;
+              galleryPanY = 0;
+            }
+            applyGalleryRotation(currentGalleryRotation);
+            return;
+          }
+          lastTapTime = now;
+
+          if (galleryZoomScale > 1.05) {
+            // Khi đang zoom > 1: Kéo rê ảnh (Pan)
+            isPanning = true;
+            panStartX = e.touches[0].clientX;
+            panStartY = e.touches[0].clientY;
+            initialPanX = galleryPanX;
+            initialPanY = galleryPanY;
+          } else {
+            // Khi ở tỉ lệ 1x: Vuốt lướt chuyển ảnh (Swipe)
+            isPanning = false;
+            galleryTouchStartX = e.touches[0].clientX;
+            galleryTouchStartY = e.touches[0].clientY;
+          }
+        }
+      }, { passive: false });
+
+      viewport.addEventListener('touchmove', (e) => {
+        if (!e.touches) return;
+
+        if (isPinching && e.touches.length === 2) {
+          e.preventDefault();
+          const currentDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          if (initialPinchDist > 0) {
+            let s = initialPinchScale * (currentDist / initialPinchDist);
+            s = Math.max(1.0, Math.min(s, 4.0));
+            galleryZoomScale = s;
+            if (galleryZoomScale === 1.0) {
+              galleryPanX = 0;
+              galleryPanY = 0;
+            }
+            applyGalleryRotation(currentGalleryRotation);
+          }
+        } else if (isPanning && e.touches.length === 1 && galleryZoomScale > 1.05) {
+          e.preventDefault();
+          const dx = e.touches[0].clientX - panStartX;
+          const dy = e.touches[0].clientY - panStartY;
+          galleryPanX = initialPanX + dx;
+          galleryPanY = initialPanY + dy;
+
+          const limitX = Math.max(40, (galleryZoomScale - 1) * 160);
+          const limitY = Math.max(40, (galleryZoomScale - 1) * 220);
+          galleryPanX = Math.max(-limitX, Math.min(limitX, galleryPanX));
+          galleryPanY = Math.max(-limitY, Math.min(limitY, galleryPanY));
+
+          applyGalleryRotation(currentGalleryRotation);
+        }
+      }, { passive: false });
 
       viewport.addEventListener('touchend', (e) => {
-        const touch = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
-        if (!touch) return;
-        const dx = touch.clientX - galleryTouchStartX;
-        const dy = touch.clientY - galleryTouchStartY;
-        if (Math.abs(dx) >= 35 && Math.abs(dx) > Math.abs(dy) * 1.2) {
-          if (dx < 0) {
-            nextBabyPhoto();
-          } else {
-            prevBabyPhoto();
+        if (e.touches && e.touches.length < 2) {
+          isPinching = false;
+        }
+        if (!e.touches || e.touches.length === 0) {
+          if (isPanning) {
+            isPanning = false;
+          } else if (galleryZoomScale <= 1.05) {
+            const touch = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+            if (touch) {
+              const dx = touch.clientX - galleryTouchStartX;
+              const dy = touch.clientY - galleryTouchStartY;
+              if (Math.abs(dx) >= 35 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+                if (dx < 0) {
+                  nextBabyPhoto();
+                } else {
+                  prevBabyPhoto();
+                }
+              }
+            }
           }
         }
       }, { passive: true });
+
+      // 2. Cuộn chuột để Zoom (Mouse Wheel Zoom trên máy tính)
+      viewport.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+          zoomInBabyPhoto();
+        } else {
+          zoomOutBabyPhoto();
+        }
+      }, { passive: false });
     }
 
     function clearPassError() {
