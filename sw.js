@@ -1,5 +1,5 @@
 // Service Worker cho PWA Lịch Học Thêm
-const CACHE_NAME = 'lichhoc-pwa-v23';
+const CACHE_NAME = 'lichhoc-pwa-v24';
 
 const STATIC_ASSETS = [
   './',
